@@ -92,14 +92,16 @@ export const BORDERRADIUS: BorderRadius = {
     radius_20: 20,
 };
 
-interface Colour {
+interface Color {
     primaryBlueHex: string;
     primaryWhiteHex: string;
     primaryBlackHex: string;
+    primaryLightGreyHex: string;
 };
 
-export const COLOUR: Colour = {
+export const COLOR: Color = {
     primaryBlueHex: '#4682B4',
     primaryWhiteHex: '#FFFFFF',
     primaryBlackHex: '#343434',
+    primaryLightGreyHex: '#90A4AE',
 };

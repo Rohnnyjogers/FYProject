@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import TabNavigator from './src/navigator/TabNavigator'
@@ -21,5 +22,7 @@ const App = () => {
     </NavigationContainer>
   )
 }
+
+const styles = StyleSheet.create({})
 
 export default App
