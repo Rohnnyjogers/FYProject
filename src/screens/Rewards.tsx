@@ -9,7 +9,7 @@ const Rewards = () => {
   const bottomTabHeight = useBottomTabBarHeight();
 
   return (
-    <View style={styles.container}>
+    <View style={styles.screenContainer}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollViewFlex}>
@@ -21,7 +21,7 @@ const Rewards = () => {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screenContainer: {
     flex: 1,
   },
   scrollViewFlex: {

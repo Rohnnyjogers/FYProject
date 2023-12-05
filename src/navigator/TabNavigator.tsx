@@ -26,7 +26,7 @@ const TabNavigator = () => {
                 name="home"
                 size={25}
                 color={
-                  focused ? COLOR.primaryBlueHex : COLOR.primaryLightGreyHex
+                  focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
                 }
               />
             )
@@ -40,7 +40,7 @@ const TabNavigator = () => {
                 name="star"
                 size={25}
                 color={
-                  focused ? COLOR.primaryBlueHex : COLOR.primaryLightGreyHex
+                  focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
                 }
               />
             )
@@ -55,7 +55,7 @@ const TabNavigator = () => {
                 name="folder"
                 size={25}
                 color={
-                  focused ? COLOR.primaryBlueHex : COLOR.primaryLightGreyHex
+                  focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
                 }
               />
             )
@@ -70,7 +70,7 @@ const TabNavigator = () => {
                 name="user"
                 size={25}
                 color={
-                  focused ? COLOR.primaryBlueHex : COLOR.primaryLightGreyHex
+                  focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
                 }
               />
             )

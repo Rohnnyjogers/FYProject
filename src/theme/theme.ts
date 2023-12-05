@@ -96,12 +96,14 @@ interface Color {
     primaryBlueHex: string;
     primaryWhiteHex: string;
     primaryBlackHex: string;
-    primaryLightGreyHex: string;
+    primaryGreyHex: string;
+    secondaryLightGrey: string;
 };
 
 export const COLOR: Color = {
     primaryBlueHex: '#4682B4',
     primaryWhiteHex: '#FFFFFF',
     primaryBlackHex: '#343434',
-    primaryLightGreyHex: '#90A4AE',
+    primaryGreyHex: '#494d4f',
+    secondaryLightGrey: '#B3B6B7'
 };
