@@ -1,27 +1,70 @@
-interface Spacing {
-    space_2: number;
-    space_4: number;
-    space_6: number;
-    space_8: number;
-    space_10: number;
-    space_12: number;
-    space_14: number;
-    space_16: number;
-    space_18: number;
-    space_20: number;
+import { Dimensions } from "react-native";
+
+export const RECEIPT_CARD_WIDTH = Dimensions.get('window').width*0.4;
+export const RECEIPT_CARD_HEIGHT = Dimensions.get('window').width*0.8;
+export const RECEIPT_WIDTH = Dimensions.get('window').width*0.3;
+export const RECEIPT_HEIGHT = Dimensions.get('window').width*0.5;
+
+interface Size {
+    size_1: number;
+    size_2: number;
+    size_3: number;
+    size_4: number;
+    size_5: number;
+    size_6: number;
+    size_7: number;
+    size_8: number;
+    size_9: number;
+    size_10: number;
+    size_12: number;
+    size_14: number;
+    size_15: number;
+    size_16: number;
+    size_18: number;
+    size_20: number;
+    size_22: number;
+    size_24: number;
+    size_25: number;
+    size_26: number;
+    size_28: number;
+    size_30: number;
+    size_35: number;
+    size_40: number;
+    size_45: number;
+    size_50: number;
+    size_55: number;
+    size_60: number;
 };
 
-export const SPACING: Spacing = {
-    space_2: 2,
-    space_4: 4,
-    space_6: 6,
-    space_8: 8,
-    space_10: 10,
-    space_12: 12,
-    space_14: 14,
-    space_16: 16,
-    space_18: 18,
-    space_20: 20,
+export const SIZE: Size = {
+    size_1: 1,
+    size_2: 2,
+    size_3: 3,
+    size_4: 4,
+    size_5: 5,
+    size_6: 6,
+    size_7: 7,
+    size_8: 8,
+    size_9: 9,
+    size_10: 10,
+    size_12: 12,
+    size_14: 14,
+    size_15: 15,
+    size_16: 16,
+    size_18: 18,
+    size_20: 20,
+    size_22: 22,
+    size_24: 24,
+    size_25: 25,
+    size_26: 26,
+    size_28: 28,
+    size_30: 30,
+    size_35: 35,
+    size_40: 40,
+    size_45: 45,
+    size_50: 50,
+    size_55: 55,
+    size_60: 60,
 };
 
 interface FontFamily {
@@ -64,32 +107,6 @@ export const FONTFAMILY: FontFamily = {
     jost_semibolditalic: 'Jost-SemiBoldItalic',
     jost_thin: 'Jost-Thin',
     jost_thinitalic: 'Jost-ThinItalic'
-};
-
-interface BorderRadius {
-    radius_2: number;
-    radius_4: number;
-    radius_6: number;
-    radius_8: number;
-    radius_10: number;
-    radius_12: number;
-    radius_14: number;
-    radius_16: number;
-    radius_18: number;
-    radius_20: number;
-};
-
-export const BORDERRADIUS: BorderRadius = {
-    radius_2: 2,
-    radius_4: 4,
-    radius_6: 6,
-    radius_8: 8,
-    radius_10: 10,
-    radius_12: 12,
-    radius_14: 14,
-    radius_16: 16,
-    radius_18: 18,
-    radius_20: 20,
 };
 
 interface Color {

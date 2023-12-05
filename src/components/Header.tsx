@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { FONTFAMILY, SPACING } from '../theme/theme'
+import { FONTFAMILY, SIZE } from '../theme/theme'
 
 interface HeaderBarProps {
     headerTitle?: string,
@@ -16,7 +16,7 @@ const Header: React.FC<HeaderBarProps> = ({headerTitle}) => {
 
 const styles = StyleSheet.create({
     headerContainer: {
-        padding: SPACING.space_20,
+        padding: SIZE.size_20,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

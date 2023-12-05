@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import React from 'react'
-import { BORDERRADIUS, COLOR, FONTFAMILY, SPACING } from '../theme/theme'
+import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, RECEIPT_CARD_WIDTH, RECEIPT_HEIGHT, SIZE } from '../theme/theme'
 
 const CARD_WIDTH = Dimensions.get('window').width*0.4;
 const RECEIPT_WIDTH = Dimensions.get('window').width*0.25;
@@ -45,25 +45,25 @@ const ReceiptCard: React.FC<ReceiptCardProps> = ({
 
 const styles = StyleSheet.create({
     card: {
-        height: CARD_WIDTH * 2,
-        width: CARD_WIDTH,
+        height: RECEIPT_CARD_HEIGHT,
+        width: RECEIPT_CARD_WIDTH,
         backgroundColor: COLOR.secondaryLightGrey,
-        borderRadius: BORDERRADIUS.radius_4,
+        borderRadius: SIZE.size_4,
         flexDirection: 'column',
         alignItems: 'center',
-        paddingTop: SPACING.space_8,
-        gap: SPACING.space_8,
+        paddingTop: SIZE.size_8,
+        gap: SIZE.size_8,
     },
     receiptStyle: {
-        height: RECEIPT_WIDTH * 2,
-        width: RECEIPT_WIDTH,
+        height: RECEIPT_HEIGHT,
+        padding: SIZE.size_2,
         backgroundColor: COLOR.primaryWhiteHex,
     },
     receiptTitle: {
-      fontFamily: FONTFAMILY.jost_medium,
+      fontFamily: FONTFAMILY.jost_medium
     },
     receiptTime: {
-      fontFamily: FONTFAMILY.jost_light
+      fontFamily: FONTFAMILY.jost_regular
     }
 })
 

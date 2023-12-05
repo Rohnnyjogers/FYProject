@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, FlatList } from 'react-native';
-import { COLOR, FONTFAMILY, SPACING } from '../theme/theme';
+import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, SIZE } from '../theme/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Header from '../components/Header';
 import { useStore } from '../store/AppStore';
@@ -26,6 +26,7 @@ const Home = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.recentList}
+            style={styles.flatlistStyle}
             data={ReceiptsList}
             keyExtractor={item => item.id}
             renderItem={({item}) => {
@@ -46,6 +47,8 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   screenContainer: {
+    paddingLeft: SIZE.size_20,
+    paddingRight: SIZE.size_20,
     flex: 1,
   },
   scrollViewFlex: {
@@ -53,28 +56,28 @@ const styles = StyleSheet.create({
   },
   recentScrollView: {},
   title: {
-    paddingLeft: SPACING.space_20,
     fontFamily: FONTFAMILY.jost_bold,
-    fontSize: 25,
+    fontSize: SIZE.size_25,
     color: COLOR.primaryBlueHex,
   },
   recentListTitle: {
-    paddingTop: SPACING.space_20,
-    paddingLeft: SPACING.space_20,
+    paddingTop: SIZE.size_20,
     fontFamily: FONTFAMILY.jost_medium,
-    fontSize: 20,
+    fontSize: SIZE.size_20,
     color: COLOR.primaryGreyHex,
   },
   recentList: {
-    gap: SPACING.space_20,
-    paddingVertical: SPACING.space_10,
-    paddingHorizontal: SPACING.space_20,
+    gap: SIZE.size_20,
+    height: RECEIPT_CARD_HEIGHT
+  },
+  flatlistStyle: {
+    marginTop: SIZE.size_10,
+    flexGrow: 0
   },
   mapTitle: {
-    paddingLeft: SPACING.space_20,
-    marginTop: 10,
+    marginTop: SIZE.size_20,
     fontFamily: FONTFAMILY.jost_medium,
-    fontSize: 20,
+    fontSize: SIZE.size_20,
     color: COLOR.primaryGreyHex,
   },
   map: {

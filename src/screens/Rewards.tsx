@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView  } from 'react-native';
 import React from 'react';
-import { COLOR, FONTFAMILY, SPACING } from '../theme/theme';
+import { COLOR, FONTFAMILY, SIZE } from '../theme/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Header from '../components/Header';
 
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   title: {
-    paddingLeft: SPACING.space_20,
+    paddingLeft: SIZE.size_20,
     fontFamily: FONTFAMILY.jost_bold,
     fontSize: 25,
     color: COLOR.primaryBlueHex,

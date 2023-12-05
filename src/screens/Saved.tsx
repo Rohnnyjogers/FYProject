@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native'
 import React from 'react'
-import { FONTFAMILY, SPACING, COLOR } from '../theme/theme'
+import { FONTFAMILY, SIZE, COLOR } from '../theme/theme'
 import Header from '../components/Header'
 
 const Saved = () => {
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   title: {
-    paddingLeft: SPACING.space_20,
+    paddingLeft: SIZE.size_20,
     fontFamily: FONTFAMILY.jost_bold,
     fontSize: 25,
     color: COLOR.primaryBlueHex,
