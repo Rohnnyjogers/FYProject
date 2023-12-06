@@ -86,6 +86,22 @@ interface FontFamily {
     jost_semibolditalic: string;
     jost_thin: string;
     jost_thinitalic: string;
+    IBMPlexMono_Bold: string;
+    IBMPlexMono_BoldItalic: string;
+    IBMPlexMono_ExtraLight: string;
+    IBMPlexMono_ExtraLightItalic: string;
+    IBMPlexMono_Italic: string;
+    IBMPlexMono_Light: string;
+    IBMPlexMono_LightItalic: string;
+    IBMPlexMono_Medium: string;
+    IBMPlexMono_MediumItalic: string;
+    IBMPlexMono_Regular: string;
+    IBMPlexMono_SemiBold: string;
+    IBMPlexMono_SemiBoldItalic: string;
+    IBMPlexMono_Thin: string;
+    IBMPlexMono_ThinItalic: string;
+    
+    
 };
 
 export const FONTFAMILY: FontFamily = {
@@ -106,7 +122,21 @@ export const FONTFAMILY: FontFamily = {
     jost_semibold: 'Jost-SemiBold',
     jost_semibolditalic: 'Jost-SemiBoldItalic',
     jost_thin: 'Jost-Thin',
-    jost_thinitalic: 'Jost-ThinItalic'
+    jost_thinitalic: 'Jost-ThinItalic',
+    IBMPlexMono_Bold: 'IBMPlexMono-Bold',
+    IBMPlexMono_BoldItalic: 'IBMPlexMono-BoldItalic',
+    IBMPlexMono_ExtraLight: 'IBMPlexMono-ExtraLight',
+    IBMPlexMono_ExtraLightItalic: 'IBMPlexMono-ExtraLightItalic',
+    IBMPlexMono_Italic: 'IBMPlexMono-Italic',
+    IBMPlexMono_Light: 'IBMPlexMono-Light',
+    IBMPlexMono_LightItalic: 'IBMPlexMono-LightItalic',
+    IBMPlexMono_Medium: 'IBMPlexMono-Medium',
+    IBMPlexMono_MediumItalic: 'IBMPlexMono-MediumItalic',
+    IBMPlexMono_Regular: 'IBMPlexMono-Regular',
+    IBMPlexMono_SemiBold: 'IBMPlexMono-SemiBold',
+    IBMPlexMono_SemiBoldItalic: 'IBMPlexMono-SemiBoldItalic',
+    IBMPlexMono_Thin: 'IBMPlexMono-Thin',
+    IBMPlexMono_ThinItalic: 'IBMPlexMono-ThinItalic',
 };
 
 interface Color {

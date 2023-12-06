@@ -1,6 +1,8 @@
-import { StyleSheet, Text, View, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, Pressable, Button } from 'react-native'
 import React from 'react'
 import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, RECEIPT_CARD_WIDTH, RECEIPT_HEIGHT, SIZE } from '../theme/theme'
+import Receipt from './Receipt';
+import ReceiptViewer from '../screens/ReceiptViewer';
 
 const CARD_WIDTH = Dimensions.get('window').width*0.4;
 const RECEIPT_WIDTH = Dimensions.get('window').width*0.25;
@@ -15,6 +17,13 @@ interface ReceiptCardProps {
 
 }
 
+const renderReceipt = () => {
+  console.log("Inside render receipt function");
+  return(
+    <ReceiptViewer/>
+  )
+}
+
 const ReceiptCard: React.FC<ReceiptCardProps> = ({
   id,
   items,
@@ -25,18 +34,15 @@ const ReceiptCard: React.FC<ReceiptCardProps> = ({
 
   return (
     <View style={styles.card}>
-      <View style={styles.receiptStyle}>
-            <Text>{location}</Text>
-            <View>
-              {items.map((item) => {
-                return(
-                  <Text>{item.quantity} x {item.description}  €{item.price}</Text>
-                )
-              })}
-            </View>
-            <Text>Items: {itemTotal}</Text>
-            <Text>Price: €{priceTotal}</Text>
-        </View>
+      <Pressable onPress={() => renderReceipt()}>
+        <Receipt
+            id={id}
+            items={items}
+            location={location}
+            priceTotal={priceTotal}
+            itemTotal={itemTotal} 
+            index={0}/>
+      </Pressable>  
       <Text style={styles.receiptTitle}>{location}</Text>
       <Text style={styles.receiptTime}>12:10 04/12/2023</Text>
     </View>
@@ -53,11 +59,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: SIZE.size_8,
         gap: SIZE.size_8,
-    },
-    receiptStyle: {
-        height: RECEIPT_HEIGHT,
-        padding: SIZE.size_2,
-        backgroundColor: COLOR.primaryWhiteHex,
     },
     receiptTitle: {
       fontFamily: FONTFAMILY.jost_medium

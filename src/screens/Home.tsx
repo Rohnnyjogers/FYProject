@@ -10,7 +10,6 @@ import MapView from 'react-native-maps';
 const Home = () => {
   
   const ReceiptsList = useStore((state: any) => state.ReceiptsList);
-  console.log("Receipts data:", ReceiptsList);
 
   const bottomTabHeight = useBottomTabBarHeight();
 
