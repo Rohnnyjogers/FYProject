@@ -3,23 +3,47 @@ import Home from '../screens/Home'
 import Rewards from '../screens/Rewards'
 import Saved from '../screens/Saved'
 import Profile from '../screens/Profile'
+import ReceiptViewer from '../screens/ReceiptViewer'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StyleSheet } from 'react-native'
-import Icon from 'react-native-vector-icons/Feather'
 import { COLOR } from '../theme/theme'
+import Icon from 'react-native-vector-icons/Feather'
+
+const HomeStack = createNativeStackNavigator();
+
+const HomeStackScreen = () => {
+  return(
+    <HomeStack.Navigator screenOptions={{
+      headerShown: false,
+    }}>
+      <HomeStack.Screen 
+        name='Home' 
+        component={Home}/>
+      <HomeStack.Screen 
+        name='ReceiptViewer' 
+        component={ReceiptViewer}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerTintColor: COLOR.primaryBlueHex
+        }}/>
+    </HomeStack.Navigator>
+  )
+}
 
 const BottomTab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
-    <BottomTab.Navigator screenOptions={{
-      headerShown: false,
-      tabBarHideOnKeyboard: true,
-      tabBarShowLabel: false,
-    }}>
+      <BottomTab.Navigator screenOptions={{
+        headerShown: false,
+        tabBarHideOnKeyboard: true,
+        tabBarShowLabel: false,
+      }}>
         <BottomTab.Screen 
-          name='home' 
-          component={Home}
+          name='HomeStackScreen' 
+          component={HomeStackScreen}
           options={{
             tabBarIcon: ({focused, size, color}) => (
               <Icon 
@@ -76,7 +100,7 @@ const TabNavigator = () => {
             )
           }}
           />
-    </BottomTab.Navigator>
+      </BottomTab.Navigator>
   )
 }
 

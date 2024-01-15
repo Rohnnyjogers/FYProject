@@ -1,14 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { COLOR, FONTFAMILY, RECEIPT_HEIGHT, RECEIPT_WIDTH, SIZE } from '../theme/theme';
+import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
 import { ReceiptProps } from '../types/types';
+import { COLOR, FONTFAMILY, FULL_RECEIPT_HEIGHT, FULL_RECEIPT_WIDTH, SIZE } from '../theme/theme';
 
-
-const Receipt: React.FC<ReceiptProps> = ({
-    items,
+const FullReceipt: React.FC<ReceiptProps> = ({
     location,
-    priceTotal,
+    items,
     itemTotal,
+    priceTotal
 }) => {
   return (
     <View style={styles.receiptContainer}>
@@ -26,12 +25,14 @@ const Receipt: React.FC<ReceiptProps> = ({
   )
 }
 
+export default FullReceipt
+
 const styles = StyleSheet.create({
     receiptContainer: {
-        height: RECEIPT_HEIGHT,
-        width: RECEIPT_WIDTH,
-        borderRadius: SIZE.size_2,
+        height: FULL_RECEIPT_HEIGHT,
+        width: FULL_RECEIPT_WIDTH,
         padding: SIZE.size_4,
+        borderRadius: SIZE.size_2,
         backgroundColor: COLOR.primaryWhiteHex,
       },
     receiptTitle: {
@@ -42,5 +43,3 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
       }
 })
-
-export default Receipt
