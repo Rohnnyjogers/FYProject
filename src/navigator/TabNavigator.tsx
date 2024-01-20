@@ -1,34 +1,70 @@
-import React from 'react'
-import Home from '../screens/Home'
-import Rewards from '../screens/Rewards'
-import Saved from '../screens/Saved'
-import Profile from '../screens/Profile'
-import ReceiptViewer from '../screens/ReceiptViewer'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { StyleSheet } from 'react-native'
-import { COLOR } from '../theme/theme'
-import Icon from 'react-native-vector-icons/Feather'
+import React from 'react';
+import Home from '../screens/Home';
+import Rewards from '../screens/Rewards';
+import Saved from '../screens/Saved';
+import Profile from '../screens/Profile';
+import ReceiptViewer from '../screens/ReceiptViewer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StyleSheet } from 'react-native';
+import { COLOR } from '../theme/theme';
+import Icon from 'react-native-vector-icons/Feather';
+import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX } from '../types/types';
+import NavError from '../components/NavError';
 
 const HomeStack = createNativeStackNavigator();
+const SavedStack = createNativeStackNavigator();
 
 const HomeStackScreen = () => {
   return(
-    <HomeStack.Navigator screenOptions={{
-      headerShown: false,
-    }}>
+    <HomeStack.Navigator 
+      screenOptions={{headerShown: false}}>
       <HomeStack.Screen 
         name='Home' 
         component={Home}/>
       <HomeStack.Screen 
-        name='ReceiptViewer' 
+        name={ADD_TO_SAVED_AND_TAX} 
         component={ReceiptViewer}
         options={{
           headerShown: true,
           headerTitle: "",
           headerTintColor: COLOR.primaryBlueHex
         }}/>
+        <SavedStack.Screen
+        name='Nav Error'
+        component={NavError}/>
     </HomeStack.Navigator>
+  )
+}
+
+const SavedStackScreen = () => {
+  return(
+    <SavedStack.Navigator
+      screenOptions={{headerShown: false}}>
+        <SavedStack.Screen
+          name='Saved'
+          component={Saved}/>
+        <SavedStack.Screen
+          name={REMOVE_FROM_SAVED}
+          component={ReceiptViewer}
+          options={{
+            headerShown: true,
+            headerTitle: '',
+            headerTintColor: COLOR.primaryBlueHex
+          }}/>
+        <SavedStack.Screen
+          name={REMOVE_FROM_TAX}
+          component={ReceiptViewer}
+          options={{
+            headerShown: true,
+            headerTitle: '',
+            headerTintColor: COLOR.primaryBlueHex
+          }}
+        />  
+        <SavedStack.Screen
+          name={NAV_ERROR}
+          component={NavError}/>
+    </SavedStack.Navigator>
   )
 }
 
@@ -71,8 +107,8 @@ const TabNavigator = () => {
           }}
           />
         <BottomTab.Screen 
-          name='saved' 
-          component={Saved}
+          name='SavedStackScreen' 
+          component={SavedStackScreen}
           options={{
             tabBarIcon: ({focused, size, color}) => (
               <Icon 

@@ -1,18 +1,18 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { COLOR, FONTFAMILY, RECEIPT_HEIGHT, RECEIPT_WIDTH, SIZE } from '../theme/theme';
-import { ReceiptProps } from '../types/types';
+import { ReceiptProps, UIReceiptProps } from '../types/types';
 
 
-const Receipt: React.FC<ReceiptProps> = ({
+const CompactReceipt: React.FC<UIReceiptProps> = ({
+    vendorName,
     items,
-    location,
     priceTotal,
     itemTotal,
 }) => {
   return (
     <View style={styles.receiptContainer}>
-      <Text style={styles.receiptTitle}>{location}</Text>
+      <Text style={styles.receiptTitle}>{vendorName}</Text>
       <View style={styles.items}>
         {items.map((item) => {
           return(
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
       }
 })
 
-export default Receipt
+export default CompactReceipt;

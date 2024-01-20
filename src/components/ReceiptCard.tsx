@@ -1,54 +1,71 @@
-import { StyleSheet, Text, View, Dimensions, Pressable, Button } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
-import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, RECEIPT_CARD_WIDTH, RECEIPT_HEIGHT, SIZE } from '../theme/theme'
-import Receipt from './Receipt';
-import ReceiptViewer from '../screens/ReceiptViewer';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, RECEIPT_CARD_WIDTH, SIZE } from '../theme/theme'
+import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ReceiptProps, RootStackParamsList } from '../types/types';
+import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX, ReceiptProps, RootStackParamsList, ViewerScreen } from '../types/types';
+import CompactReceipt from './CompactReceipt';
 
-// const ShowReceipt = () => {
-//   console.log("Inside render receipt function");
-//   return(
-
-//   )
-// }
-
-
-
-const ReceiptCard: React.FC<ReceiptProps> = ({id, items, location, priceTotal, itemTotal, index}) => {
+const ReceiptCard: React.FC<ReceiptProps> = ({
+      receiptId,
+      vendorId,
+      vendorLat,
+      vendorLong,
+      vendorName, 
+      items, 
+      priceTotal, 
+      itemTotal, 
+      viewerType 
+}) => {
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
   
-  const onPressHandler = () => {
-    navigation.navigate('ReceiptViewer', {
-      id,
-      items,
-      location,
-      priceTotal,
-      itemTotal,
-      index
+  const toReceiptViewer = () => {
+    let targetViewer: ViewerScreen;
+
+    if(viewerType === ADD_TO_SAVED_AND_TAX){
+      targetViewer = viewerType;
+    }
+    else if(viewerType === REMOVE_FROM_SAVED){
+      targetViewer = viewerType;
+    }
+    else if(viewerType === REMOVE_FROM_TAX){
+      targetViewer = viewerType
+    } 
+    else {
+      targetViewer = NAV_ERROR 
+    }
+
+    navigation.navigate(targetViewer, {
+      receiptId,
+      vendorId,
+      vendorLat,
+      vendorLong,
+      vendorName, 
+      items, 
+      priceTotal, 
+      itemTotal, 
+      viewerType 
     });
   };
 
   return (
     <View style={styles.card}>
-          <Pressable onPress={onPressHandler}>
-            <Receipt
-                id={id}
+          <Pressable onPress={toReceiptViewer}>
+            <CompactReceipt
+                receiptId={receiptId}
                 items={items}
-                location={location}
+                vendorName={vendorName}
                 priceTotal={priceTotal}
-                itemTotal={itemTotal} 
-                index={0}/>
+                itemTotal={itemTotal}/>
           </Pressable> 
-      <Text style={styles.receiptTitle}>{location}</Text>
+      <Text style={styles.receiptTitle}>{vendorName}</Text>
       <Text style={styles.receiptTime}>12:10 04/12/2023</Text>
     </View>
   );
-
 };
+
+export default ReceiptCard;
 
 const styles = StyleSheet.create({
     card: {
@@ -69,4 +86,3 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ReceiptCard;

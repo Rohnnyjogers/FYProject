@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text, ScrollView, FlatList } from 'react-native';
 import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, SIZE } from '../theme/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Header from '../components/Header';
-import { useStore } from '../store/AppStore';
+import { ReceiptsData } from '../data/ReceiptsData'
 import ReceiptCard from '../components/ReceiptCard';
 import MapView from 'react-native-maps';
+import { ADD_TO_SAVED_AND_TAX } from '../types/types';
 
 const Home = () => {
-  
-  const ReceiptsList = useStore((state: any) => state.ReceiptsList);
 
   const bottomTabHeight = useBottomTabBarHeight();
 
@@ -26,16 +25,19 @@ const Home = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.recentList}
             style={styles.flatlistStyle}
-            data={ReceiptsList}
-            keyExtractor={item => item.id}
+            data={ReceiptsData}
+            keyExtractor={item => item.receiptId.toString()}
             renderItem={({item}) => {
               return <ReceiptCard
-                        id={item.id}
-                        index={item.index}
-                        location={item.location}
+                        receiptId={item.receiptId}
+                        vendorId={item.vendorId}
+                        vendorLat={item.vendorLat}
+                        vendorLong={item.vendorLong}
+                        vendorName={item.vendorName}
                         items={item.items}
                         priceTotal={item.priceTotal}
-                        itemTotal={item.itemTotal}/>
+                        itemTotal={item.itemTotal}
+                        viewerType={ADD_TO_SAVED_AND_TAX}/>
             }}/>
             <Text style={styles.mapTitle}>Compare receipts nearby</Text>
             {/* <MapView style={styles.map}/> */}
@@ -43,6 +45,8 @@ const Home = () => {
     </View>
   )
 }
+
+export default Home;
 
 const styles = StyleSheet.create({
   screenContainer: {
@@ -83,5 +87,3 @@ const styles = StyleSheet.create({
 
   },
 });
-
-export default Home;

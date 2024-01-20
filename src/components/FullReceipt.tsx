@@ -1,17 +1,17 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { ReceiptProps } from '../types/types';
+import { ReceiptProps, UIReceiptProps } from '../types/types';
 import { COLOR, FONTFAMILY, FULL_RECEIPT_HEIGHT, FULL_RECEIPT_WIDTH, SIZE } from '../theme/theme';
 
-const FullReceipt: React.FC<ReceiptProps> = ({
-    location,
-    items,
-    itemTotal,
-    priceTotal
+const FullReceipt: React.FC<UIReceiptProps> = ({
+  vendorName,
+  items,
+  priceTotal,
+  itemTotal,
 }) => {
   return (
     <View style={styles.receiptContainer}>
-      <Text style={styles.receiptTitle}>{location}</Text>
+      <Text style={styles.receiptTitle}>{vendorName}</Text>
       <View style={styles.items}>
         {items.map((item) => {
           return(

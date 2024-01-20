@@ -1,3 +1,7 @@
+export const ADD_TO_SAVED_AND_TAX = 'ADD_TO_SAVED_AND_TAX';
+export const REMOVE_FROM_SAVED = 'REMOVE_FROM_SAVED';
+export const REMOVE_FROM_TAX = 'REMOVE_FROM_TAX';
+export const NAV_ERROR = 'NAV_ERROR';
 
 type Item = {
     quantity: number;
@@ -6,21 +10,77 @@ type Item = {
 }
 
 export type ReceiptProps = {
-    id: String;
+    receiptId: number;
+    vendorId: number;
+    vendorLat: number;
+    vendorLong: number;
+    vendorName: string;
     items: Item[];
-    location: String;
     priceTotal: number;
     itemTotal: number;
-    index: number;
-}
+} & ({viewerType?: never} | {viewerType: string});
+
+export type ViewerScreen = 
+    typeof ADD_TO_SAVED_AND_TAX | 
+    typeof REMOVE_FROM_SAVED | 
+    typeof REMOVE_FROM_TAX |
+    typeof NAV_ERROR; 
 
 export type RootStackParamsList = {
-    ReceiptViewer:{
-        id: String;
+    Home: undefined;
+    Saved: undefined;
+    Rewards: undefined;
+    Profile: undefined;
+    ADD_TO_SAVED_AND_TAX: {
+        receiptId: number;
+        vendorId: number;
+        vendorLat: number;
+        vendorLong: number;
+        vendorName: string;
         items: Item[];
-        location: String;
         priceTotal: number;
         itemTotal: number;
-        index: number;
+        viewerType: string | undefined;
     },
+    REMOVE_FROM_SAVED: {
+        receiptId: number;
+        vendorId: number;
+        vendorLat: number;
+        vendorLong: number;
+        vendorName: string;
+        items: Item[];
+        priceTotal: number;
+        itemTotal: number;
+        viewerType: string | undefined;
+    },
+    REMOVE_FROM_TAX: {
+        receiptId: number;
+        vendorId: number;
+        vendorLat: number;
+        vendorLong: number;
+        vendorName: string;
+        items: Item[];
+        priceTotal: number;
+        itemTotal: number;
+        viewerType: string | undefined;
+    }
+    NAV_ERROR: {
+        receiptId: number;
+        vendorId: number;
+        vendorLat: number;
+        vendorLong: number;
+        vendorName: string;
+        items: Item[];
+        priceTotal: number;
+        itemTotal: number;
+        viewerType: string | undefined;
+    }
+}
+
+export interface UIReceiptProps {
+    receiptId: number;
+    vendorName: string;
+    items: Item[];
+    itemTotal: number;
+    priceTotal: number;
 }
