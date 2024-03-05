@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, ScrollView, FlatList, ActivityIndicator } from 
 import React, { useEffect, useState } from 'react'
 import { FONTFAMILY, SIZE, COLOR, RECEIPT_CARD_HEIGHT } from '../theme/theme'
 import Header from '../components/Header'
-import ReceiptCard from '../components/ReceiptCard'
+import ReceiptCard from '../components/receipts/ReceiptCard'
 import { auth, database } from '../../firebaseconfig'
 import { onValue, ref } from 'firebase/database'
 import { REMOVE_FROM_SAVED, REMOVE_FROM_TAX, ReceiptProps } from '../types/types'

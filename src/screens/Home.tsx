@@ -4,7 +4,7 @@ import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, SIZE } from '../theme/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Header from '../components/Header';
 import { ReceiptsData } from '../data/ReceiptsData'
-import ReceiptCard from '../components/ReceiptCard';
+import ReceiptCard from '../components/receipts/ReceiptCard';
 import MapView from 'react-native-maps';
 import { ADD_TO_SAVED_AND_TAX } from '../types/types';
 

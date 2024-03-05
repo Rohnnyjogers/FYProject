@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
-import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, RECEIPT_CARD_WIDTH, SIZE } from '../theme/theme'
+import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, RECEIPT_CARD_WIDTH, SIZE } from '../../theme/theme'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX, ReceiptProps, RootStackParamsList, ViewerScreen } from '../types/types';
-import CompactReceipt from './receipts/CompactReceipt';
+import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX, ReceiptProps, RootStackParamsList, ViewerScreen } from '../../types/types';
+import CompactReceipt from './CompactReceipt';
 
 const ReceiptCard: React.FC<ReceiptProps> = ({
       receiptId,

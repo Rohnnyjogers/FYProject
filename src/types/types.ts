@@ -82,10 +82,34 @@ export type RootStackParamsList = {
     }
 }
 
-export interface UIReceiptProps {
+export type UIReceiptProps = {
     receiptId: number;
     vendorName: string;
     items: Item[];
     itemTotal: number;
     priceTotal: number;
+}
+
+export type NameProp = {
+    fullName: string;
+    onNameChange: (updatedName: NameProp) => void;
+}
+
+export type AddressProps = {
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    country: string;
+    onAddressChange: (updatedAddress: AddressProps) => void;
+}
+
+export type OccupationProps = {
+    company: string;
+    role: string;
+    onOccupationChange: (updatedOccupation: OccupationProps) => void;
+}
+
+export type TaxNumberProp = {
+    taxNumber: string;
+    onTaxNumberChange: (updatedTaxNumber: TaxNumberProp) => void;
 }
