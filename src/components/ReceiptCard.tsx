@@ -4,7 +4,7 @@ import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, RECEIPT_CARD_WIDTH, SIZE } from
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX, ReceiptProps, RootStackParamsList, ViewerScreen } from '../types/types';
-import CompactReceipt from './CompactReceipt';
+import CompactReceipt from './receipts/CompactReceipt';
 
 const ReceiptCard: React.FC<ReceiptProps> = ({
       receiptId,

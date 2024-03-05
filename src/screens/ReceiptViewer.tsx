@@ -1,17 +1,26 @@
 import { Alert, Button, ScrollView, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native'; 
-import { ADD_TO_SAVED_AND_TAX, REMOVE_FROM_SAVED, REMOVE_FROM_TAX, ReceiptProps, RootStackParamsList } from '../types/types';
-import { COLOR, SIZE } from '../theme/theme';
-import FullReceipt from '../components/FullReceipt';
-import {auth, database} from '../../firebaseconfig';
-import { get, ref, remove, set } from 'firebase/database';
+import { ADD_TO_SAVED_AND_TAX, 
+         REMOVE_FROM_SAVED, 
+         REMOVE_FROM_TAX,
+         ADD_TO_SAVED_BTN,
+         ADD_TO_TAX_BTN,
+         REMOVE_FROM_SAVED_BTN,
+         REMOVE_FROM_TAX_BTN, 
+         ReceiptProps, 
+         RootStackParamsList } from '../types/types';
+import { COLOR, FULL_RECEIPT_WIDTH, SIZE } from '../theme/theme';
+import FullReceipt from '../components/receipts/FullReceipt';
+import { auth } from '../../firebaseconfig';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { addReceiptToSaved, addReceiptToTax, removeReceiptFromSaved, removeReceiptFromTax } from '../service/service';
 
 const ReceiptViewer = () => {
   const route = useRoute();
 
-  const { receiptId,
+  const { 
+    receiptId,
     vendorId,
     vendorLat,
     vendorLong,
@@ -23,124 +32,37 @@ const ReceiptViewer = () => {
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
   
-  const addReceiptToSaved = () => {
-    const userId = auth.currentUser?.uid;
+  const userId = auth.currentUser?.uid;
 
+  const receiptData: ReceiptProps = {
+    receiptId,
+    vendorId,
+    vendorLat,
+    vendorLong,
+    vendorName, 
+    items, 
+    priceTotal, 
+    itemTotal, 
+  };
+
+  const serviceMethodsWrapper = (button: number) => {
     if(userId){
-      const receiptData = {
-        receiptId,
-        vendorId,
-        vendorLat,
-        vendorLong,
-        vendorName, 
-        items, 
-        priceTotal, 
-        itemTotal, 
-      };
-      
-      const receiptKey = `${vendorName}_${vendorId}_${receiptId}`; 
-      const dbRef = ref(database, `/${userId}/receipts/saved/${vendorName}_${vendorId}/${receiptKey}`)
-
-      set(dbRef, receiptData)
-      .then(() => {
-        Alert.alert('Receipt Saved', undefined, [{
-          onPress: () => {
-            navigation.navigate('Home');
-          }
-        }]);
-      })
-      .catch((error: any) => {
-        Alert.alert('Error saving receipt '+error.message);
-      })
+      if(button === ADD_TO_SAVED_BTN){
+        addReceiptToSaved(userId, receiptData, navigation);
+      }
+      else if(button === ADD_TO_TAX_BTN){
+        addReceiptToTax(userId, receiptData, navigation);
+      }
+      else if(button === REMOVE_FROM_SAVED_BTN){
+        removeReceiptFromSaved(userId, receiptData, navigation);
+      }
+      else if(button === REMOVE_FROM_TAX_BTN){
+        removeReceiptFromTax(userId, receiptData, navigation);
+      }
     } 
     else {
       Alert.alert('User not authenticated');
     }
-  }
-
-  const addReceiptToTax = () => {
-    const userId = auth.currentUser?.uid;
-
-    if(userId){
-      const receiptData = {
-        receiptId,
-        vendorId,
-        vendorLat,
-        vendorLong,
-        vendorName, 
-        items, 
-        priceTotal, 
-        itemTotal, 
-      };
-      
-      const receiptKey = `T_${vendorName}_${vendorId}_${receiptId}`; 
-      const dbRef = ref(database, `/${userId}/receipts/tax/${vendorName}_${vendorId}/${receiptKey}`)
-
-      set(dbRef, receiptData)
-      .then(() => {
-        Alert.alert('Tax Receipt Saved', undefined, [{
-          onPress: () => {
-            navigation.navigate('Home');
-          }
-        }]);
-      })
-      .catch((error: any) => {
-        Alert.alert('Error saving receipt '+error.message);
-      })
-    } 
-    else {
-      Alert.alert('User not authenticated');
-    }
-  }
-
-  const removeReceiptFromSaved = () => {
-  const userId = auth.currentUser?.uid;
-  const receiptKey = `${vendorName}_${vendorId}_${receiptId}`; 
-  const dbRef = ref(database, `/${userId}/receipts/saved/${vendorName}_${vendorId}/${receiptKey}`);
-
-  get(dbRef)
-  .then((snapshot) => {
-    if(snapshot.exists()){
-      Alert.alert('Receipt removed', undefined, [{
-        onPress: () => {
-          navigation.navigate('Saved');
-        }
-      }]);
-      return remove(dbRef);
-    } 
-    else {
-      Alert.alert('Receipt not found')
-      return Promise.resolve();
-    }
-  })
-  .catch((error: any) => {
-    Alert.alert('Error removing receipt: '+error.message);
-  });
-  }
-
-  const removeReceiptFromTax = () => {
-  const userId = auth.currentUser?.uid;
-  const receiptKey = `T_${vendorName}_${vendorId}_${receiptId}`; 
-  const dbRef = ref(database, `/${userId}/receipts/tax/${vendorName}_${vendorId}/${receiptKey}`);
-
-  get(dbRef)
-  .then((snapshot) => {
-    if(snapshot.exists()){
-      Alert.alert('Tax receipt removed', undefined, [{
-        onPress: () => {
-          navigation.navigate('Saved');
-        }
-      }]);
-      return remove(dbRef);
-    }
-    else {
-      Alert.alert('Receipt not found');
-      return Promise.resolve();
-    }
-  })
-  .catch((error: any) => {
-    Alert.alert('Error removing receipt '+error.message);
-  });
   }
 
   return (
@@ -151,34 +73,44 @@ const ReceiptViewer = () => {
            items={items}
            vendorName={vendorName}
            priceTotal={priceTotal}
-           itemTotal={itemTotal}/>
-      </ScrollView>
-      {viewerType === ADD_TO_SAVED_AND_TAX && (
-        <>
-          <Button
-            title='Add to Saved'
-            color={COLOR.primaryBlueHex}
-            onPress={addReceiptToSaved}/>
-          <Button
-            title='Add to Tax'
-            color={COLOR.primaryBlueHex}
-            onPress={addReceiptToTax}
-          />
-        </>
-      )}
-      {viewerType === REMOVE_FROM_SAVED && (
-        <Button
-          title='Remove from Saved'
-          color={COLOR.primaryBlueHex}
-          onPress={removeReceiptFromSaved}
+           itemTotal={itemTotal}
         />
-      )}
-      {viewerType === REMOVE_FROM_TAX && (
-        <Button
-          title='Remove from Tax'
-          color={COLOR.primaryBlueHex}
-          onPress={removeReceiptFromTax}/>
-      )}
+      </ScrollView>
+    
+      <View style={styles.buttonView}>
+        {viewerType === ADD_TO_SAVED_AND_TAX && (
+          <View style={styles.addBtnsContainer}>
+            <Button
+              title='Add to Saved'
+              color={COLOR.primaryBlueHex}
+              onPress={() => serviceMethodsWrapper(ADD_TO_SAVED_BTN)}
+            />
+            <Button
+              title='Add to Tax'
+              color={COLOR.primaryBlueHex}
+              onPress={() => serviceMethodsWrapper(ADD_TO_TAX_BTN)}
+            />
+          </View>
+        )}
+        {viewerType === REMOVE_FROM_SAVED && (
+          <View style={styles.removeBtnsContainer}>
+            <Button
+              title='Remove from Saved'
+              color={COLOR.primaryBlueHex}
+              onPress={() => serviceMethodsWrapper(REMOVE_FROM_SAVED_BTN)}
+            />
+          </View>
+        )}
+        {viewerType === REMOVE_FROM_TAX && (
+          <View style={styles.removeBtnsContainer}>
+            <Button
+              title='Remove from Tax'
+              color={COLOR.primaryBlueHex}
+              onPress={() => serviceMethodsWrapper(REMOVE_FROM_TAX_BTN)}
+            />
+          </View>
+        )}
+      </View>
     </View>
   )
 }
@@ -188,7 +120,19 @@ export default ReceiptViewer;
 const styles = StyleSheet.create({
   receiptView: {
     alignSelf: 'center',
-    paddingTop: SIZE.size_40,
+    marginTop: SIZE.size_40,
+  },
+  buttonView: {
+    alignSelf: 'center',
+    marginBottom: SIZE.size_20
+  },
+  addBtnsContainer: {
+    flexDirection: 'column',
+    width: FULL_RECEIPT_WIDTH,
+    gap: SIZE.size_10
+  },
+  removeBtnsContainer: {
+    width: FULL_RECEIPT_WIDTH
   },
   scrollView:{
     flex: 1, 

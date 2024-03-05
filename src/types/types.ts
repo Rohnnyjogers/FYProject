@@ -3,6 +3,11 @@ export const REMOVE_FROM_SAVED = 'REMOVE_FROM_SAVED';
 export const REMOVE_FROM_TAX = 'REMOVE_FROM_TAX';
 export const NAV_ERROR = 'NAV_ERROR';
 
+export const ADD_TO_SAVED_BTN = 0;
+export const ADD_TO_TAX_BTN = 1;
+export const REMOVE_FROM_SAVED_BTN = 2;
+export const REMOVE_FROM_TAX_BTN = 3;
+
 type Item = {
     quantity: number;
     description: string;
