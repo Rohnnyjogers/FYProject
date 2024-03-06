@@ -73,6 +73,8 @@ const styles = StyleSheet.create({
         width: RECEIPT_CARD_WIDTH,
         backgroundColor: COLOR.secondaryLightGrey,
         borderRadius: SIZE.size_4,
+        borderWidth: 1,
+        borderColor: COLOR.borderLightGrey,
         flexDirection: 'column',
         alignItems: 'center',
         paddingTop: SIZE.size_8,
