@@ -14,12 +14,13 @@ const Saved = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    
     const userId = auth.currentUser?.uid;
 
     if(userId){
       const savedDBRef = ref(database, `/${userId}/receipts/saved`);
       const taxDBRef = ref(database, `/${userId}/receipts/tax`)
+      setLoading(true);
 
       onValue(savedDBRef, (snapshot) => {
         if(snapshot.exists()){
@@ -37,6 +38,7 @@ const Saved = () => {
         } else {
           setSavedReceipts([]);
         }
+        setLoading(false);
       })
 
       onValue(taxDBRef, (snapshot) => {
@@ -55,77 +57,84 @@ const Saved = () => {
         } else {
           setTaxReceipts([]);
         }
+        setLoading(false);
       })
-
-      setLoading(false);
     }
   },[]);
 
   return (
-    <View style={styles.screenContainer}>
-     <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.scrollViewFlex}>
-        <Header/>
-        <Text style={styles.title}>Saved</Text>
-        <Text style={styles.savedTitle}>Saved Receipts</Text>
-
-        {loading ? <ActivityIndicator size={'large'} color={COLOR.primaryBlueHex}/>
+    <>
+       {loading ? 
+          <ActivityIndicator 
+            size={'large'} 
+            color={COLOR.primaryBlueHex}
+            style={styles.indicator}
+          />
           : 
-          <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.flatListStyle}
-          contentContainerStyle={styles.receiptList}
-          data={savedReceipts}
-          keyExtractor={(item) => item.receiptId.toString()}
-          renderItem={({item}) => {
-            return(
-              <ReceiptCard 
-                receiptId={item.receiptId}
-                vendorId={item.vendorId}
-                vendorLat={item.vendorLat}
-                vendorLong={item.vendorLong}
-                vendorName={item.vendorName}
-                items={item.items}
-                priceTotal={item.priceTotal}
-                itemTotal={item.itemTotal}
-                viewerType={REMOVE_FROM_SAVED}/>
-            )
-          }}
-          ListEmptyComponent={<NavError/>}/> 
+          <>
+            <Header/>
+            <Text style={styles.title}>Saved</Text>
+            <View style={styles.divider}/>
+            <View style={styles.screenContainer}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.scrollViewFlex}>
+                <Text style={styles.savedTitle}>Saved Receipts</Text>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  style={styles.flatListStyle}
+                  contentContainerStyle={styles.receiptList}
+                  data={savedReceipts}
+                  keyExtractor={(item) => item.receiptId.toString()}
+                  renderItem={({item}) => {
+                    return(
+                      <ReceiptCard 
+                        receiptId={item.receiptId}
+                        vendorId={item.vendorId}
+                        vendorLat={item.vendorLat}
+                        vendorLong={item.vendorLong}
+                        vendorName={item.vendorName}
+                        items={item.items}
+                        priceTotal={item.priceTotal}
+                        itemTotal={item.itemTotal}
+                        viewerType={REMOVE_FROM_SAVED}
+                      />
+                    )
+                  }}
+                  ListEmptyComponent={<NavError/>}
+                />
+
+                <Text style={styles.taxTitle}>Tax Receipts</Text>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  style={styles.flatListStyle}
+                  contentContainerStyle={styles.receiptList}
+                  data={taxReceipts}
+                  keyExtractor={(item) => item.receiptId.toString()}
+                  renderItem={({item}) => {
+                    return(
+                      <ReceiptCard
+                        receiptId={item.receiptId}
+                        vendorId={item.vendorId}
+                        vendorLat={item.vendorLat}
+                        vendorLong={item.vendorLong}
+                        vendorName={item.vendorName}
+                        items={item.items}
+                        priceTotal={item.priceTotal}
+                        itemTotal={item.itemTotal}
+                        viewerType={REMOVE_FROM_TAX}
+                      />
+                    )
+                  }}
+                  ListEmptyComponent={<NavError/>}
+                />
+              </ScrollView>
+            </View>
+          </> 
         }
-        
-        <Text style={styles.taxTitle}>Tax Receipts</Text>
-        
-        {loading ? <ActivityIndicator size={'large'} color={COLOR.primaryBlueHex}/>
-          :
-          <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.flatListStyle}
-          contentContainerStyle={styles.receiptList}
-          data={taxReceipts}
-          keyExtractor={(item) => item.receiptId.toString()}
-          renderItem={({item}) => {
-            return(
-              <ReceiptCard
-                receiptId={item.receiptId}
-                vendorId={item.vendorId}
-                vendorLat={item.vendorLat}
-                vendorLong={item.vendorLong}
-                vendorName={item.vendorName}
-                items={item.items}
-                priceTotal={item.priceTotal}
-                itemTotal={item.itemTotal}
-                viewerType={REMOVE_FROM_TAX}/>
-            )
-          }}
-          ListEmptyComponent={<NavError/>}/>
-        }
-        
-      </ScrollView>
-    </View>
+    </>
   )
 }
 
@@ -135,15 +144,25 @@ const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     paddingLeft: SIZE.size_20,
-    paddingRight: SIZE.size_20
+    paddingRight: SIZE.size_20,
+    marginBottom: SIZE.size_20
   },
   scrollViewFlex: {
     flexGrow: 1,
   },
   title: {
+    paddingStart: SIZE.size_20,
+    paddingEnd: SIZE.size_20,
     fontFamily: FONTFAMILY.jost_bold,
     fontSize: 25,
     color: COLOR.primaryBlueHex,
+  },
+  divider: {
+    height: SIZE.size_1,
+    backgroundColor: COLOR.primaryBlueHex
+  },
+  indicator: {
+    alignSelf: 'center'
   },
   savedTitle: {
     paddingTop: SIZE.size_20,
