@@ -28,8 +28,7 @@ const Login = () => {
         setLoading(true);
 
         try{
-            const response = await signInWithEmailAndPassword(auth, email, password);
-            Alert.alert("Sign-in successful!");
+            await signInWithEmailAndPassword(auth, email, password);
         } catch (error: any) {
             Alert.alert("Sign-in invalid: "+error.message);
         }
@@ -42,43 +41,58 @@ const Login = () => {
         <View style={styles.container}>
             <Text style={styles.title}>spence.</Text>
             
-            <TextInput 
-                value={email} 
-                style={styles.input}
-                placeholder='e-mail'
-                placeholderTextColor={COLOR.primaryBlueHex}
-                onChangeText={(text) => setEmail(text)}/>
-            
-            <TextInput
-                secureTextEntry={true}
-                value={password}
-                style={styles.input}
-                placeholder='password'
-                placeholderTextColor={COLOR.primaryBlueHex}
-                onChangeText={(text) => setPassword(text)}/>
+            <View style={styles.inputContainer}>
+                <TextInput 
+                    value={email} 
+                    style={styles.input}
+                    placeholder='e-mail'
+                    placeholderTextColor={COLOR.primaryBlueHex}
+                    onChangeText={(text) => setEmail(text)}/>
+                
+                <TextInput
+                    secureTextEntry={true}
+                    value={password}
+                    style={styles.input}
+                    placeholder='password'
+                    placeholderTextColor={COLOR.primaryBlueHex}
+                    onChangeText={(text) => setPassword(text)}/>
+            </View>
             
             {loading ? <ActivityIndicator size={'large'} color={COLOR.primaryBlueHex}/>
             :
-            <>
-                <Button title='Sign-in' onPress={signIn}/>
-                <Button title='Sign-up' onPress={signUp}/>
-            </>}
+            <View style={styles.buttonContainer}>
+                <Button 
+                    title='Sign-in'
+                    onPress={signIn}
+                    color={COLOR.primaryBlueHex}
+                />
+                <Button 
+                    title='Sign-up' 
+                    onPress={signUp}
+                    color={COLOR.primaryBlueHex}
+                />
+            </View>}
         </View>
   )
 }
 
-export default Login
+export default Login;
 
 const styles = StyleSheet.create({
     container: {
         marginHorizontal: 20,
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginBottom: SIZE.size_20
     },
     title:{
         fontFamily: FONTFAMILY.jost_bold,
         fontSize: SIZE.size_24,
         color: COLOR.primaryBlueHex
+    },
+    inputContainer: {
+        marginTop: SIZE.size_20,
+        marginBottom: SIZE.size_40
     },
     input: {
         marginVertical: 4,
@@ -87,5 +101,9 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         padding: 10,
         backgroundColor: '#fff'
+    },
+    buttonContainer: {
+        marginTop: SIZE.size_60,
+        gap: SIZE.size_10
     }
 })

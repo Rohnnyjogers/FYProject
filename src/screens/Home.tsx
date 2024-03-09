@@ -44,7 +44,7 @@ const Home = () => {
               }}
             />
             <Text style={styles.mapTitle}>Compare receipts nearby</Text>
-            <Map/>
+            {/* <Map/> */}
           </ScrollView>
       </View>
     </>
