@@ -7,12 +7,20 @@ import { auth } from './firebaseconfig';
 import TabNavigator from './src/navigator/TabNavigator';
 import Login from './src/screens/Login';
 import NfcManager, { Ndef, NdefRecord, NfcEvents, NfcTech, TagEvent } from 'react-native-nfc-manager';
+import { ReceiptProps } from './src/types/types';
 
 
 const Stack = createNativeStackNavigator();
 
+export const ReceiptContext = React.createContext<{
+  recentReceipts: ReceiptProps[], 
+  setRecentReceipts: React.Dispatch<React.SetStateAction<ReceiptProps[]>>} | undefined>(
+    undefined
+  );
+
 const App: React.FC = () => {
   const [user, setUser] = useState<User|null>(null);
+  const [recentReceipts, setRecentReceipts] = useState<ReceiptProps[]>([]);
 
   useEffect(()=>{
     onAuthStateChanged(auth, (user) => {
@@ -21,7 +29,7 @@ const App: React.FC = () => {
   },[])
 
   useEffect(()=>{
-    NfcManager.setEventListener(NfcEvents.DiscoverTag, handleNfcTag);
+    // NfcManager.setEventListener(NfcEvents.DiscoverTag, handleNfcTag);
 
     const startNfcListener = async () => {
       const nfcSupported = await NfcManager.isSupported();
@@ -39,10 +47,12 @@ const App: React.FC = () => {
             const fullPayload: Uint8Array = new Uint8Array(message.map(record => record.payload).flat());
             const fullPayloadStr: string = Ndef.text.decodePayload(fullPayload);
             const payload: Uint8Array = new Uint8Array(message[0].payload);
-            const receipt : string = Ndef.text.decodePayload(payload);
+            const receipt: ReceiptProps = JSON.parse(Ndef.text.decodePayload(payload));
             
-            console.log('Payload array:', fullPayloadStr)
+            console.log('Payload array:', receipt)
             console.log('Receipt at 0 in payload array:', receipt)
+
+            setRecentReceipts(prevReceipts => [...prevReceipts, receipt]);
           }
         }
         else{
@@ -60,6 +70,7 @@ const App: React.FC = () => {
     return(() => {
       NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
       NfcManager.unregisterTagEvent();
+      NfcManager.cancelTechnologyRequest();
     })
 
   },[]);
@@ -69,26 +80,28 @@ const App: React.FC = () => {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName='Login' 
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        {user ? 
-          <Stack.Screen
-            name='Internal'
-            component={TabNavigator}
-          />
-          :
-          <Stack.Screen
-            name='Login'
-            component={Login}
-          />
-        }
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ReceiptContext.Provider value={{recentReceipts, setRecentReceipts}}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName='Login' 
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          {user ? 
+            <Stack.Screen
+              name='Internal'
+              component={TabNavigator}
+            />
+            :
+            <Stack.Screen
+              name='Login'
+              component={Login}
+            />
+          }
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ReceiptContext.Provider>
   )
 }
 

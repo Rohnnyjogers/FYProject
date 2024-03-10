@@ -3,13 +3,31 @@ import { ReceiptProps } from "../types/types";
 import { database } from "../../firebaseconfig";
 import { Alert } from "react-native";
 
+export const addReceiptToRecent = (
+    userId: string | undefined,
+    receiptData: ReceiptProps,
+) => {
+    const receiptKey = `${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`
+    const dbRef = ref(database, `/users/${userId}/receipts/recent/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+
+    get(dbRef)
+    .then((snapshot) => {
+        if(snapshot.exists()){
+            console.error(`A receipt with receipt key ${receiptKey} already exists.`)
+        }
+        else{
+            set(dbRef, receiptData);
+        }
+    })
+}
+
 export const addReceiptToSaved = (
     userId: string | undefined,
     receiptData: ReceiptProps,
     navigation: any
 ) => {
     const receiptKey = `${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
-    const dbRef = ref(database, `/${userId}/receipts/saved/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/saved/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
 
     get(dbRef)
     .then((snapshot) => {
@@ -30,13 +48,13 @@ export const addReceiptToSaved = (
         }]);
         })
         .catch((error: any) => {
-            console.log('Error saving receipt: ', error);
+            console.error('Error saving receipt: ', error);
             Alert.alert('Error saving receipt '+error.message);
         });
     }
     })
     .catch((error: any) => {
-        console.log('Error saving receipt: ', error);
+        console.error('Error saving receipt: ', error);
         Alert.alert('Error locating receipt');
     });
 }
@@ -47,7 +65,7 @@ export const addReceiptToTax = (
     navigation: any
 ) => {
     const receiptKey = `T_${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
-    const dbRef = ref(database, `${userId}/receipts/tax/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/tax/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
 
     get(dbRef)
     .then((snapshot) => {
@@ -68,13 +86,13 @@ export const addReceiptToTax = (
             }]);
         })
         .catch((error: any) => {
-            console.log('Error saving receipt: ', error);
+            console.error('Error saving receipt: ', error);
             Alert.alert('Error saving receipt '+error.message);
         });
     }
     })
     .catch((error: any) => {
-        console.log('Error saving receipt: ', error);
+        console.error('Error saving receipt: ', error);
         Alert.alert('Error locating receipt');
     });
 }
@@ -85,7 +103,7 @@ export const removeReceiptFromSaved = (
     navigation: any
 ) => {
     const receiptKey = `${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
-    const dbRef = ref(database, `${userId}/receipts/saved/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/saved/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
 
     get(dbRef)
     .then((snapshot) => {
@@ -114,7 +132,7 @@ export const removeReceiptFromTax = (
     navigation: any
 ) => {
     const receiptKey = `T_${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
-    const dbRef = ref(database, `${userId}/receipts/tax/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/tax/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
 
     get(dbRef)
     .then((snapshot) => {

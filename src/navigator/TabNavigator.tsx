@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Home from '../screens/Home';
 import Rewards from '../screens/Rewards';
 import Saved from '../screens/Saved';
@@ -11,6 +11,9 @@ import { COLOR } from '../theme/theme';
 import Icon from 'react-native-vector-icons/Feather';
 import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX } from '../types/types';
 import NavError from '../components/NavError';
+import { ReceiptContext } from '../../App';
+import { auth } from '../../firebaseconfig';
+import { addReceiptToRecent } from '../service/service';
 
 const HomeStack = createNativeStackNavigator();
 const SavedStack = createNativeStackNavigator();
@@ -71,6 +74,16 @@ const SavedStackScreen = () => {
 const BottomTab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const contextValue = useContext(ReceiptContext) || {recentReceipts: [], setRecentReceipts: () => {}};
+  const { recentReceipts } = contextValue;
+
+  const userId = auth.currentUser?.uid;
+
+  recentReceipts.map((receipt) => {
+    addReceiptToRecent(userId, receipt);
+  })
+
+
   return (
       <BottomTab.Navigator screenOptions={{
         headerShown: false,

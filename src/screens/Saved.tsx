@@ -18,8 +18,8 @@ const Saved = () => {
     const userId = auth.currentUser?.uid;
 
     if(userId){
-      const savedDBRef = ref(database, `/${userId}/receipts/saved`);
-      const taxDBRef = ref(database, `/${userId}/receipts/tax`)
+      const savedDBRef = ref(database, `/users/${userId}/receipts/saved`);
+      const taxDBRef = ref(database, `/users/${userId}/receipts/tax`)
       setLoading(true);
 
       onValue(savedDBRef, (snapshot) => {
