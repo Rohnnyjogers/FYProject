@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Home from '../screens/Home';
 import Rewards from '../screens/Rewards';
 import Saved from '../screens/Saved';
@@ -75,13 +75,21 @@ const BottomTab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const contextValue = useContext(ReceiptContext) || {recentReceipts: [], setRecentReceipts: () => {}};
-  const { recentReceipts } = contextValue;
+  const { recentReceipts, setRecentReceipts } = contextValue;
+
+  console.log("Receipt", JSON.stringify(recentReceipts));
 
   const userId = auth.currentUser?.uid;
 
-  recentReceipts.map((receipt) => {
-    addReceiptToRecent(userId, receipt);
-  })
+  useEffect(() => {
+    if(recentReceipts.length > 0){
+      recentReceipts.forEach((receipt) => {
+        addReceiptToRecent(userId, receipt);
+      });
+      setRecentReceipts([]);
+    }
+  },[recentReceipts, setRecentReceipts, userId]);
+
 
 
   return (

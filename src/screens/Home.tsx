@@ -1,16 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, FlatList } from 'react-native';
 import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, SIZE } from '../theme/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Header from '../components/Header';
-import { ReceiptsData } from '../data/ReceiptsData'
 import ReceiptCard from '../components/receipts/ReceiptCard';
-import { ADD_TO_SAVED_AND_TAX } from '../types/types';
+import { ADD_TO_SAVED_AND_TAX, ReceiptProps } from '../types/types';
 import Map from '../components/Map';
+import { auth, database } from '../../firebaseconfig';
+import { onValue, ref } from 'firebase/database';
 
 const Home = () => {
+  const [recentReceipts, setRecentReceipts] = useState<ReceiptProps[]>([]);
 
   const bottomTabHeight = useBottomTabBarHeight();
+
+  useEffect(() => {
+    const userId = auth.currentUser?.uid;
+
+    const recentDbRef = ref(database, `/users/${userId}/receipts/recent`);
+
+    onValue(recentDbRef, (snapshot) => {
+      if(snapshot.exists()){
+        const recents = Object.keys(snapshot.val());
+
+        const recentReceipts = recents.flatMap((receipt) => {
+          const receipts: ReceiptProps[] = Object.values(snapshot.val()[receipt])
+          
+          return receipts.map((receipt) => ({
+            ...receipt
+          }))
+        });
+        setRecentReceipts(recentReceipts);
+      }
+    })
+
+  },[]);
 
   return (
     <>
@@ -27,7 +51,7 @@ const Home = () => {
               showsHorizontalScrollIndicator={false}
               style={styles.flatlistStyle}
               contentContainerStyle={styles.recentList}
-              data={ReceiptsData}
+              data={recentReceipts}
               keyExtractor={item => item.receiptId.toString()}
               renderItem={({item}) => {
                 return <ReceiptCard

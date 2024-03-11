@@ -56,11 +56,11 @@ const App: React.FC = () => {
           }
         }
         else{
-          console.log('NFC not supported on this device');
+          console.warn('NFC not supported on this device');
         }
       }
       catch(error){
-        console.log('Error starting NFC manager', error);
+        console.error('Error starting NFC manager', error);
       }
       await NfcManager.registerTagEvent();
     }

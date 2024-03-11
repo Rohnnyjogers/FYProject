@@ -14,15 +14,14 @@ const Saved = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    
     const userId = auth.currentUser?.uid;
 
     if(userId){
-      const savedDBRef = ref(database, `/users/${userId}/receipts/saved`);
-      const taxDBRef = ref(database, `/users/${userId}/receipts/tax`)
       setLoading(true);
+      const savedDbRef = ref(database, `/users/${userId}/receipts/saved`);
+      const taxDbRef = ref(database, `/users/${userId}/receipts/tax`)
 
-      onValue(savedDBRef, (snapshot) => {
+      onValue(savedDbRef, (snapshot) => {
         if(snapshot.exists()){
           const vendors = Object.keys(snapshot.val());
 
@@ -32,7 +31,6 @@ const Saved = () => {
             return vendorReceipts.map((receipt) => ({
               ...receipt
             }));
-
           });
           setSavedReceipts(receipts);
         } else {
@@ -41,7 +39,7 @@ const Saved = () => {
         setLoading(false);
       })
 
-      onValue(taxDBRef, (snapshot) => {
+      onValue(taxDbRef, (snapshot) => {
         if(snapshot.exists()){
           const vendors = Object.keys(snapshot.val());
 
