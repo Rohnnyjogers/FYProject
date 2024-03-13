@@ -13,7 +13,7 @@ import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX } f
 import NavError from '../components/NavError';
 import { ReceiptContext } from '../../App';
 import { auth } from '../../firebaseconfig';
-import { addReceiptToRecent } from '../service/service';
+import { addReceiptToRecent, sendReceiptToVendor } from '../service/service';
 
 const HomeStack = createNativeStackNavigator();
 const SavedStack = createNativeStackNavigator();
@@ -76,21 +76,17 @@ const BottomTab = createBottomTabNavigator();
 const TabNavigator = () => {
   const contextValue = useContext(ReceiptContext) || {recentReceipts: [], setRecentReceipts: () => {}};
   const { recentReceipts, setRecentReceipts } = contextValue;
-
-  console.log("Receipt", JSON.stringify(recentReceipts));
-
   const userId = auth.currentUser?.uid;
 
   useEffect(() => {
     if(recentReceipts.length > 0){
       recentReceipts.forEach((receipt) => {
         addReceiptToRecent(userId, receipt);
+        sendReceiptToVendor(userId, receipt);
       });
       setRecentReceipts([]);
     }
   },[recentReceipts, setRecentReceipts, userId]);
-
-
 
   return (
       <BottomTab.Navigator screenOptions={{

@@ -3,6 +3,24 @@ import { ReceiptProps } from "../types/types";
 import { database } from "../../firebaseconfig";
 import { Alert } from "react-native";
 
+export const sendReceiptToVendor = (
+    userId: string | undefined,
+    receiptData: ReceiptProps
+) => {
+    const receiptKey = `${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`
+    const dbRef = ref(database, `/vendors/${receiptData.vendorName}/${receiptData.vendorName}_${receiptData.vendorId}/customers/${userId}/receipts/${receiptKey}`);
+
+    get(dbRef)
+    .then((snapshot) => {
+        if(snapshot.exists()){
+            console.error(`A receipt with receipt key ${receiptKey} already exists at ${dbRef}`);
+        }
+        else{
+            set(dbRef, receiptData);
+        }
+    });
+}
+
 export const addReceiptToRecent = (
     userId: string | undefined,
     receiptData: ReceiptProps,
@@ -18,7 +36,7 @@ export const addReceiptToRecent = (
         else{
             set(dbRef, receiptData);
         }
-    })
+    });
 }
 
 export const addReceiptToSaved = (

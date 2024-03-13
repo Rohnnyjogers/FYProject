@@ -18,6 +18,8 @@ import { addReceiptToSaved, addReceiptToTax, removeReceiptFromSaved, removeRecei
 
 const ReceiptViewer = () => {
   const route = useRoute();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
+  const userId = auth.currentUser?.uid;
 
   const { 
     receiptId,
@@ -29,10 +31,6 @@ const ReceiptViewer = () => {
     priceTotal, 
     itemTotal, 
     viewerType} = route.params as ReceiptProps;
-
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
-  
-  const userId = auth.currentUser?.uid;
 
   const receiptData: ReceiptProps = {
     receiptId,
