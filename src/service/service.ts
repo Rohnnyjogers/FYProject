@@ -1,7 +1,36 @@
-import { get, ref, remove, set } from "firebase/database";
+import { child, get, ref, remove, set } from "firebase/database";
 import { ReceiptProps } from "../types/types";
 import { database } from "../../firebaseconfig";
 import { Alert } from "react-native";
+
+export const updateCustomerRecordWithVendor = async (
+    userId: string | undefined,
+    receiptData: ReceiptProps
+) => {
+    const dbRef = ref(database, `/vendors/${receiptData.vendorName}/${receiptData.vendorName}_${receiptData.vendorId}/customers/${userId}/purchases`);
+    const items = receiptData.items;
+
+    try{
+        const purchasesSnapshot = await get(dbRef);
+        const purchases = purchasesSnapshot.exists() ? purchasesSnapshot.val() : {};
+
+        for (const item of items){
+            const { description, quantity } = item;
+            const currentItem = purchases[description];
+            const itemRef = child(dbRef, description);
+
+            if(currentItem){
+                const updateQuantity = currentItem.quantity + quantity;
+                await set(itemRef, {quantity: updateQuantity});
+            } 
+            else{
+                await set(itemRef, {quantity});
+            }
+        }
+    }catch(error){
+        console.error('Error while accessing customer purchases', error);
+    }
+}
 
 export const sendReceiptToVendor = (
     userId: string | undefined,
@@ -72,7 +101,7 @@ export const addReceiptToSaved = (
     }
     })
     .catch((error: any) => {
-        console.error('Error saving receipt: ', error);
+        console.error('Error saving receipt: ', error.message);
         Alert.alert('Error locating receipt');
     });
 }

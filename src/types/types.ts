@@ -25,6 +25,12 @@ export type ReceiptProps = {
     itemTotal: number;
 } & ({viewerType?: never} | {viewerType: string});
 
+export type Reward = {
+    active: boolean;
+    item: string;
+    stamps: number;
+}
+
 export type ViewerScreen = 
     typeof ADD_TO_SAVED_AND_TAX | 
     typeof REMOVE_FROM_SAVED | 

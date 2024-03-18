@@ -15,8 +15,7 @@ const Home = () => {
   const bottomTabHeight = useBottomTabBarHeight();
 
   useEffect(() => {
-    const userId = auth.currentUser?.uid;
-
+    const userId = auth.currentUser?.uid; 
     const recentDbRef = ref(database, `/users/${userId}/receipts/recent`);
 
     onValue(recentDbRef, (snapshot) => {
@@ -24,7 +23,7 @@ const Home = () => {
         const recents = Object.keys(snapshot.val());
 
         const recentReceipts = recents.flatMap((receipt) => {
-          const receipts: ReceiptProps[] = Object.values(snapshot.val()[receipt])
+          const receipts: ReceiptProps[] = Object.values(snapshot.val()[receipt]);
           
           return receipts.map((receipt) => ({
             ...receipt

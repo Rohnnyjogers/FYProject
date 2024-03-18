@@ -13,7 +13,7 @@ import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX } f
 import NavError from '../components/NavError';
 import { ReceiptContext } from '../../App';
 import { auth } from '../../firebaseconfig';
-import { addReceiptToRecent, sendReceiptToVendor } from '../service/service';
+import { addReceiptToRecent, sendReceiptToVendor, updateCustomerRecordWithVendor } from '../service/service';
 
 const HomeStack = createNativeStackNavigator();
 const SavedStack = createNativeStackNavigator();
@@ -82,6 +82,7 @@ const TabNavigator = () => {
     if(recentReceipts.length > 0){
       recentReceipts.forEach((receipt) => {
         addReceiptToRecent(userId, receipt);
+        updateCustomerRecordWithVendor(userId, receipt);
         sendReceiptToVendor(userId, receipt);
       });
       setRecentReceipts([]);

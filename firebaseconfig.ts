@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getDatabase } from "firebase/database"
+import { getDatabase } from "firebase/database";
 // Firebase product library
 // https://firebase.google.com/docs/web/setup#available-libraries
 

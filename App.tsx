@@ -42,6 +42,7 @@ const App: React.FC = () => {
 
           if(tag && tag.ndefMessage){
             
+            handleNfcTag(tag);
             const message: NdefRecord[] = tag.ndefMessage;
             
             const fullPayload: Uint8Array = new Uint8Array(message.map(record => record.payload).flat());
@@ -49,8 +50,7 @@ const App: React.FC = () => {
             const payload: Uint8Array = new Uint8Array(message[0].payload);
             const receipt: ReceiptProps = JSON.parse(Ndef.text.decodePayload(payload));
             
-            console.log('Payload array:', receipt)
-            console.log('Receipt at 0 in payload array:', receipt)
+            console.log('receipt', receipt);
 
             setRecentReceipts(prevReceipts => [...prevReceipts, receipt]);
           }
