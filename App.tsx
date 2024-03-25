@@ -22,62 +22,62 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User|null>(null);
   const [recentReceipts, setRecentReceipts] = useState<ReceiptProps[]>([]);
 
+  const handleTag = async(tag: TagEvent) => {  
+    try{
+      const message = tag.ndefMessage;
+      if(message){
+        const payload: Uint8Array = new Uint8Array(message[0].payload);
+        const receipt: ReceiptProps = JSON.parse(Ndef.text.decodePayload(payload));
+        setRecentReceipts(prevReceipts => [...prevReceipts, receipt]);
+        console.log('Receipt read: ', receipt);
+      }
+    }catch(error){
+      console.error('Error handling tag: ', error);
+    }
+  }
+
+  const startNfcListener = async () => {
+    // NfcManager.setEventListener(NfcEvents.DiscoverTag, handleNfcTag);
+    const nfcSupported = await NfcManager.isSupported();
+    await NfcManager.start();
+    
+    try{
+      if(nfcSupported){
+        const tech = await NfcManager.requestTechnology(NfcTech.Ndef);
+        const tag = await NfcManager.getTag();
+
+        if(tag&&tech){
+          handleTag(tag);
+          await NfcManager.registerTagEvent();
+        }
+      }
+      else{
+        console.warn('NFC not supported on this device');
+      }
+    }
+    catch(error){
+      console.error('Error starting NFC manager', error);
+    }
+
+  }
+
+  useEffect(()=>{
+    startNfcListener();
+
+    return() => {
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
+      NfcManager.setEventListener(NfcEvents.SessionClosed, null);
+      NfcManager.unregisterTagEvent();
+      NfcManager.cancelTechnologyRequest();
+    }
+
+  },[recentReceipts]);
+
   useEffect(()=>{
     onAuthStateChanged(auth, (user) => {
       setUser(user);
     })
-  },[])
-
-  useEffect(()=>{
-    // NfcManager.setEventListener(NfcEvents.DiscoverTag, handleNfcTag);
-
-    const startNfcListener = async () => {
-      const nfcSupported = await NfcManager.isSupported();
-      
-      try{
-        if(nfcSupported){
-          await NfcManager.start();
-          await NfcManager.requestTechnology(NfcTech.Ndef);
-          const tag = await NfcManager.getTag();
-
-          if(tag && tag.ndefMessage){
-            
-            handleNfcTag(tag);
-            const message: NdefRecord[] = tag.ndefMessage;
-            
-            const fullPayload: Uint8Array = new Uint8Array(message.map(record => record.payload).flat());
-            const fullPayloadStr: string = Ndef.text.decodePayload(fullPayload);
-            const payload: Uint8Array = new Uint8Array(message[0].payload);
-            const receipt: ReceiptProps = JSON.parse(Ndef.text.decodePayload(payload));
-            
-            console.log('receipt', receipt);
-
-            setRecentReceipts(prevReceipts => [...prevReceipts, receipt]);
-          }
-        }
-        else{
-          console.warn('NFC not supported on this device');
-        }
-      }
-      catch(error){
-        console.error('Error starting NFC manager', error);
-      }
-      await NfcManager.registerTagEvent();
-    }
-
-    startNfcListener();
-
-    return(() => {
-      NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
-      NfcManager.unregisterTagEvent();
-      NfcManager.cancelTechnologyRequest();
-    })
-
   },[]);
-
-  const handleNfcTag = (tag: TagEvent) => {
-    console.log('Nfc tag detected:', tag);   
-  }
 
   return (
     <ReceiptContext.Provider value={{recentReceipts, setRecentReceipts}}>

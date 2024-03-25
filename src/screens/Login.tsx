@@ -1,6 +1,6 @@
 import { ActivityIndicator, Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useState } from 'react';
-import { auth } from '../../firebaseconfig';
+import { initAuth } from '../../firebaseconfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { COLOR, FONTFAMILY, SIZE } from '../theme/theme';
 
@@ -8,13 +8,12 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const userAuth = auth;
   
     const signUp = async () => {
         setLoading(true);
 
         try{
-            const response = await createUserWithEmailAndPassword(auth, email, password);
+            const response = await createUserWithEmailAndPassword(initAuth, email, password);
             Alert.alert("Sign-up successful!");
         
         } catch (error: any){
@@ -28,7 +27,7 @@ const Login = () => {
         setLoading(true);
 
         try{
-            await signInWithEmailAndPassword(auth, email, password);
+            await signInWithEmailAndPassword(initAuth, email, password);
         } catch (error: any) {
             Alert.alert("Sign-in invalid: "+error.message);
         }
