@@ -1,15 +1,20 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { COLOR, REWARDS_CARD_HEIGHT, REWARDS_CARD_WIDTH, SIZE } from '../../theme/theme'
+import { Reward } from '../../types/types';
 
+interface RewardCardProps {
+  reward: Reward;
+}
 
-
-const RewardsCard: React.FC<{value:string}> = ({
-    value
+const RewardsCard: React.FC<RewardCardProps> = ({
+  reward
 }) => {
+  
+
   return (
     <View style={styles.container}>
-      <Text>{value}</Text>
+      <Text>{reward.item}</Text>
     </View>
   )
 }

@@ -90,12 +90,13 @@ const Saved = () => {
                       <ReceiptCard 
                         receiptId={item.receiptId}
                         vendorId={item.vendorId}
-                        vendorLat={item.vendorLat}
-                        vendorLong={item.vendorLong}
+                        receiptDate={item.receiptDate}
+                        latitude={item.latitude}
+                        longitude={item.longitude}
                         vendorName={item.vendorName}
                         items={item.items}
                         priceTotal={item.priceTotal}
-                        itemTotal={item.itemTotal}
+                        itemsTotal={item.itemsTotal}
                         viewerType={REMOVE_FROM_SAVED}
                       />
                     )
@@ -114,15 +115,16 @@ const Saved = () => {
                   renderItem={({item}) => {
                     return(
                       <ReceiptCard
-                        receiptId={item.receiptId}
-                        vendorId={item.vendorId}
-                        vendorLat={item.vendorLat}
-                        vendorLong={item.vendorLong}
-                        vendorName={item.vendorName}
-                        items={item.items}
-                        priceTotal={item.priceTotal}
-                        itemTotal={item.itemTotal}
-                        viewerType={REMOVE_FROM_TAX}
+                      receiptId={item.receiptId}
+                      vendorId={item.vendorId}
+                      receiptDate={item.receiptDate}
+                      latitude={item.latitude}
+                      longitude={item.longitude}
+                      vendorName={item.vendorName}
+                      items={item.items}
+                      priceTotal={item.priceTotal}
+                      itemsTotal={item.itemsTotal}
+                      viewerType={REMOVE_FROM_TAX}
                       />
                     )
                   }}

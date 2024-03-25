@@ -29,7 +29,8 @@ export type ReceiptProps = {
 export type Reward = {
     active: boolean;
     item: string;
-    stamps: number;
+    size: number;
+    userStamps: number;
 }
 
 export type ViewerScreen = 

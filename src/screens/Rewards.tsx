@@ -15,22 +15,30 @@ const Rewards = () => {
 
   const bottomTabHeight = useBottomTabBarHeight();
 
+  const DATA = [
+    {
+      title: 'Rewards in progress',
+      data: rewards
+    }
+  ];
+
   useEffect(() => {
     const userId = auth.currentUser?.uid;
     const rewardsRef = ref(database, `/users/${userId}/rewards`);
 
     onValue(rewardsRef, (snapshot) => {
       if(snapshot.exists()){
-        const rewards = Object.keys(snapshot.val());
-
-        const mapRewards = rewards.flatMap((reward) => {
-          const fullRewards: Reward[] = Object.values(snapshot.val()[reward]);
-
-          return fullRewards.map((reward) => ({
-            ...reward
-          }));
-        });
-        setRewards(mapRewards);
+        const rewardIds = Object.keys(snapshot.val());
+        const rewards: Reward[] = rewardIds.map(rewardId => {
+          const rewardData = snapshot.val()[rewardId];
+          return{
+            item: rewardData.item,
+            active: rewardData.active,
+            size: rewardData.size,
+            userStamps: rewardData.userStamps
+          }
+        })
+        setRewards(rewards);
       }
     });
   }, []);
@@ -54,22 +62,14 @@ const Rewards = () => {
               contentContainerStyle={styles.scrollViewFlex}>
               <Text style={styles.inProgressTitle}>Rewards in progress</Text>
               <View style={styles.flatListView}>
-                {/* <SectionList
-                  sections={rewards}
-                /> */}
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  style={styles.flatListStyle}
-                  contentContainerStyle={styles.rewardsList}
-                  data={rewards}
-                  keyExtractor={(item) => item.toString()}
-                  renderItem={({item}) => {
-                    return(
-                      <RewardsCard
-                        value={item.item}
-                      />
-                    )
-                  }}
+                <SectionList
+                  sections={DATA}
+                  keyExtractor={(reward, index) => reward.item + index}
+                  renderItem={({ item }) => (
+                    <RewardsCard
+                      reward={item}                    
+                    />
+                  )}
                 />
               </View>
             </ScrollView>

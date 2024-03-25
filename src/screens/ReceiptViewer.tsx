@@ -24,23 +24,25 @@ const ReceiptViewer = () => {
   const { 
     receiptId,
     vendorId,
-    vendorLat,
-    vendorLong,
+    receiptDate,
+    latitude,
+    longitude,
     vendorName, 
     items, 
     priceTotal, 
-    itemTotal, 
+    itemsTotal, 
     viewerType} = route.params as ReceiptProps;
 
   const receiptData: ReceiptProps = {
     receiptId,
     vendorId,
-    vendorLat,
-    vendorLong,
+    receiptDate,
+    latitude,
+    longitude,
     vendorName, 
     items, 
     priceTotal, 
-    itemTotal, 
+    itemsTotal, 
   };
 
   const serviceMethodsWrapper = (button: number) => {
@@ -71,7 +73,7 @@ const ReceiptViewer = () => {
            items={items}
            vendorName={vendorName}
            priceTotal={priceTotal}
-           itemTotal={itemTotal}
+           itemTotal={itemsTotal}
         />
       </ScrollView>
     
