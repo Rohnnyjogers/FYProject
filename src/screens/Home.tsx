@@ -56,12 +56,13 @@ const Home = () => {
                 return <ReceiptCard
                           receiptId={item.receiptId}
                           vendorId={item.vendorId}
-                          vendorLat={item.vendorLat}
-                          vendorLong={item.vendorLong}
+                          receiptDate={item.receiptDate}
+                          latitude={item.latitude}
+                          longitude={item.longitude}
                           vendorName={item.vendorName}
                           items={item.items}
                           priceTotal={item.priceTotal}
-                          itemTotal={item.itemTotal}
+                          itemsTotal={item.itemsTotal}
                           viewerType={ADD_TO_SAVED_AND_TAX}
                         />
               }}

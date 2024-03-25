@@ -17,12 +17,13 @@ type Item = {
 export type ReceiptProps = {
     receiptId: number;
     vendorId: number;
-    vendorLat: number;
-    vendorLong: number;
+    receiptDate: Date;
     vendorName: string;
+    latitude: number;
+    longitude: number;
     items: Item[];
+    itemsTotal: number;
     priceTotal: number;
-    itemTotal: number;
 } & ({viewerType?: never} | {viewerType: string});
 
 export type Reward = {
@@ -45,45 +46,49 @@ export type RootStackParamsList = {
     ADD_TO_SAVED_AND_TAX: {
         receiptId: number;
         vendorId: number;
-        vendorLat: number;
-        vendorLong: number;
+        receiptDate: Date;
         vendorName: string;
+        latitude: number;
+        longitude: number;
         items: Item[];
+        itemsTotal: number;
         priceTotal: number;
-        itemTotal: number;
         viewerType: string | undefined;
     },
     REMOVE_FROM_SAVED: {
         receiptId: number;
         vendorId: number;
-        vendorLat: number;
-        vendorLong: number;
+        receiptDate: Date;
         vendorName: string;
+        latitude: number;
+        longitude: number;
         items: Item[];
+        itemsTotal: number;
         priceTotal: number;
-        itemTotal: number;
         viewerType: string | undefined;
     },
     REMOVE_FROM_TAX: {
         receiptId: number;
         vendorId: number;
-        vendorLat: number;
-        vendorLong: number;
+        receiptDate: Date;
         vendorName: string;
+        latitude: number;
+        longitude: number;
         items: Item[];
+        itemsTotal: number;
         priceTotal: number;
-        itemTotal: number;
         viewerType: string | undefined;
     }
     NAV_ERROR: {
         receiptId: number;
         vendorId: number;
-        vendorLat: number;
-        vendorLong: number;
+        receiptDate: Date;
         vendorName: string;
+        latitude: number;
+        longitude: number;
         items: Item[];
+        itemsTotal: number;
         priceTotal: number;
-        itemTotal: number;
         viewerType: string | undefined;
     }
 }

@@ -9,12 +9,13 @@ import CompactReceipt from './CompactReceipt';
 const ReceiptCard: React.FC<ReceiptProps> = ({
       receiptId,
       vendorId,
-      vendorLat,
-      vendorLong,
+      receiptDate,
+      latitude,
+      longitude,
       vendorName, 
       items, 
       priceTotal, 
-      itemTotal, 
+      itemsTotal, 
       viewerType 
 }) => {
 
@@ -39,12 +40,13 @@ const ReceiptCard: React.FC<ReceiptProps> = ({
     navigation.navigate(targetViewer, {
       receiptId,
       vendorId,
-      vendorLat,
-      vendorLong,
+      receiptDate,
       vendorName, 
+      latitude,
+      longitude,
       items, 
+      itemsTotal, 
       priceTotal, 
-      itemTotal, 
       viewerType 
     });
   };
@@ -57,7 +59,7 @@ const ReceiptCard: React.FC<ReceiptProps> = ({
                 items={items}
                 vendorName={vendorName}
                 priceTotal={priceTotal}
-                itemTotal={itemTotal}/>
+                itemTotal={itemsTotal}/>
           </Pressable> 
       <Text style={styles.receiptTitle}>{vendorName}</Text>
       <Text style={styles.receiptTime}>12:10 04/12/2023</Text>
