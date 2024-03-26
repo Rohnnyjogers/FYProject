@@ -5,37 +5,60 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Header from '../components/Header';
 import RewardsCard from '../components/rewards/RewardsCard';
 import { auth, database } from '../../firebaseconfig';
-import { onValue, ref } from 'firebase/database';
+import { DatabaseReference, onValue, ref } from 'firebase/database';
 import { Reward } from '../types/types';
 
 const Rewards = () => {
 
   const [rewards, setRewards] = useState<Reward[]>([]);
+  const [active, setActive] = useState<Reward[]>([]);
+  const [complete, setComplete] = useState<Reward[]>([]);
   const [loading, setLoading] = useState(false);
 
   const bottomTabHeight = useBottomTabBarHeight();
+  
+  let DATA: any[] = [];
 
-  const DATA = [
-    {
-      title: 'Rewards in progress',
+  if(rewards && rewards.length > 0){
+    DATA.push({
+      title: 'Rewards for you',
       data: rewards
-    }
-  ];
+    })
+  }
+  console.log(rewards);
+
+  if(active && active.length > 0){
+    DATA.push({
+      title: 'Rewards in progress',
+      data: active
+    })
+  }
+  console.log(active);
+
+  if(complete && complete.length > 0){
+    DATA.push({
+      title: 'Completed rewards',
+      data: complete
+    })
+  }
+  console.log(complete);
+  console.log('DATA', DATA);
 
   useEffect(() => {
-    const userId = auth.currentUser?.uid;
-    const rewardsRef = ref(database, `/users/${userId}/rewards`);
+    const userId: string | undefined = auth.currentUser?.uid;
+    const rewardsRef: DatabaseReference = ref(database, `/users/${userId}/rewards`);
 
     onValue(rewardsRef, (snapshot) => {
       if(snapshot.exists()){
-        const rewardIds = Object.keys(snapshot.val());
+        const rewardIds: string[] = Object.keys(snapshot.val());
         const rewards: Reward[] = rewardIds.map(rewardId => {
-          const rewardData = snapshot.val()[rewardId];
+          const rewardData: Reward = snapshot.val()[rewardId];
           return{
-            item: rewardData.item,
             active: rewardData.active,
+            vendor: rewardData.vendor,
+            item: rewardData.item,
             size: rewardData.size,
-            userStamps: rewardData.userStamps
+            progress: rewardData.progress
           }
         })
         setRewards(rewards);
@@ -48,28 +71,29 @@ const Rewards = () => {
     <>
       {loading ? 
         <ActivityIndicator 
-        size={'large'} 
-        color={COLOR.primaryBlueHex}
-        style={styles.indicator}/>
+          size={'large'} 
+          color={COLOR.primaryBlueHex}
+          style={styles.indicator}
+        />
         :
         <>
           <Header/>
           <Text style={styles.title}>Rewards</Text>
           <View style={styles.divider}/>
           <View style={styles.screenContainer}>
-          <Text style={styles.inProgressTitle}>Rewards in progress</Text>
-          <View style={styles.flatListView}>
             <SectionList
               contentContainerStyle={styles.sectionList}
               sections={DATA}
               keyExtractor={(reward, index) => reward.item + index}
+              renderSectionHeader={(DATA) => (
+                <Text style={styles.sectionTitle}>{DATA.section.title}</Text>
+              )}
               renderItem={({ item }) => (
                 <RewardsCard
                   reward={item}                    
                 />
               )}
             />
-          </View>
           </View>
         </>
       }
@@ -87,13 +111,9 @@ const styles = StyleSheet.create({
     paddingEnd: SIZE.size_20,
     marginBottom: SIZE.size_20
   },
-  scrollViewFlex: {
-    flexGrow: 1,
-  },
   title: {
     paddingStart: SIZE.size_20,
     paddingEnd: SIZE.size_20,
-
     fontFamily: FONTFAMILY.jost_bold,
     fontSize: 25,
     color: COLOR.primaryBlueHex,
@@ -102,21 +122,14 @@ const styles = StyleSheet.create({
     height: SIZE.size_1,
     backgroundColor: COLOR.primaryBlueHex
   },
-  inProgressTitle: {
+  sectionTitle: {
     paddingTop: SIZE.size_20,
     fontFamily: FONTFAMILY.jost_medium,
     fontSize: SIZE.size_20,
     color: COLOR.primaryGreyHex,
   },
-  flatListView: {
-    height: RECEIPT_CARD_HEIGHT
-  },
-  flatListStyle: {
-    marginTop: SIZE.size_10,
-    flexGrow: 0
-  },
   sectionList: {
-    gap: SIZE.size_10
+    gap: SIZE.size_15
   }
 })
 

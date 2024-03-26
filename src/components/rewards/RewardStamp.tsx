@@ -19,7 +19,7 @@ export default RewardStamp;
 
 const styles = StyleSheet.create({
     rewardStamp: {
-        margin: SIZE.size_10,
+        // margin: SIZE.size_10,
         width: SIZE.size_30,
         height: SIZE.size_30,
         borderRadius: SIZE.size_15,

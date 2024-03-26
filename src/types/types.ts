@@ -28,9 +28,10 @@ export type ReceiptProps = {
 
 export type Reward = {
     active: boolean;
+    vendor: string;
     item: string;
     size: number;
-    userStamps: number;
+    progress: number;
 }
 
 export type ViewerScreen = 

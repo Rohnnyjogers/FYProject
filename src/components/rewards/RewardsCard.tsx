@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { COLOR, REWARDS_CARD_HEIGHT, REWARDS_CARD_WIDTH, SIZE } from '../../theme/theme'
+import { Button, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { COLOR, FONTFAMILY, FULL_RECEIPT_WIDTH, REWARDS_CARD_HEIGHT, REWARDS_CARD_WIDTH, SIZE } from '../../theme/theme'
 import { Reward } from '../../types/types';
 import RewardStamp from './RewardStamp';
 
@@ -11,9 +11,13 @@ interface RewardCardProps {
 const RewardsCard: React.FC<RewardCardProps> = ({
   reward
 }) => {
-  //const { size } = reward;
+  // const { active, vendor, item , size, progress  } = reward;
+  const rewardStatus: boolean = false;
+  const [active, setActive] = useState<boolean>(false);
+  const vendor: string = 'The Corner Shop'
   const size: number = 6;
-  const progress: number = 3;
+  const progress: number = 0;
+
 
   const renderRewardArray = () => {
     const rewardArray = [];
@@ -30,11 +34,22 @@ const RewardsCard: React.FC<RewardCardProps> = ({
 
 
   return (
-    <View style={styles.container}>
-      <Text>{reward.item}</Text>
-      <View style={styles.stamps}>
-        {renderRewardArray()}
-      </View>
+    <View style={styles.card}>
+      <Text style={styles.itemText}>{reward.item}</Text>
+      <Text style={styles.vendorText}>{vendor}</Text>
+      {active ? 
+        <View style={styles.stamps}>
+          {renderRewardArray()}
+        </View>
+        : 
+        <View style={styles.activate}>
+          <Button
+            title='Activate'
+            color={COLOR.primaryBlueHex}
+            onPress={() => {setActive(true)}}
+          />
+        </View>
+      }      
     </View>
   )
 }
@@ -42,7 +57,7 @@ const RewardsCard: React.FC<RewardCardProps> = ({
 export default RewardsCard;
 
 const styles = StyleSheet.create({
-    container: {
+    card: {
         height: REWARDS_CARD_HEIGHT,
         width: REWARDS_CARD_WIDTH,
         backgroundColor: COLOR.secondaryLightGrey,
@@ -50,14 +65,27 @@ const styles = StyleSheet.create({
         borderWidth: SIZE.size_1,
         borderColor: COLOR.borderDarkGrey,
         flexDirection: 'column',
+        gap: SIZE.size_8,
+        paddingTop: SIZE.size_5,
+        paddingBottom: SIZE.size_5,
         alignItems: 'center',
         alignSelf: 'center',
-        paddingTop: SIZE.size_8
+    },
+    itemText: {
+      fontFamily: FONTFAMILY.jost_medium,
+      fontSize: SIZE.size_16
+    },
+    vendorText: {
+      fontFamily: FONTFAMILY.jost_light,
+      fontSize: SIZE.size_14
     },
     stamps: {
-      alignSelf: 'center',
+      width: REWARDS_CARD_WIDTH,
       flexDirection: 'row',
-      justifyContent: 'center',
+      justifyContent: 'space-around',
       marginTop: SIZE.size_10
+    },
+    activate: {
+      width: FULL_RECEIPT_WIDTH
     }
-})
+  })
