@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         paddingEnd: SIZE.size_10,
         borderRadius: SIZE.size_2,
         borderWidth: SIZE.size_1,
-        borderColor: COLOR.borderLightGrey,
+        borderColor: COLOR.borderDarkGrey,
         backgroundColor: COLOR.primaryWhiteHex,
       },
     receiptTitle: {

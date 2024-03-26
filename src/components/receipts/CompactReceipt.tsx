@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     width: COMPACT_RECEIPT_WIDTH,
     borderRadius: SIZE.size_2,
     borderWidth: SIZE.size_1,
-    borderColor: COLOR.borderLightGrey,
+    borderColor: COLOR.borderDarkGrey,
     padding: SIZE.size_4,
     backgroundColor: COLOR.primaryWhiteHex,
   },

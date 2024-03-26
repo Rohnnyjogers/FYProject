@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR.secondaryLightGrey,
         borderRadius: SIZE.size_4,
         borderWidth: 1,
-        borderColor: COLOR.borderLightGrey,
+        borderColor: COLOR.borderDarkGrey,
         flexDirection: 'column',
         alignItems: 'center',
         paddingTop: SIZE.size_8,

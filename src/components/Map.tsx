@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: SIZE.size_4,
     borderWidth: 1,
-    borderColor: COLOR.borderLightGrey,
+    borderColor: COLOR.borderDarkGrey,
     backgroundColor: COLOR.secondaryLightGrey
   },
   mapContainer: {
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     height: MAP_HEIGHT,
     borderRadius: SIZE.size_4,
     borderWidth: 1,
-    borderColor: COLOR.borderLightGrey,
+    borderColor: COLOR.borderDarkGrey,
     backgroundColor: COLOR.secondaryLightGrey
   },
   map: {

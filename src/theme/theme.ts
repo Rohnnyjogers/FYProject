@@ -6,8 +6,8 @@ export const COMPACT_RECEIPT_WIDTH = Dimensions.get('window').width*0.35;
 export const COMPACT_RECEIPT_HEIGHT = Dimensions.get('window').width*0.45;
 export const FULL_RECEIPT_WIDTH = Dimensions.get('window').width*0.75;
 export const FULL_RECEIPT_HEIGHT =  Dimensions.get('window').height*0.65;
-export const REWARDS_CARD_WIDTH = Dimensions.get('window').width*0.9;
-export const REWARDS_CARD_HEIGHT = Dimensions.get('window').height*0.08;
+export const REWARDS_CARD_WIDTH = Dimensions.get('window').width*0.895;
+export const REWARDS_CARD_HEIGHT = Dimensions.get('window').height*0.15;
 export const COMPACT_ITEMS_CONTAINER_HEIGHT = Dimensions.get('window').height*0.08;
 export const FULL_ITEMS_CONTAINER_HEIGHT = Dimensions.get('window').height*0.35;
 export const MAP_CARD_WIDTH = Dimensions.get('window').width*0.9;
@@ -154,8 +154,10 @@ interface Color {
     primaryWhiteHex: string;
     primaryBlackHex: string;
     primaryGreyHex: string;
-    borderLightGrey: string;
+    borderDarkGrey: string;
+    borderDarkBlue: string;
     secondaryLightGrey: string;
+    stampLightGrey: string;
 };
 
 export const COLOR: Color = {
@@ -163,6 +165,8 @@ export const COLOR: Color = {
     primaryWhiteHex: '#FBFCFC',
     primaryBlackHex: '#343434',
     primaryGreyHex: '#494d4f',
-    borderLightGrey: '#D7DBDD',
-    secondaryLightGrey: '#E5E7E9'
+    borderDarkGrey: '#D7DBDD',
+    borderDarkBlue: '#325D81',
+    secondaryLightGrey: '#E5E7E9',
+    stampLightGrey: '#F3F3F3'
 };

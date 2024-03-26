@@ -57,22 +57,19 @@ const Rewards = () => {
           <Text style={styles.title}>Rewards</Text>
           <View style={styles.divider}/>
           <View style={styles.screenContainer}>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.scrollViewFlex}>
-              <Text style={styles.inProgressTitle}>Rewards in progress</Text>
-              <View style={styles.flatListView}>
-                <SectionList
-                  sections={DATA}
-                  keyExtractor={(reward, index) => reward.item + index}
-                  renderItem={({ item }) => (
-                    <RewardsCard
-                      reward={item}                    
-                    />
-                  )}
+          <Text style={styles.inProgressTitle}>Rewards in progress</Text>
+          <View style={styles.flatListView}>
+            <SectionList
+              contentContainerStyle={styles.sectionList}
+              sections={DATA}
+              keyExtractor={(reward, index) => reward.item + index}
+              renderItem={({ item }) => (
+                <RewardsCard
+                  reward={item}                    
                 />
-              </View>
-            </ScrollView>
+              )}
+            />
+          </View>
           </View>
         </>
       }
@@ -118,9 +115,8 @@ const styles = StyleSheet.create({
     marginTop: SIZE.size_10,
     flexGrow: 0
   },
-  rewardsList: {
-    alignItems: 'center',
-    gap: SIZE.size_20
+  sectionList: {
+    gap: SIZE.size_10
   }
 })
 
