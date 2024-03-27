@@ -28,10 +28,13 @@ export type ReceiptProps = {
 
 export type Reward = {
     active: boolean;
+    rewardId: number;
     vendor: string;
+    vendorId: string;
     item: string;
     size: number;
     progress: number;
+    complete: boolean;
 }
 
 export type ViewerScreen = 

@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { COLOR, FONTFAMILY, FULL_RECEIPT_WIDTH, REWARDS_CARD_HEIGHT, REWARDS_CARD_WIDTH, SIZE } from '../../theme/theme'
 import { Reward } from '../../types/types';
 import RewardStamp from './RewardStamp';
+import { auth } from '../../../firebaseconfig';
+import { setRewardActive } from '../../service/rewardFunctions';
 
 interface RewardCardProps {
   reward: Reward;
@@ -12,6 +14,7 @@ const RewardsCard: React.FC<RewardCardProps> = ({
   reward
 }) => {
   // const { active, vendor, item , size, progress  } = reward;
+  const userId = auth.currentUser?.uid;
   const rewardStatus: boolean = false;
   const [active, setActive] = useState<boolean>(false);
   const vendor: string = 'The Corner Shop'
@@ -46,7 +49,11 @@ const RewardsCard: React.FC<RewardCardProps> = ({
           <Button
             title='Activate'
             color={COLOR.primaryBlueHex}
-            onPress={() => {setActive(true)}}
+            onPress={() => setRewardActive(
+              userId,
+              reward,
+              setActive
+            )}
           />
         </View>
       }      

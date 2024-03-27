@@ -15,6 +15,20 @@ const Rewards = () => {
   const [complete, setComplete] = useState<Reward[]>([]);
   const [loading, setLoading] = useState(false);
 
+  rewards.forEach((reward) => {
+    if(reward.active){
+      active.push(reward);
+      const index = rewards.indexOf(reward);
+      rewards.splice(index, 1);
+    }
+
+    if(reward.complete){
+      complete.push(reward);
+      const index = rewards.indexOf(reward);
+      rewards.splice(index, 1);
+    }
+  })
+
   const bottomTabHeight = useBottomTabBarHeight();
   
   let DATA: any[] = [];
@@ -25,7 +39,6 @@ const Rewards = () => {
       data: rewards
     })
   }
-  console.log(rewards);
 
   if(active && active.length > 0){
     DATA.push({
@@ -33,7 +46,6 @@ const Rewards = () => {
       data: active
     })
   }
-  console.log(active);
 
   if(complete && complete.length > 0){
     DATA.push({
@@ -41,8 +53,6 @@ const Rewards = () => {
       data: complete
     })
   }
-  console.log(complete);
-  console.log('DATA', DATA);
 
   useEffect(() => {
     const userId: string | undefined = auth.currentUser?.uid;
@@ -55,10 +65,13 @@ const Rewards = () => {
           const rewardData: Reward = snapshot.val()[rewardId];
           return{
             active: rewardData.active,
+            rewardId: rewardData.rewardId,
             vendor: rewardData.vendor,
+            vendorId: rewardData.vendorId,
             item: rewardData.item,
             size: rewardData.size,
-            progress: rewardData.progress
+            progress: rewardData.progress,
+            complete: rewardData.complete
           }
         })
         setRewards(rewards);
