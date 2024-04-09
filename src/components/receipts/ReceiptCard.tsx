@@ -51,6 +51,10 @@ const ReceiptCard: React.FC<ReceiptProps> = ({
     });
   };
 
+  const rawDate: Date = new Date(receiptDate);
+  const date = `${rawDate.getDate()}/${rawDate.getMonth()}/${rawDate.getFullYear()} ${rawDate.getHours()}:${rawDate.getMinutes()}`;
+  const vendor: string = vendorName.replace(/_/g,' ');
+
   return (
     <View style={styles.card}>
           <Pressable onPress={toReceiptViewer}>
@@ -61,8 +65,8 @@ const ReceiptCard: React.FC<ReceiptProps> = ({
                 priceTotal={priceTotal}
                 itemTotal={itemsTotal}/>
           </Pressable> 
-      <Text style={styles.receiptTitle}>{vendorName}</Text>
-      <Text style={styles.receiptTime}>12:10 04/12/2023</Text>
+      <Text style={styles.receiptTitle}>{vendor}</Text>
+      <Text style={styles.receiptTime}>{date}</Text>
     </View>
   );
 };

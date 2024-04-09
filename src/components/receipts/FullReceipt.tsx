@@ -9,9 +9,11 @@ const FullReceipt: React.FC<UIReceiptProps> = ({
   priceTotal,
   itemTotal,
 }) => {
+  const vendor: string = vendorName.replace(/_/g,' ');
+
   return (
     <View style={styles.receiptContainer}>
-      <Text style={styles.receiptTitle}>{vendorName}</Text>
+      <Text style={styles.receiptTitle}>{vendor}</Text>
       <View style={styles.divider}/>
       <View style={styles.items}>
         <ScrollView

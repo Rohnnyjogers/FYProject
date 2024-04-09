@@ -14,6 +14,8 @@ import NavError from '../components/NavError';
 import { ReceiptContext } from '../../App';
 import { auth } from '../../firebaseconfig';
 import { addReceiptToRecent, sendReceiptToVendor, updateCustomerRecordWithVendor } from '../service/service';
+import { checkAndUpdateRewards } from '../service/rewardFunctions';
+import PushNotification from 'react-native-push-notification';
 
 const HomeStack = createNativeStackNavigator();
 const SavedStack = createNativeStackNavigator();
@@ -80,10 +82,18 @@ const TabNavigator = () => {
 
   useEffect(() => {
     if(recentReceipts.length > 0){
+     
+      PushNotification.localNotification({
+        channelId: '7000',
+        title: "Notification",
+        message: 'This is a notification.'
+      });
+
       recentReceipts.forEach((receipt) => {
         addReceiptToRecent(userId, receipt);
         updateCustomerRecordWithVendor(userId, receipt);
         sendReceiptToVendor(userId, receipt);
+        checkAndUpdateRewards(userId, receipt);
       });
       setRecentReceipts([]);
     }

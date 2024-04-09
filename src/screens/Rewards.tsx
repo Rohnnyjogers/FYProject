@@ -7,52 +7,71 @@ import RewardsCard from '../components/rewards/RewardsCard';
 import { auth, database } from '../../firebaseconfig';
 import { DatabaseReference, onValue, ref } from 'firebase/database';
 import { Reward } from '../types/types';
+import { checkAndUpdateRewards } from '../service/rewardFunctions';
 
 const Rewards = () => {
 
   const [rewards, setRewards] = useState<Reward[]>([]);
-  const [active, setActive] = useState<Reward[]>([]);
-  const [complete, setComplete] = useState<Reward[]>([]);
   const [loading, setLoading] = useState(false);
 
+  let rewardData = [];
+  let availableRewards: Reward[] = [];
+  let activeRewards: Reward[] = [];
+  let unclaimedRewards: Reward[] = [];
+  let completeRewards: Reward[] = [];
+  
   rewards.forEach((reward) => {
-    if(reward.active){
-      active.push(reward);
-      const index = rewards.indexOf(reward);
-      rewards.splice(index, 1);
+    if(!reward.active&&!reward.complete&&!reward.claimed){
+      availableRewards.push(reward);
     }
 
-    if(reward.complete){
-      complete.push(reward);
-      const index = rewards.indexOf(reward);
-      rewards.splice(index, 1);
+    if(reward.active){
+      activeRewards.push(reward);
     }
+
+    if(reward.complete&&!reward.claimed){
+      unclaimedRewards.push(reward);
+    }
+
+    if(reward.complete&&reward.claimed){
+      completeRewards.push(reward);
+    }
+
   })
 
-  const bottomTabHeight = useBottomTabBarHeight();
-  
-  let DATA: any[] = [];
-
-  if(rewards && rewards.length > 0){
-    DATA.push({
+  if(availableRewards.length > 0){
+    const availableList = {
       title: 'Rewards for you',
-      data: rewards
-    })
+      data: availableRewards
+    }
+    rewardData.push(availableList);
   }
 
-  if(active && active.length > 0){
-    DATA.push({
+  if(activeRewards.length > 0){
+    const activeList = {
       title: 'Rewards in progress',
-      data: active
-    })
+      data: activeRewards
+    }
+    rewardData.push(activeList);
   }
 
-  if(complete && complete.length > 0){
-    DATA.push({
-      title: 'Completed rewards',
-      data: complete
-    })
+  if(unclaimedRewards.length > 0){
+    const unclaimedList = {
+      title: 'Complete rewards',
+      data: unclaimedRewards
+    }
+    rewardData.push(unclaimedList);
   }
+
+  if(completeRewards.length > 0){
+    const completeList = {
+      title: 'Rewards history',
+      data: completeRewards
+    }
+    rewardData.push(completeList);
+  }
+  
+  const bottomTabHeight = useBottomTabBarHeight();
 
   useEffect(() => {
     const userId: string | undefined = auth.currentUser?.uid;
@@ -71,6 +90,7 @@ const Rewards = () => {
             item: rewardData.item,
             size: rewardData.size,
             progress: rewardData.progress,
+            claimed: rewardData.claimed,
             complete: rewardData.complete
           }
         })
@@ -80,7 +100,6 @@ const Rewards = () => {
   }, []);
 
   return (
-    
     <>
       {loading ? 
         <ActivityIndicator 
@@ -96,7 +115,7 @@ const Rewards = () => {
           <View style={styles.screenContainer}>
             <SectionList
               contentContainerStyle={styles.sectionList}
-              sections={DATA}
+              sections={rewardData}
               keyExtractor={(reward, index) => reward.item + index}
               renderSectionHeader={(DATA) => (
                 <Text style={styles.sectionTitle}>{DATA.section.title}</Text>

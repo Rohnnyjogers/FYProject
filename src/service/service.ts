@@ -1,14 +1,43 @@
-import { child, get, ref, remove, set } from "firebase/database";
-import { ReceiptProps } from "../types/types";
+import { child, get, ref, remove, set, update } from "firebase/database";
+import { PurchaseProps, ReceiptProps, Reward } from "../types/types";
 import { database } from "../../firebaseconfig";
 import { Alert } from "react-native";
+
+export const getCurrentRewardSize = async(
+    userId: string|undefined,
+    receiptData: ReceiptProps,
+    rewardItem: string
+) => {
+    const dbRef = ref(database, `/users/${userId}/rewards`);
+
+    try{
+        const rewardsSnapshot = await get(dbRef);
+
+        if(rewardsSnapshot.exists()){
+            const rewards = rewardsSnapshot.val();
+            const { vendorId } = receiptData;
+
+            for(const reward of Object.keys(rewards)){
+                const rewardData: Reward = rewards[reward];
+
+                if(rewardData.vendorId===vendorId && rewardData.item===rewardItem && rewardData.active){
+                    return rewardData.size;
+                }
+            }
+        }
+        return null;
+    }
+    catch(error){
+        console.log('Error retrieving reward size: ', error);
+    }
+}
 
 export const updateCustomerRecordWithVendor = async (
     userId: string | undefined,
     receiptData: ReceiptProps
 ) => {
     const dbRef = ref(database, `/vendors/${receiptData.vendorName}/${receiptData.vendorName}_${receiptData.vendorId}/customers/${userId}/purchases`);
-    const items = receiptData.items;
+    const { items } = receiptData;
 
     try{
         const purchasesSnapshot = await get(dbRef);
@@ -16,15 +45,45 @@ export const updateCustomerRecordWithVendor = async (
 
         for (const item of items){
             const { description, quantity } = item;
-            const currentItem = purchases[description];
+            const currentItem: PurchaseProps = purchases[description];
             const itemRef = child(dbRef, description);
 
             if(currentItem){
                 const updateQuantity = currentItem.quantity + quantity;
-                await set(itemRef, {quantity: updateQuantity});
+                update(itemRef, {quantity: updateQuantity});
+                
+                if(currentItem.rewardable){
+
+                    if(currentItem.activeReward || currentItem.nextRewardPhase){
+                        let currentRewardCount = currentItem.rewardCount;
+
+                        if(currentRewardCount !== null){
+
+                            for(let i=0;i<quantity;i++){
+                                
+                                if(currentRewardCount >= currentItem.nextRewardCount){
+                                    update(itemRef, {nextRewardPhase: false});
+                                    break;
+                                }
+                                currentRewardCount++;
+                            }
+                            update(itemRef, {rewardCount: currentRewardCount});
+                        }
+                    }                  
+                }
             } 
             else{
-                await set(itemRef, {quantity});
+                const purchaseData: PurchaseProps = {
+                    quantity: quantity,
+                    rewardable: true,
+                    activeReward: false,
+                    rewardCount: null,
+                    nextRewardCount: 0,
+                    nextRewardPhase: false,
+                    totalCompleteRewards: 0
+                }
+
+                await set(itemRef, purchaseData);
             }
         }
     }catch(error){

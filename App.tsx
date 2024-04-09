@@ -6,7 +6,7 @@ import { User, onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebaseconfig';
 import TabNavigator from './src/navigator/TabNavigator';
 import Login from './src/screens/Login';
-import NfcManager, { Ndef, NdefRecord, NfcEvents, NfcTech, TagEvent } from 'react-native-nfc-manager';
+import NfcManager, { Ndef, NfcEvents, NfcTech, TagEvent } from 'react-native-nfc-manager';
 import { ReceiptProps } from './src/types/types';
 
 

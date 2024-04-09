@@ -16,7 +16,7 @@ type Item = {
 
 export type ReceiptProps = {
     receiptId: number;
-    vendorId: number;
+    vendorId: string;
     receiptDate: Date;
     vendorName: string;
     latitude: number;
@@ -34,6 +34,7 @@ export type Reward = {
     item: string;
     size: number;
     progress: number;
+    claimed: boolean;
     complete: boolean;
 }
 
@@ -50,7 +51,7 @@ export type RootStackParamsList = {
     Profile: undefined;
     ADD_TO_SAVED_AND_TAX: {
         receiptId: number;
-        vendorId: number;
+        vendorId: string;
         receiptDate: Date;
         vendorName: string;
         latitude: number;
@@ -62,7 +63,7 @@ export type RootStackParamsList = {
     },
     REMOVE_FROM_SAVED: {
         receiptId: number;
-        vendorId: number;
+        vendorId: string;
         receiptDate: Date;
         vendorName: string;
         latitude: number;
@@ -74,7 +75,7 @@ export type RootStackParamsList = {
     },
     REMOVE_FROM_TAX: {
         receiptId: number;
-        vendorId: number;
+        vendorId: string;
         receiptDate: Date;
         vendorName: string;
         latitude: number;
@@ -86,7 +87,7 @@ export type RootStackParamsList = {
     }
     NAV_ERROR: {
         receiptId: number;
-        vendorId: number;
+        vendorId: string;
         receiptDate: Date;
         vendorName: string;
         latitude: number;
@@ -104,6 +105,16 @@ export type UIReceiptProps = {
     items: Item[];
     itemTotal: number;
     priceTotal: number;
+}
+
+export type PurchaseProps = {
+    quantity: number;
+    rewardable: boolean;
+    activeReward: boolean;
+    rewardCount: number | null;
+    nextRewardPhase: boolean;
+    nextRewardCount: number;
+    totalCompleteRewards: number;
 }
 
 export type NameProp = {

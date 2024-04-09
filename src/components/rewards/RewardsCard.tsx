@@ -4,7 +4,7 @@ import { COLOR, FONTFAMILY, FULL_RECEIPT_WIDTH, REWARDS_CARD_HEIGHT, REWARDS_CAR
 import { Reward } from '../../types/types';
 import RewardStamp from './RewardStamp';
 import { auth } from '../../../firebaseconfig';
-import { setRewardActive } from '../../service/rewardFunctions';
+import { setRewardActive, setRewardClaimed } from '../../service/rewardFunctions';
 
 interface RewardCardProps {
   reward: Reward;
@@ -13,13 +13,11 @@ interface RewardCardProps {
 const RewardsCard: React.FC<RewardCardProps> = ({
   reward
 }) => {
-  // const { active, vendor, item , size, progress  } = reward;
+  const { active, complete, claimed, vendor, item , size, progress  } = reward;
   const userId = auth.currentUser?.uid;
-  const rewardStatus: boolean = false;
-  const [active, setActive] = useState<boolean>(false);
-  const vendor: string = 'The Corner Shop'
-  const size: number = 6;
-  const progress: number = 0;
+  const vendorName: string = vendor.replace(/_/g,' ');
+
+  
 
 
   const renderRewardArray = () => {
@@ -35,29 +33,64 @@ const RewardsCard: React.FC<RewardCardProps> = ({
     return rewardArray;
   }
 
-
   return (
-    <View style={styles.card}>
-      <Text style={styles.itemText}>{reward.item}</Text>
-      <Text style={styles.vendorText}>{vendor}</Text>
-      {active ? 
-        <View style={styles.stamps}>
-          {renderRewardArray()}
+    <>
+      {claimed ? 
+        <View style={styles.card}>
+          <Text style={styles.itemText}>{item}</Text>
+          <Text style={styles.vendorText}>{vendorName}</Text>
+          <View style={styles.stamps}>
+            {renderRewardArray()}
+          </View>
         </View>
-        : 
-        <View style={styles.activate}>
-          <Button
-            title='Activate'
-            color={COLOR.primaryBlueHex}
-            onPress={() => setRewardActive(
-              userId,
-              reward,
-              setActive
-            )}
-          />
-        </View>
-      }      
-    </View>
+        :
+          <View style={styles.card}>
+            {complete ? 
+              <>
+                <Text style={styles.itemText}>{item} reward complete!</Text>
+                <Text style={styles.vendorText}>{vendorName}</Text>
+              </>
+            : 
+              <>
+                <Text style={styles.itemText}>{item}</Text>
+                <Text style={styles.vendorText}>{vendorName}</Text>
+              </>
+            }
+            {active ? 
+                <View style={styles.stamps}>
+                  {renderRewardArray()}
+                </View>
+              : 
+              <>
+              {complete ? 
+                <View style={styles.activate}>
+                  <Button
+                    title='Claim'
+                    color={COLOR.primaryBlueHex}
+                    onPress={() => setRewardClaimed(
+                      userId,
+                      reward
+                    )}
+                    
+                  />
+                </View>
+              :
+                <View style={styles.activate}>
+                  <Button
+                    title='Activate'
+                    color={COLOR.primaryBlueHex}
+                    onPress={() => setRewardActive(
+                      userId,
+                      reward
+                    )}
+                  />
+                </View>
+              }
+              </>
+            }      
+          </View>
+      }
+    </> 
   )
 }
 

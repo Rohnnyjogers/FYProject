@@ -1,0 +1,30 @@
+{
+    "project_info": {
+        "project_number": "865359060011",
+        "firebase_url": "https://fyproject-54d28-default-rtdb.firebaseio.com",
+        "project_id": "fyproject-54d28",
+        "storage_bucket": "fyproject-54d28.appspot.com"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:865359060011:web:0f035dfdbc4de2d58a1e6e",
+                "android_client_info": {
+                    "package_name": "com.finalyearproject"
+                  }
+            },
+            "oauth_client": [],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyDZSjspGldg6xTJPuuA2c0D4qOpGUA-2OA"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                  "other_platform_oauth_client": []
+                }
+              }
+        }
+    ],
+    "configuration_version": "1"
+}
