@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
         paddingBottom: SIZE.size_5,
         alignItems: 'center',
         alignSelf: 'center',
+        elevation: SIZE.size_2
     },
     itemText: {
       fontFamily: FONTFAMILY.jost_medium,

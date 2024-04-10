@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: SIZE.size_8,
         gap: SIZE.size_8,
+        elevation: SIZE.size_2
     },
     receiptTitle: {
       fontFamily: FONTFAMILY.jost_medium

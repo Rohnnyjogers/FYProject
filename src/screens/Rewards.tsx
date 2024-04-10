@@ -114,6 +114,7 @@ const Rewards = () => {
           <View style={styles.divider}/>
           <View style={styles.screenContainer}>
             <SectionList
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.sectionList}
               sections={rewardData}
               keyExtractor={(reward, index) => reward.item + index}

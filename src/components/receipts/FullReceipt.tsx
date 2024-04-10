@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
         borderWidth: SIZE.size_1,
         borderColor: COLOR.borderDarkGrey,
         backgroundColor: COLOR.primaryWhiteHex,
+        elevation: SIZE.size_2
       },
     receiptTitle: {
         marginTop: SIZE.size_24,

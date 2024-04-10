@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import Home from '../screens/Home';
 import Rewards from '../screens/Rewards';
-import Saved from '../screens/Saved';
+import Receipts from '../screens/Receipts';
 import Profile from '../screens/Profile';
 import ReceiptViewer from '../screens/ReceiptViewer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -18,7 +18,7 @@ import { checkAndUpdateRewards } from '../service/rewardFunctions';
 import PushNotification from 'react-native-push-notification';
 
 const HomeStack = createNativeStackNavigator();
-const SavedStack = createNativeStackNavigator();
+const ReceiptsStack = createNativeStackNavigator();
 
 const HomeStackScreen = () => {
   return(
@@ -35,21 +35,21 @@ const HomeStackScreen = () => {
           headerTitle: "",
           headerTintColor: COLOR.primaryBlueHex
         }}/>
-        <SavedStack.Screen
+        <ReceiptsStack.Screen
         name='Nav Error'
         component={NavError}/>
     </HomeStack.Navigator>
   )
 }
 
-const SavedStackScreen = () => {
+const ReceiptsStackScreen = () => {
   return(
-    <SavedStack.Navigator
+    <ReceiptsStack.Navigator
       screenOptions={{headerShown: false}}>
-        <SavedStack.Screen
-          name='Saved'
-          component={Saved}/>
-        <SavedStack.Screen
+        <ReceiptsStack.Screen
+          name='Receipts'
+          component={Receipts}/>
+        <ReceiptsStack.Screen
           name={REMOVE_FROM_SAVED}
           component={ReceiptViewer}
           options={{
@@ -57,7 +57,7 @@ const SavedStackScreen = () => {
             headerTitle: '',
             headerTintColor: COLOR.primaryBlueHex
           }}/>
-        <SavedStack.Screen
+        <ReceiptsStack.Screen
           name={REMOVE_FROM_TAX}
           component={ReceiptViewer}
           options={{
@@ -66,10 +66,10 @@ const SavedStackScreen = () => {
             headerTintColor: COLOR.primaryBlueHex
           }}
         />  
-        <SavedStack.Screen
+        <ReceiptsStack.Screen
           name={NAV_ERROR}
           component={NavError}/>
-    </SavedStack.Navigator>
+    </ReceiptsStack.Navigator>
   )
 }
 
@@ -135,8 +135,8 @@ const TabNavigator = () => {
           }}
           />
         <BottomTab.Screen 
-          name='SavedStackScreen' 
-          component={SavedStackScreen}
+          name='ReceiptsStackScreen' 
+          component={ReceiptsStackScreen}
           options={{
             tabBarIcon: ({focused, size, color}) => (
               <Icon 

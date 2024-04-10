@@ -8,6 +8,8 @@ export const FULL_RECEIPT_WIDTH = Dimensions.get('window').width*0.75;
 export const FULL_RECEIPT_HEIGHT =  Dimensions.get('window').height*0.65;
 export const REWARDS_CARD_WIDTH = Dimensions.get('window').width*0.895;
 export const REWARDS_CARD_HEIGHT = Dimensions.get('window').height*0.18;
+export const TAX_EXPENSE_CARD_WIDTH = Dimensions.get('window').width*0.895;
+export const TAX_EXPENSE_CARD_HEIGHT = Dimensions.get('window').height*0.18;
 export const COMPACT_ITEMS_CONTAINER_HEIGHT = Dimensions.get('window').height*0.08;
 export const FULL_ITEMS_CONTAINER_HEIGHT = Dimensions.get('window').height*0.35;
 export const MAP_CARD_WIDTH = Dimensions.get('window').width*0.9;
@@ -44,6 +46,10 @@ interface Size {
     size_50: number;
     size_55: number;
     size_60: number;
+    size_100: number;
+    size_120: number;
+    size_140: number;
+    size_160: number;
 };
 
 export const SIZE: Size = {
@@ -75,6 +81,10 @@ export const SIZE: Size = {
     size_50: 50,
     size_55: 55,
     size_60: 60,
+    size_100: 100,
+    size_120: 120,
+    size_140: 140,
+    size_160: 160
 };
 
 interface FontFamily {

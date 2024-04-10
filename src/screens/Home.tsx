@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   recentList: {
     gap: SIZE.size_20,
-    height: RECEIPT_CARD_HEIGHT
+    height: RECEIPT_CARD_HEIGHT+2
   },
   flatlistStyle: {
     marginTop: SIZE.size_10,

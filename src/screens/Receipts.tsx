@@ -7,6 +7,7 @@ import { auth, database } from '../../firebaseconfig'
 import { onValue, ref } from 'firebase/database'
 import { REMOVE_FROM_SAVED, REMOVE_FROM_TAX, ReceiptProps } from '../types/types'
 import NavError from '../components/NavError'
+import TaxAndExpenseCard from '../components/taxesExpenses/TaxAndExpenseCard'
 
 const Saved = () => {
   const [savedReceipts, setSavedReceipts] = useState<ReceiptProps[]>([]);
@@ -71,7 +72,7 @@ const Saved = () => {
           : 
           <>
             <Header/>
-            <Text style={styles.title}>Saved</Text>
+            <Text style={styles.title}>Receipts</Text>
             <View style={styles.divider}/>
             <View style={styles.screenContainer}>
               <ScrollView
@@ -104,7 +105,8 @@ const Saved = () => {
                   ListEmptyComponent={<NavError/>}
                 />
 
-                <Text style={styles.taxTitle}>Tax Receipts</Text>
+                <Text style={styles.taxTitle}>Taxes and Expenses</Text>
+                <TaxAndExpenseCard/>
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}
@@ -172,11 +174,11 @@ const styles = StyleSheet.create({
   },
   flatListStyle: {
     marginTop: SIZE.size_10,
-    flexGrow: 0
+    flexGrow: 0,
   },
   receiptList: {
     gap: SIZE.size_20,
-    height: RECEIPT_CARD_HEIGHT
+    height: RECEIPT_CARD_HEIGHT+2
   },
   taxTitle: {
     marginTop: SIZE.size_20,

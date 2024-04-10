@@ -34,7 +34,7 @@ const CompactReceipt: React.FC<UIReceiptProps> = ({
       <View style={styles.divider}/>
       <View style={styles.dblDivider}/>
       <View style={styles.totalContainer}>
-        <Text style={styles.total}>Total :</Text>
+        <Text style={styles.total}>Total:</Text>
         <Text style={styles.price}>€{priceTotal}</Text>
       </View>
       <View style={styles.divider}/>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     marginTop: SIZE.size_6,
     fontSize: SIZE.size_14,
     alignSelf: 'center',
-    fontFamily: FONTFAMILY.IBMPlexMono_Bold,
+    fontFamily: FONTFAMILY.IBMPlexMono_SemiBold,
     color: COLOR.primaryGreyHex
   },
   divider: {
@@ -77,8 +77,7 @@ const styles = StyleSheet.create({
   },
   items: {
       marginTop: SIZE.size_4,
-      height: COMPACT_ITEMS_CONTAINER_HEIGHT,
-      fontFamily: FONTFAMILY.IBMPlexMono_Italic,
+      height: COMPACT_ITEMS_CONTAINER_HEIGHT
   },
   itemView: {
     marginLeft: SIZE.size_4,
@@ -88,17 +87,21 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end'
   },
   itemQuantity: {
-    color: COLOR.primaryGreyHex
+    color: COLOR.primaryGreyHex,
+    fontFamily: FONTFAMILY.IBMPlexMono_Light
   },
   itemMultiplier: {
     marginLeft: -SIZE.size_12,
-    color: COLOR.primaryGreyHex
+    color: COLOR.primaryGreyHex,
+    fontFamily: FONTFAMILY.IBMPlexMono_Light
   },
   itemDesc: {
-    color: COLOR.primaryGreyHex
+    color: COLOR.primaryGreyHex,
+    fontFamily: FONTFAMILY.IBMPlexMono_Light
   },
   itemPrice: {
-    color: COLOR.primaryGreyHex
+    color: COLOR.primaryGreyHex,
+    fontFamily: FONTFAMILY.IBMPlexMono_Light
   },
   totalContainer: {
     marginTop: SIZE.size_4,
@@ -107,10 +110,13 @@ const styles = StyleSheet.create({
   },
   total: {
     fontSize: SIZE.size_14,
-    color: COLOR.primaryGreyHex
+    color: COLOR.primaryGreyHex,
+    fontFamily: FONTFAMILY.IBMPlexMono_SemiBold
+  
   },
   price: {
     fontSize: SIZE.size_14,
-    color: COLOR.primaryGreyHex
+    color: COLOR.primaryGreyHex,
+    fontFamily: FONTFAMILY.IBMPlexMono_SemiBold  
   }
 })
