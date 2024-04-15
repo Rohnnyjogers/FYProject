@@ -22,10 +22,8 @@ const CompactReceipt: React.FC<UIReceiptProps> = ({
           {items.map((item) => {
             return(
               <View style={styles.itemView} key={items.indexOf(item)}>
-                <Text style={styles.itemQuantity}>{item.quantity}</Text>
-                <Text style={styles.itemMultiplier}>x</Text>
-                <Text style={styles.itemDesc}>{item.description}</Text>
-                <Text style={styles.itemPrice}>{item.price}</Text>
+                <Text style={styles.itemLayout}>{item.quantity} x {item.description}</Text>
+                <Text style={styles.itemPrice}>{item.price.toFixed(2)}</Text>
               </View>
             )
           })}
@@ -35,7 +33,7 @@ const CompactReceipt: React.FC<UIReceiptProps> = ({
       <View style={styles.dblDivider}/>
       <View style={styles.totalContainer}>
         <Text style={styles.total}>Total:</Text>
-        <Text style={styles.price}>€{priceTotal}</Text>
+        <Text style={styles.price}>€{priceTotal.toFixed(2)}</Text>
       </View>
       <View style={styles.divider}/>
     </View>
@@ -53,12 +51,14 @@ const styles = StyleSheet.create({
     borderColor: COLOR.borderDarkGrey,
     padding: SIZE.size_4,
     backgroundColor: COLOR.primaryWhiteHex,
+    elevation: SIZE.size_2
   },
   receiptTitle: {
-    marginTop: SIZE.size_6,
+    marginTop: SIZE.size_2,
     fontSize: SIZE.size_14,
     alignSelf: 'center',
-    fontFamily: FONTFAMILY.IBMPlexMono_SemiBold,
+    textAlign: 'center',
+    fontFamily: FONTFAMILY.IBMPlexMono_Medium,
     color: COLOR.primaryGreyHex
   },
   divider: {
@@ -76,32 +76,23 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed'
   },
   items: {
-      marginTop: SIZE.size_4,
       height: COMPACT_ITEMS_CONTAINER_HEIGHT
   },
   itemView: {
-    marginLeft: SIZE.size_4,
-    marginBottom: SIZE.size_2,
+    padding: SIZE.size_1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end'
   },
-  itemQuantity: {
+  itemLayout: {
     color: COLOR.primaryGreyHex,
-    fontFamily: FONTFAMILY.IBMPlexMono_Light
-  },
-  itemMultiplier: {
-    marginLeft: -SIZE.size_12,
-    color: COLOR.primaryGreyHex,
-    fontFamily: FONTFAMILY.IBMPlexMono_Light
-  },
-  itemDesc: {
-    color: COLOR.primaryGreyHex,
-    fontFamily: FONTFAMILY.IBMPlexMono_Light
+    fontFamily: FONTFAMILY.IBMPlexMono_Light,
+    fontSize: SIZE.size_12
   },
   itemPrice: {
     color: COLOR.primaryGreyHex,
-    fontFamily: FONTFAMILY.IBMPlexMono_Light
+    fontFamily: FONTFAMILY.IBMPlexMono_Light,
+    fontSize: SIZE.size_12
   },
   totalContainer: {
     marginTop: SIZE.size_4,
@@ -111,12 +102,12 @@ const styles = StyleSheet.create({
   total: {
     fontSize: SIZE.size_14,
     color: COLOR.primaryGreyHex,
-    fontFamily: FONTFAMILY.IBMPlexMono_SemiBold
+    fontFamily: FONTFAMILY.IBMPlexMono_Medium
   
   },
   price: {
     fontSize: SIZE.size_14,
     color: COLOR.primaryGreyHex,
-    fontFamily: FONTFAMILY.IBMPlexMono_SemiBold  
+    fontFamily: FONTFAMILY.IBMPlexMono_Medium  
   }
 })

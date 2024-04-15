@@ -1,4 +1,4 @@
-import { Alert, Button, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Button, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native'; 
 import { ADD_TO_SAVED_AND_TAX, 
@@ -10,7 +10,7 @@ import { ADD_TO_SAVED_AND_TAX,
          REMOVE_FROM_TAX_BTN, 
          ReceiptProps, 
          RootStackParamsList } from '../types/types';
-import { COLOR, FULL_RECEIPT_WIDTH, SIZE } from '../theme/theme';
+import { COLOR, FONTFAMILY, FULL_RECEIPT_WIDTH, SIZE } from '../theme/theme';
 import FullReceipt from '../components/receipts/FullReceipt';
 import { auth } from '../../firebaseconfig';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -67,47 +67,55 @@ const ReceiptViewer = () => {
 
   return (
     <View style={styles.receiptView}>
-      <ScrollView style={styles.scrollView}>
-        <FullReceipt
-           receiptId={receiptId}
-           items={items}
-           vendorName={vendorName}
-           priceTotal={priceTotal}
-           itemTotal={itemsTotal}
-        />
-      </ScrollView>
+      <FullReceipt
+          receiptId={receiptId}
+          items={items}
+          vendorName={vendorName}
+          priceTotal={priceTotal}
+          itemTotal={itemsTotal}
+      />
     
       <View style={styles.buttonView}>
         {viewerType === ADD_TO_SAVED_AND_TAX && (
-          <View style={styles.addBtnsContainer}>
-            <Button
-              title='Add to Saved'
-              color={COLOR.primaryBlueHex}
+          <View style={styles.buttonsContainer}>
+            <Pressable 
               onPress={() => serviceMethodsWrapper(ADD_TO_SAVED_BTN)}
-            />
-            <Button
-              title='Add to Tax'
-              color={COLOR.primaryBlueHex}
+              style={styles.pressable}
+              android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+              <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Save Receipt</Text>
+            </Pressable>
+            <Pressable 
               onPress={() => serviceMethodsWrapper(ADD_TO_TAX_BTN)}
-            />
+              style={styles.pressable}
+              android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+              <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Add to Taxback</Text>
+            </Pressable>
+            <Pressable 
+              onPress={() => {}}
+              style={styles.pressable}
+              android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+              <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Add to Expenses</Text>
+            </Pressable>
           </View>
         )}
-        {viewerType === REMOVE_FROM_SAVED && (
-          <View style={styles.removeBtnsContainer}>
-            <Button
-              title='Remove from Saved'
-              color={COLOR.primaryBlueHex}
+        {viewerType === REMOVE_FROM_SAVED && ( 
+          <View style={styles.buttonsContainer}>
+            <Pressable 
               onPress={() => serviceMethodsWrapper(REMOVE_FROM_SAVED_BTN)}
-            />
+              style={styles.pressable}
+              android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                <Text style={{fontFamily: FONTFAMILY.jost_bold, color: COLOR.primaryWhiteHex}}>Remove Receipt</Text>
+            </Pressable>
           </View>
         )}
         {viewerType === REMOVE_FROM_TAX && (
-          <View style={styles.removeBtnsContainer}>
-            <Button
-              title='Remove from Tax'
-              color={COLOR.primaryBlueHex}
+          <View style={styles.buttonsContainer}>
+            <Pressable 
               onPress={() => serviceMethodsWrapper(REMOVE_FROM_TAX_BTN)}
-            />
+              style={styles.pressable}
+              android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                <Text style={{fontFamily: FONTFAMILY.jost_bold, color: COLOR.primaryWhiteHex}}>Remove Receipt</Text>
+            </Pressable>
           </View>
         )}
       </View>
@@ -119,22 +127,31 @@ export default ReceiptViewer;
 
 const styles = StyleSheet.create({
   receiptView: {
+    padding: SIZE.size_10,
     alignSelf: 'center',
-    marginTop: SIZE.size_40,
+    marginTop: SIZE.size_15,
+    gap: SIZE.size_25,
+    borderWidth: SIZE.size_1,
+    borderColor: COLOR.borderDarkGrey,
+    borderRadius: SIZE.size_4,
+    backgroundColor: COLOR.secondaryLightGrey,
+    elevation: SIZE.size_1
   },
   buttonView: {
-    alignSelf: 'center',
-    marginBottom: SIZE.size_20
+    alignSelf: 'center'
   },
-  addBtnsContainer: {
-    flexDirection: 'column',
+  buttonsContainer: {
     width: FULL_RECEIPT_WIDTH,
     gap: SIZE.size_10
   },
+  pressable: {
+    backgroundColor: COLOR.primaryBlueHex,
+    alignItems: 'center',
+    padding: SIZE.size_5,
+    borderRadius: SIZE.size_4,
+    elevation: SIZE.size_2
+  },
   removeBtnsContainer: {
     width: FULL_RECEIPT_WIDTH
-  },
-  scrollView:{
-    flex: 1, 
   }
 })

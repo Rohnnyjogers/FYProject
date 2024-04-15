@@ -21,10 +21,9 @@ const FullReceipt: React.FC<UIReceiptProps> = ({
           {items.map((item) => {
             return(
               <View style={styles.itemView} key={items.indexOf(item)}>
-                <Text style={styles.itemQuantity}>{item.quantity}</Text>
-                <Text style={styles.itemMultiplier}>x</Text>
-                <Text style={styles.itemDesc}>{item.description}</Text>
-                <Text style={styles.itemPrice}>{item.price}</Text>
+                <Text style={styles.itemQuantity}>{item.quantity} x</Text>
+                <Text style={styles.itemDescription}>{item.description}</Text>
+                <Text style={styles.itemPrice}>{item.price.toFixed(2)}</Text>
               </View>
             )
           })}
@@ -33,11 +32,12 @@ const FullReceipt: React.FC<UIReceiptProps> = ({
       <View style={styles.divider}/>
       <View style={styles.dblDivider}/>
       <View style={styles.totalContainer}>
-        <Text style={styles.total}>Total :</Text>
-        <Text style={styles.price}>€{priceTotal}</Text>
+        <Text style={styles.total}>Total:</Text>
+        <Text style={styles.price}>€{priceTotal.toFixed(2)}</Text>
       </View>
       <View style={styles.divider}/>
     </View>
+    
   )
 }
 
@@ -56,12 +56,11 @@ const styles = StyleSheet.create({
         elevation: SIZE.size_2
       },
     receiptTitle: {
-        marginTop: SIZE.size_24,
+        marginTop: SIZE.size_16,
         fontSize: SIZE.size_18,
         alignSelf: 'center',
         fontFamily: FONTFAMILY.IBMPlexMono_Bold,
         color: COLOR.primaryGreyHex
-
       },
     divider: {
       marginTop: SIZE.size_12,
@@ -79,8 +78,7 @@ const styles = StyleSheet.create({
     },
     items: {
         marginTop: SIZE.size_12,
-        height: FULL_ITEMS_CONTAINER_HEIGHT,
-        fontFamily: FONTFAMILY.IBMPlexMono_Italic,
+        height: FULL_ITEMS_CONTAINER_HEIGHT
       },
     itemView: {
       marginLeft: SIZE.size_6,
@@ -90,16 +88,15 @@ const styles = StyleSheet.create({
       alignItems: 'flex-end'
     },
     itemQuantity: {
+      fontFamily: FONTFAMILY.IBMPlexMono_Medium,
       color: COLOR.primaryGreyHex
     },
-    itemMultiplier: {
-      marginLeft: -SIZE.size_40,
-      color: COLOR.primaryGreyHex
-    },
-    itemDesc: {
+    itemDescription: {
+      fontFamily: FONTFAMILY.IBMPlexMono_Medium,
       color: COLOR.primaryGreyHex
     },
     itemPrice: {
+      fontFamily: FONTFAMILY.IBMPlexMono_Medium,
       color: COLOR.primaryGreyHex
     },
     totalContainer: {
@@ -113,6 +110,7 @@ const styles = StyleSheet.create({
       fontSize: SIZE.size_22
     },
     price: {
+      fontFamily: FONTFAMILY.IBMPlexMono_Bold,
       fontSize: SIZE.size_22,
       color: COLOR.primaryGreyHex
     }

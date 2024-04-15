@@ -216,7 +216,7 @@ export const removeReceiptFromSaved = (
         if(snapshot.exists()){
             Alert.alert('Receipt removed', undefined, [{
                 onPress: () => {
-                    navigation.navigate('Saved');
+                    navigation.navigate('Receipts');
                 }
             }]);
 
@@ -245,7 +245,7 @@ export const removeReceiptFromTax = (
     if(snapshot.exists()){
         Alert.alert('Tax receipt removed', undefined, [{
             onPress: () => {
-            navigation.navigate('Saved');
+            navigation.navigate('Receipts');
             }
         }]);
 

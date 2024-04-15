@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet } from 'react-native';
 import { COLOR } from '../theme/theme';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX } from '../types/types';
 import NavError from '../components/NavError';
 import { ReceiptContext } from '../../App';
@@ -112,7 +112,7 @@ const TabNavigator = () => {
             tabBarIcon: ({focused, size, color}) => (
               <Icon 
                 name="home"
-                size={25}
+                size={28}
                 color={
                   focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
                 }
@@ -125,8 +125,8 @@ const TabNavigator = () => {
           options={{
             tabBarIcon: ({focused, size, color}) => (
               <Icon 
-                name="star"
-                size={25}
+                name="stars"
+                size={28}
                 color={
                   focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
                 }
@@ -141,7 +141,7 @@ const TabNavigator = () => {
             tabBarIcon: ({focused, size, color}) => (
               <Icon 
                 name="folder"
-                size={25}
+                size={28}
                 color={
                   focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
                 }
@@ -155,8 +155,8 @@ const TabNavigator = () => {
           options={{
             tabBarIcon: ({focused, size, color}) => (
               <Icon 
-                name="user"
-                size={25}
+                name="account-box"
+                size={28}
                 color={
                   focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
                 }

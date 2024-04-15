@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { Button, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { COLOR, FONTFAMILY, FULL_RECEIPT_WIDTH, REWARDS_CARD_HEIGHT, REWARDS_CARD_WIDTH, SIZE } from '../../theme/theme'
 import { Reward } from '../../types/types';
@@ -64,26 +64,23 @@ const RewardsCard: React.FC<RewardCardProps> = ({
               <>
               {complete ? 
                 <View style={styles.activate}>
-                  <Button
-                    title='Claim'
-                    color={COLOR.primaryBlueHex}
-                    onPress={() => setRewardClaimed(
-                      userId,
-                      reward
-                    )}
-                    
-                  />
+                  <Pressable 
+                    style={styles.pressable}
+                    android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                    <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_14 ,color: COLOR.primaryWhiteHex}}>Claim</Text>
+                  </Pressable>
                 </View>
               :
                 <View style={styles.activate}>
-                  <Button
-                    title='Activate'
-                    color={COLOR.primaryBlueHex}
+                  <Pressable 
                     onPress={() => setRewardActive(
                       userId,
                       reward
                     )}
-                  />
+                    style={styles.pressable}
+                    android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                    <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Activate</Text>
+                  </Pressable>
                 </View>
               }
               </>
@@ -128,5 +125,12 @@ const styles = StyleSheet.create({
     },
     activate: {
       width: FULL_RECEIPT_WIDTH
+    },
+    pressable: {
+      alignItems: 'center',
+      padding: SIZE.size_5,
+      borderRadius: SIZE.size_4,
+      backgroundColor: COLOR.primaryBlueHex,
+      elevation: SIZE.size_2
     }
   })

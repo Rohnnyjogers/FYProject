@@ -84,7 +84,7 @@ const Saved = () => {
                   showsHorizontalScrollIndicator={false}
                   style={styles.flatListStyle}
                   contentContainerStyle={styles.receiptList}
-                  data={savedReceipts}
+                  data={savedReceipts.reverse()}
                   keyExtractor={(item) => item.receiptId.toString()}
                   renderItem={({item}) => {
                     return(
@@ -106,7 +106,9 @@ const Saved = () => {
                 />
 
                 <Text style={styles.taxTitle}>Taxes and Expenses</Text>
-                <TaxAndExpenseCard/>
+                <TaxAndExpenseCard
+                  taxes={taxReceipts}
+                  />
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}

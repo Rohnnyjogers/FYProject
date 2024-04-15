@@ -50,7 +50,7 @@ const Home = () => {
               showsHorizontalScrollIndicator={false}
               style={styles.flatlistStyle}
               contentContainerStyle={styles.recentList}
-              data={recentReceipts}
+              data={recentReceipts.reverse()}
               keyExtractor={item => item.receiptId.toString()}
               renderItem={({item}) => {
                 return <ReceiptCard

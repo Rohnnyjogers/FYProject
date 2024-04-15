@@ -52,12 +52,14 @@ const ReceiptCard: React.FC<ReceiptProps> = ({
   };
 
   const rawDate: Date = new Date(receiptDate);
-  const date = `${rawDate.getDate()}/${rawDate.getMonth()}/${rawDate.getFullYear()} ${rawDate.getHours()}:${rawDate.getMinutes()}`;
+  const date = `${rawDate.getDate()}/${rawDate.getMonth()}/${rawDate.getFullYear()} ${rawDate.getHours()}:${String(rawDate.getMinutes()).padStart(2, '0')}`;
   const vendor: string = vendorName.replace(/_/g,' ');
 
   return (
     <View style={styles.card}>
-          <Pressable onPress={toReceiptViewer}>
+          <Pressable 
+            onPress={toReceiptViewer}
+            android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
             <CompactReceipt
                 receiptId={receiptId}
                 items={items}
