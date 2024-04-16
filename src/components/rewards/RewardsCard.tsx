@@ -67,7 +67,7 @@ const RewardsCard: React.FC<RewardCardProps> = ({
                   <Pressable 
                     style={styles.pressable}
                     android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
-                    <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_14 ,color: COLOR.primaryWhiteHex}}>Claim</Text>
+                    <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16 ,color: COLOR.primaryWhiteHex}}>Claim</Text>
                   </Pressable>
                 </View>
               :

@@ -9,13 +9,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet } from 'react-native';
 import { COLOR } from '../theme/theme';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX } from '../types/types';
+import { ADD_TO_SAVED_TAX_EXPENSE, NAV_ERROR, RECEIPT_LIST_VIEWER, REMOVE_FROM_SAVED, REMOVE_FROM_TAX } from '../types/types';
 import NavError from '../components/NavError';
 import { ReceiptContext } from '../../App';
 import { auth } from '../../firebaseconfig';
 import { addReceiptToRecent, sendReceiptToVendor, updateCustomerRecordWithVendor } from '../service/service';
 import { checkAndUpdateRewards } from '../service/rewardFunctions';
 import PushNotification from 'react-native-push-notification';
+import ReceiptListViewer from '../screens/ReceiptListViewer';
 
 const HomeStack = createNativeStackNavigator();
 const ReceiptsStack = createNativeStackNavigator();
@@ -28,7 +29,7 @@ const HomeStackScreen = () => {
         name='Home' 
         component={Home}/>
       <HomeStack.Screen 
-        name={ADD_TO_SAVED_AND_TAX} 
+        name={ADD_TO_SAVED_TAX_EXPENSE} 
         component={ReceiptViewer}
         options={{
           headerShown: true,
@@ -48,7 +49,8 @@ const ReceiptsStackScreen = () => {
       screenOptions={{headerShown: false}}>
         <ReceiptsStack.Screen
           name='Receipts'
-          component={Receipts}/>
+          component={Receipts}
+        />
         <ReceiptsStack.Screen
           name={REMOVE_FROM_SAVED}
           component={ReceiptViewer}
@@ -56,7 +58,8 @@ const ReceiptsStackScreen = () => {
             headerShown: true,
             headerTitle: '',
             headerTintColor: COLOR.primaryBlueHex
-          }}/>
+          }}
+        />
         <ReceiptsStack.Screen
           name={REMOVE_FROM_TAX}
           component={ReceiptViewer}
@@ -68,7 +71,17 @@ const ReceiptsStackScreen = () => {
         />  
         <ReceiptsStack.Screen
           name={NAV_ERROR}
-          component={NavError}/>
+          component={NavError}
+        />
+        <ReceiptsStack.Screen
+          name={RECEIPT_LIST_VIEWER}
+          component={ReceiptListViewer}
+          options={{
+            headerShown: true,
+            headerTitle: '',
+            headerTintColor: COLOR.primaryBlueHex
+          }}
+        />
     </ReceiptsStack.Navigator>
   )
 }

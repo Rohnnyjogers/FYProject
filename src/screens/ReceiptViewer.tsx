@@ -1,7 +1,7 @@
 import { Alert, Button, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native'; 
-import { ADD_TO_SAVED_AND_TAX, 
+import { ADD_TO_SAVED_TAX_EXPENSE, 
          REMOVE_FROM_SAVED, 
          REMOVE_FROM_TAX,
          ADD_TO_SAVED_BTN,
@@ -9,12 +9,13 @@ import { ADD_TO_SAVED_AND_TAX,
          REMOVE_FROM_SAVED_BTN,
          REMOVE_FROM_TAX_BTN, 
          ReceiptProps, 
-         RootStackParamsList } from '../types/types';
+         RootStackParamsList, 
+         ADD_TO_EXPENSE_BTN} from '../types/types';
 import { COLOR, FONTFAMILY, FULL_RECEIPT_WIDTH, SIZE } from '../theme/theme';
 import FullReceipt from '../components/receipts/FullReceipt';
 import { auth } from '../../firebaseconfig';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { addReceiptToSaved, addReceiptToTax, removeReceiptFromSaved, removeReceiptFromTax } from '../service/service';
+import { addReceiptToExpenses, addReceiptToSaved, addReceiptToTax, removeReceiptFromSaved, removeReceiptFromTax } from '../service/service';
 
 const ReceiptViewer = () => {
   const route = useRoute();
@@ -53,6 +54,9 @@ const ReceiptViewer = () => {
       else if(button === ADD_TO_TAX_BTN){
         addReceiptToTax(userId, receiptData, navigation);
       }
+      else if(button === ADD_TO_EXPENSE_BTN){
+        addReceiptToExpenses(userId, receiptData, navigation);
+      }
       else if(button === REMOVE_FROM_SAVED_BTN){
         removeReceiptFromSaved(userId, receiptData, navigation);
       }
@@ -76,7 +80,7 @@ const ReceiptViewer = () => {
       />
     
       <View style={styles.buttonView}>
-        {viewerType === ADD_TO_SAVED_AND_TAX && (
+        {viewerType === ADD_TO_SAVED_TAX_EXPENSE && (
           <View style={styles.buttonsContainer}>
             <Pressable 
               onPress={() => serviceMethodsWrapper(ADD_TO_SAVED_BTN)}
@@ -91,7 +95,7 @@ const ReceiptViewer = () => {
               <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Add to Taxback</Text>
             </Pressable>
             <Pressable 
-              onPress={() => {}}
+              onPress={() => serviceMethodsWrapper(ADD_TO_EXPENSE_BTN)}
               style={styles.pressable}
               android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
               <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Add to Expenses</Text>
@@ -104,7 +108,7 @@ const ReceiptViewer = () => {
               onPress={() => serviceMethodsWrapper(REMOVE_FROM_SAVED_BTN)}
               style={styles.pressable}
               android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
-                <Text style={{fontFamily: FONTFAMILY.jost_bold, color: COLOR.primaryWhiteHex}}>Remove Receipt</Text>
+                <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Remove Receipt</Text>
             </Pressable>
           </View>
         )}

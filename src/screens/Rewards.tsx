@@ -14,6 +14,8 @@ const Rewards = () => {
   const [rewards, setRewards] = useState<Reward[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const userId: string | undefined = auth.currentUser?.uid;
+
   let rewardData = [];
   let availableRewards: Reward[] = [];
   let activeRewards: Reward[] = [];
@@ -74,7 +76,7 @@ const Rewards = () => {
   const bottomTabHeight = useBottomTabBarHeight();
 
   useEffect(() => {
-    const userId: string | undefined = auth.currentUser?.uid;
+    setLoading(true);
     const rewardsRef: DatabaseReference = ref(database, `/users/${userId}/rewards`);
 
     onValue(rewardsRef, (snapshot) => {
@@ -97,46 +99,53 @@ const Rewards = () => {
         setRewards(rewards);
       }
     });
+
+    setLoading(false);
   }, []);
 
   return (
-    <>
-      {loading ? 
-        <ActivityIndicator 
-          size={'large'} 
-          color={COLOR.primaryBlueHex}
-          style={styles.indicator}
-        />
-        :
         <>
           <Header/>
           <Text style={styles.title}>Rewards</Text>
           <View style={styles.divider}/>
-          <View style={styles.screenContainer}>
-            <SectionList
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.sectionList}
-              sections={rewardData}
-              keyExtractor={(reward, index) => reward.item + index}
-              renderSectionHeader={(DATA) => (
-                <Text style={styles.sectionTitle}>{DATA.section.title}</Text>
-              )}
-              renderItem={({ item }) => (
-                <RewardsCard
-                  reward={item}                    
-                />
-              )}
-            />
-          </View>
+          {loading ? 
+            <View style={styles.indicatorView}>
+              <ActivityIndicator 
+                size={'large'} 
+                color={COLOR.primaryBlueHex}
+                style={styles.indicator}
+              />
+            </View> 
+          :
+            <View style={styles.screenContainer}>
+              <SectionList
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.sectionList}
+                sections={rewardData}
+                keyExtractor={(reward, index) => reward.item + index}
+                renderSectionHeader={(DATA) => (
+                  <Text style={styles.sectionTitle}>{DATA.section.title}</Text>
+                )}
+                renderItem={({ item }) => (
+                  <RewardsCard
+                    reward={item}                    
+                  />
+                )}
+              />
+            </View>
+          }
         </>
-      }
-    </>
   )
 }
 
 const styles = StyleSheet.create({
   indicator: {
     alignSelf: 'center'
+  },
+  indicatorView:{
+    flex: 1,
+    backgroundColor: COLOR.stampLightGrey,
+    justifyContent: 'center'
   },
   screenContainer: {
     flex: 1,

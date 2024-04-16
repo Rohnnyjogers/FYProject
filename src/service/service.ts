@@ -3,34 +3,36 @@ import { PurchaseProps, ReceiptProps, Reward } from "../types/types";
 import { database } from "../../firebaseconfig";
 import { Alert } from "react-native";
 
-export const getCurrentRewardSize = async(
-    userId: string|undefined,
-    receiptData: ReceiptProps,
-    rewardItem: string
-) => {
-    const dbRef = ref(database, `/users/${userId}/rewards`);
+// export const getCurrentRewardSize = async(
+//     userId: string|undefined,
+//     receiptData: ReceiptProps,
+//     rewardItem: string
+// ) => {
+//     const dbRef = ref(database, `/users/${userId}/rewards`);
 
-    try{
-        const rewardsSnapshot = await get(dbRef);
+//     try{
+//         const rewardsSnapshot = await get(dbRef);
 
-        if(rewardsSnapshot.exists()){
-            const rewards = rewardsSnapshot.val();
-            const { vendorId } = receiptData;
+//         if(rewardsSnapshot.exists()){
+//             const rewards = rewardsSnapshot.val();
+//             const { vendorId } = receiptData;
 
-            for(const reward of Object.keys(rewards)){
-                const rewardData: Reward = rewards[reward];
+//             for(const reward of Object.keys(rewards)){
+//                 const rewardData: Reward = rewards[reward];
 
-                if(rewardData.vendorId===vendorId && rewardData.item===rewardItem && rewardData.active){
-                    return rewardData.size;
-                }
-            }
-        }
-        return null;
-    }
-    catch(error){
-        console.log('Error retrieving reward size: ', error);
-    }
-}
+//                 if(rewardData.vendorId===vendorId && rewardData.item===rewardItem && rewardData.active){
+//                     return rewardData.size;
+//                 }
+//             }
+//         }
+//         return null;
+//     }
+//     catch(error){
+//         console.log('Error retrieving reward size: ', error);
+//     }
+// }
+
+
 
 export const updateCustomerRecordWithVendor = async (
     userId: string | undefined,
@@ -127,6 +129,37 @@ export const addReceiptToRecent = (
     });
 }
 
+export const addReceiptToExpenses = async (
+    userId: string | undefined,
+    receiptData: ReceiptProps,
+    navigation: any
+) => {
+    const receiptKey = `E_${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
+    const dbRef = ref(database, `/users/${userId}/receipts/expenses/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+
+    try{
+        const receiptSnapshot = await get(dbRef);
+        
+        if(receiptSnapshot.exists()){
+            Alert.alert('Receipt already in Expenses', undefined, [{
+                onPress: () => {
+                    navigation.navigate('Home');
+                }
+            }]);
+        }
+        else{
+            set(dbRef, receiptData);
+            Alert.alert('Receipt added to Expenses', undefined, [{
+                onPress: () => {
+                    navigation.navigate('Home');
+                }
+            }]);
+        }
+    }catch(error){
+        console.log('Error occured while accessing Expenses: ', error);
+    }
+}
+
 export const addReceiptToSaved = (
     userId: string | undefined,
     receiptData: ReceiptProps,
@@ -165,6 +198,8 @@ export const addReceiptToSaved = (
     });
 }
 
+
+
 export const addReceiptToTax = (
     userId: string | undefined,
     receiptData: ReceiptProps,
@@ -201,6 +236,35 @@ export const addReceiptToTax = (
         console.error('Error saving receipt: ', error);
         Alert.alert('Error locating receipt');
     });
+}
+
+export const removeReceiptFromExpenses = async (
+    userId: string | undefined,
+    receiptData: ReceiptProps,
+    navigation: any
+) => {
+    const receiptKey = `E_${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
+    const dbRef = ref(database, `/users/${userId}/receipts/expenses/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    
+    try{
+        const receiptSnaphot = await get(dbRef);
+        
+        if(receiptSnaphot.exists()){
+            Alert.alert('Receipt removed', undefined, [{
+                onPress: () => {
+                    navigation.navigate('Receipts');
+                }
+            }]);
+
+            return remove(dbRef);
+        }
+        else{
+            Alert.alert('Receipt not found')
+            return Promise.resolve();
+        }
+    }catch(error){
+        console.log("from 'removeReceiptFromExpenses()', error accessing receipt", error);
+    }
 }
 
 export const removeReceiptFromSaved = (

@@ -3,7 +3,7 @@ import React from 'react'
 import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, RECEIPT_CARD_WIDTH, SIZE } from '../../theme/theme'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ADD_TO_SAVED_AND_TAX, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX, ReceiptProps, RootStackParamsList, ViewerScreen } from '../../types/types';
+import { ADD_TO_SAVED_TAX_EXPENSE, NAV_ERROR, REMOVE_FROM_SAVED, REMOVE_FROM_TAX, ReceiptProps, RootStackParamsList, ViewerScreen } from '../../types/types';
 import CompactReceipt from './CompactReceipt';
 
 const ReceiptCard: React.FC<ReceiptProps> = ({
@@ -20,11 +20,11 @@ const ReceiptCard: React.FC<ReceiptProps> = ({
 }) => {
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
-  
+
   const toReceiptViewer = () => {
     let targetViewer: ViewerScreen;
 
-    if(viewerType === ADD_TO_SAVED_AND_TAX){
+    if(viewerType === ADD_TO_SAVED_TAX_EXPENSE){
       targetViewer = viewerType;
     }
     else if(viewerType === REMOVE_FROM_SAVED){
@@ -52,7 +52,7 @@ const ReceiptCard: React.FC<ReceiptProps> = ({
   };
 
   const rawDate: Date = new Date(receiptDate);
-  const date = `${rawDate.getDate()}/${rawDate.getMonth()}/${rawDate.getFullYear()} ${rawDate.getHours()}:${String(rawDate.getMinutes()).padStart(2, '0')}`;
+  const date = `${rawDate.getDate()}/${rawDate.getMonth()}/${rawDate.getFullYear()} ${rawDate.getHours()}:${String(rawDate.getMinutes()).padStart(2,'0')}`;
   const vendor: string = vendorName.replace(/_/g,' ');
 
   return (

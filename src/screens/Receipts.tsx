@@ -12,7 +12,8 @@ import TaxAndExpenseCard from '../components/taxesExpenses/TaxAndExpenseCard'
 const Saved = () => {
   const [savedReceipts, setSavedReceipts] = useState<ReceiptProps[]>([]);
   const [taxReceipts, setTaxReceipts] = useState<ReceiptProps[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [expenseReceipts, setExpenseReceipts] = useState<ReceiptProps[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const userId = auth.currentUser?.uid;
@@ -20,7 +21,8 @@ const Saved = () => {
     if(userId){
       setLoading(true);
       const savedDbRef = ref(database, `/users/${userId}/receipts/saved`);
-      const taxDbRef = ref(database, `/users/${userId}/receipts/tax`)
+      const taxDbRef = ref(database, `/users/${userId}/receipts/tax`);
+      const expenseDbRef = ref(database, `/users/${userId}/receipts/expenses`);
 
       onValue(savedDbRef, (snapshot) => {
         if(snapshot.exists()){
@@ -37,8 +39,7 @@ const Saved = () => {
         } else {
           setSavedReceipts([]);
         }
-        setLoading(false);
-      })
+      });
 
       onValue(taxDbRef, (snapshot) => {
         if(snapshot.exists()){
@@ -56,88 +57,108 @@ const Saved = () => {
         } else {
           setTaxReceipts([]);
         }
-        setLoading(false);
-      })
+      });
+
+      onValue(expenseDbRef, (snapshot) => {
+        if(snapshot.exists()){
+          const vendors = Object.keys(snapshot.val());
+
+          const receipts = vendors.flatMap((vendor) => {
+            const vendorReceipts: ReceiptProps[] = Object.values(snapshot.val()[vendor])
+            
+            return vendorReceipts.map((receipt) => ({
+              ...receipt
+            }));
+
+          });
+          setExpenseReceipts(receipts);
+        } else {
+          setExpenseReceipts([]);
+        }
+      });
+
+      setLoading(false);
     }
   },[]);
 
   return (
     <>
-       {loading ? 
+      <Header/>
+      <Text style={styles.title}>Receipts</Text>
+      <View style={styles.divider}/>
+      {loading ?
+        <View style={styles.indicatorView}>
           <ActivityIndicator 
             size={'large'} 
             color={COLOR.primaryBlueHex}
             style={styles.indicator}
           />
-          : 
-          <>
-            <Header/>
-            <Text style={styles.title}>Receipts</Text>
-            <View style={styles.divider}/>
-            <View style={styles.screenContainer}>
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.scrollViewFlex}>
-                <Text style={styles.savedTitle}>Saved Receipts</Text>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  style={styles.flatListStyle}
-                  contentContainerStyle={styles.receiptList}
-                  data={savedReceipts.reverse()}
-                  keyExtractor={(item) => item.receiptId.toString()}
-                  renderItem={({item}) => {
-                    return(
-                      <ReceiptCard 
-                        receiptId={item.receiptId}
-                        vendorId={item.vendorId}
-                        receiptDate={item.receiptDate}
-                        latitude={item.latitude}
-                        longitude={item.longitude}
-                        vendorName={item.vendorName}
-                        items={item.items}
-                        priceTotal={item.priceTotal}
-                        itemsTotal={item.itemsTotal}
-                        viewerType={REMOVE_FROM_SAVED}
-                      />
-                    )
-                  }}
-                  ListEmptyComponent={<NavError/>}
-                />
-
-                <Text style={styles.taxTitle}>Taxes and Expenses</Text>
-                <TaxAndExpenseCard
-                  taxes={taxReceipts}
+        </View> 
+      :
+        <View style={styles.screenContainer}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollViewFlex}>
+            <Text style={styles.savedTitle}>Saved Receipts</Text>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.flatListStyle}
+              contentContainerStyle={styles.receiptList}
+              data={savedReceipts.reverse()}
+              keyExtractor={(item) => item.receiptId.toString()}
+              renderItem={({item}) => {
+                return(
+                  <ReceiptCard 
+                    receiptId={item.receiptId}
+                    vendorId={item.vendorId}
+                    receiptDate={item.receiptDate}
+                    latitude={item.latitude}
+                    longitude={item.longitude}
+                    vendorName={item.vendorName}
+                    items={item.items}
+                    priceTotal={item.priceTotal}
+                    itemsTotal={item.itemsTotal}
+                    viewerType={REMOVE_FROM_SAVED}
                   />
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  style={styles.flatListStyle}
-                  contentContainerStyle={styles.receiptList}
-                  data={taxReceipts}
-                  keyExtractor={(item) => item.receiptId.toString()}
-                  renderItem={({item}) => {
-                    return(
-                      <ReceiptCard
-                      receiptId={item.receiptId}
-                      vendorId={item.vendorId}
-                      receiptDate={item.receiptDate}
-                      latitude={item.latitude}
-                      longitude={item.longitude}
-                      vendorName={item.vendorName}
-                      items={item.items}
-                      priceTotal={item.priceTotal}
-                      itemsTotal={item.itemsTotal}
-                      viewerType={REMOVE_FROM_TAX}
-                      />
-                    )
-                  }}
-                  ListEmptyComponent={<NavError/>}
-                />
-              </ScrollView>
-            </View>
-          </> 
-        }
+                )
+              }}
+              ListEmptyComponent={<NavError/>}
+            />
+
+            <Text style={styles.taxTitle}>Taxes and Expenses</Text>
+            <TaxAndExpenseCard
+              taxes={taxReceipts}
+              expenses={expenseReceipts}
+              />
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.flatListStyle}
+              contentContainerStyle={styles.receiptList}
+              data={taxReceipts}
+              keyExtractor={(item) => item.receiptId.toString()}
+              renderItem={({item}) => {
+                return(
+                  <ReceiptCard
+                    receiptId={item.receiptId}
+                    vendorId={item.vendorId}
+                    receiptDate={item.receiptDate}
+                    latitude={item.latitude}
+                    longitude={item.longitude}
+                    vendorName={item.vendorName}
+                    items={item.items}
+                    priceTotal={item.priceTotal}
+                    itemsTotal={item.itemsTotal}
+                    viewerType={REMOVE_FROM_TAX}
+                  />
+                )
+              }}
+              ListEmptyComponent={<NavError/>}
+            />
+          </ScrollView>
+        </View> 
+      }
     </>
   )
 }
@@ -164,6 +185,11 @@ const styles = StyleSheet.create({
   divider: {
     height: SIZE.size_1,
     backgroundColor: COLOR.primaryBlueHex
+  },
+  indicatorView:{
+    flex: 1,
+    backgroundColor: COLOR.stampLightGrey,
+    justifyContent: 'center'
   },
   indicator: {
     alignSelf: 'center'

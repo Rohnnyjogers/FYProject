@@ -1,20 +1,24 @@
 import { Button, Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { ReceiptProps } from '../../types/types'
+import { RECEIPT_LIST_VIEWER, ReceiptProps, RootStackParamsList, TO_EXPENSES_LIST, TO_MEDICAL_LIST, TO_VAT_LIST } from '../../types/types'
 import { COLOR, FONTFAMILY, SIZE, TAX_EXPENSE_CARD_HEIGHT, TAX_EXPENSE_CARD_WIDTH } from '../../theme/theme'
 import  Icon  from 'react-native-vector-icons/MaterialIcons'
-import { TabActions } from '@react-navigation/native'
+import { TabActions, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 interface TaxAndExpenseCardProps {
     taxes: ReceiptProps[],
-    // expenses: ReceiptProps[]
+    expenses: ReceiptProps[],
 }
 
 const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
-    taxes
+    taxes,
+    expenses,
 }) => {
+
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
     
-    const taxReceiptsTotal = (taxesArr: ReceiptProps[]) => {
+    const receiptsTotal = (taxesArr: ReceiptProps[]) => {
         const total = taxesArr.reduce((acc, itm) => {
             return acc + itm.priceTotal; 
         }, 0);
@@ -30,13 +34,31 @@ const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
         return vatTaxback;
     }
 
-    let vat = true;
-    let medical = true;
-    let expenses = true;
+    const medicalTaxback = (taxesArr: ReceiptProps[]) => {
+        const medicalTaxback = taxesArr.reduce((acc, itm) => {
+            return acc + itm.priceTotal * 0.2;
+        }, 0);
+        
+        return medicalTaxback;
+    }
+
+    const toReceiptListViewer = (button: number) => {
+        if(button === TO_VAT_LIST){
+            navigation.navigate(RECEIPT_LIST_VIEWER, {receiptList: taxes, viewerType: 'taxes'});
+        }
+        else if(button === TO_MEDICAL_LIST){
+            navigation.navigate(RECEIPT_LIST_VIEWER, {receiptList: taxes, viewerType: ''});
+        }
+        else if(button === TO_EXPENSES_LIST){
+            navigation.navigate(RECEIPT_LIST_VIEWER, {receiptList: expenses, viewerType: 'expenses'});
+        }
+    }
+
+    let medical = false;
 
   return (
      <View style={styles.taxExpenseCard}>
-        {vat && 
+        {taxes && 
             <View style={styles.cardLayout}>
                 <View style={styles.innerCardLayout}>
                     <View style={styles.totalsLayout}>
@@ -50,7 +72,7 @@ const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
                             </View>
                             <View style={styles.singleTotalsLayout}>
                                 <Text style={{fontFamily: FONTFAMILY.jost_medium}}>Receipts total: </Text>
-                                <Text style={{fontFamily: FONTFAMILY.jost_medium}}>€{taxReceiptsTotal(taxes).toFixed(2)}</Text>
+                                <Text style={{fontFamily: FONTFAMILY.jost_medium}}>€{receiptsTotal(taxes).toFixed(2)}</Text>
                             </View>
                             <View style={styles.singleTotalsLayout}>
                                 <Text style={{fontFamily: FONTFAMILY.jost_medium, color: COLOR.primaryBlueHex}}>Taxback total: </Text>
@@ -58,7 +80,8 @@ const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
                             </View>
                         </View>
                     </View>
-                    <Pressable 
+                    <Pressable
+                        onPress={() => toReceiptListViewer(TO_VAT_LIST)}
                         style={styles.pressableView}
                         android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                             <Icon
@@ -74,7 +97,7 @@ const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
                     <Pressable 
                         style={styles.submitButton}
                         android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
-                            <Text style={{fontFamily: FONTFAMILY.jost_bold, color: COLOR.primaryWhiteHex, padding: SIZE.size_10}}>Generate VAT Report</Text>
+                            <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Generate VAT Report</Text>
                     </Pressable>
                 </View>
             </View>
@@ -103,6 +126,7 @@ const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
                     </View>
                     <Pressable 
                         style={styles.pressableView}
+                        onPress={() => {toReceiptListViewer(TO_MEDICAL_LIST)}}
                         android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                             <Icon
                                 name='receipt'
@@ -117,12 +141,12 @@ const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
                     <Pressable 
                         style={styles.submitButton}
                         android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
-                            <Text style={{fontFamily: FONTFAMILY.jost_bold, color: COLOR.primaryWhiteHex, padding: SIZE.size_10}}>Generate Medical Report</Text>
+                            <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Generate Medical Report</Text>
                     </Pressable>
                 </View>
             </View>
         }
-        {expenses && 
+        {expenses.length > 0 && 
             <View style={styles.cardLayout}>
                 <View style={styles.innerCardLayout}>
                     <View style={styles.totalsLayout}>
@@ -132,16 +156,17 @@ const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
                         <View style={styles.totalsView}>
                             <View style={styles.singleTotalsLayout}>
                                 <Text style={{fontFamily: FONTFAMILY.jost_medium}}>Receipts count: </Text>
-                                <Text style={{fontFamily: FONTFAMILY.jost_medium}}>0</Text>
+                                <Text style={{fontFamily: FONTFAMILY.jost_medium}}>{expenses.length}</Text>
                             </View>
                             <View style={styles.singleTotalsLayout}>
                                 <Text style={{fontFamily: FONTFAMILY.jost_medium, color: COLOR.primaryBlueHex}}>Receipts total: </Text>
-                                <Text style={{fontFamily: FONTFAMILY.jost_medium, color: COLOR.primaryBlueHex}}>€0</Text>  
+                                <Text style={{fontFamily: FONTFAMILY.jost_medium, color: COLOR.primaryBlueHex}}>€{receiptsTotal(expenses).toFixed(2)}</Text>  
                             </View>
                         </View>
                     </View>
                     <Pressable 
                         style={styles.pressableView}
+                        onPress={() => {toReceiptListViewer(TO_EXPENSES_LIST)}}
                         android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                             <Icon
                                 name='receipt'
@@ -156,7 +181,7 @@ const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
                     <Pressable 
                         style={styles.submitButton}
                         android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
-                            <Text style={{fontFamily: FONTFAMILY.jost_bold, color: COLOR.primaryWhiteHex, padding: SIZE.size_10}}>Generate Expense Report</Text>
+                            <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Generate Expense Report</Text>
                     </Pressable>
                 </View>
             </View>} 
@@ -212,6 +237,7 @@ const styles = StyleSheet.create({
         elevation: SIZE.size_2
     },
     submitButton: {
+        padding: SIZE.size_5,
         backgroundColor: COLOR.primaryBlueHex,
         alignItems: 'center',
         borderRadius: SIZE.size_4,

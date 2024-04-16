@@ -4,7 +4,7 @@ import { COLOR, FONTFAMILY, RECEIPT_CARD_HEIGHT, SIZE } from '../theme/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Header from '../components/Header';
 import ReceiptCard from '../components/receipts/ReceiptCard';
-import { ADD_TO_SAVED_AND_TAX, ReceiptProps } from '../types/types';
+import { ADD_TO_SAVED_TAX_EXPENSE, ReceiptProps } from '../types/types';
 import Map from '../components/Map';
 import { auth, database } from '../../firebaseconfig';
 import { onValue, ref } from 'firebase/database';
@@ -63,7 +63,7 @@ const Home = () => {
                           items={item.items}
                           priceTotal={item.priceTotal}
                           itemsTotal={item.itemsTotal}
-                          viewerType={ADD_TO_SAVED_AND_TAX}
+                          viewerType={ADD_TO_SAVED_TAX_EXPENSE}
                         />
               }}
             />

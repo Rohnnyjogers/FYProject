@@ -1,12 +1,19 @@
-export const ADD_TO_SAVED_AND_TAX = 'ADD_TO_SAVED_AND_TAX';
+export const ADD_TO_SAVED_TAX_EXPENSE = 'ADD_TO_SAVED_TAX_EXPENSE';
 export const REMOVE_FROM_SAVED = 'REMOVE_FROM_SAVED';
 export const REMOVE_FROM_TAX = 'REMOVE_FROM_TAX';
 export const NAV_ERROR = 'NAV_ERROR';
+export const RECEIPT_LIST_VIEWER = 'RECEIPT_LIST_VIEWER';
 
 export const ADD_TO_SAVED_BTN = 0;
 export const ADD_TO_TAX_BTN = 1;
-export const REMOVE_FROM_SAVED_BTN = 2;
-export const REMOVE_FROM_TAX_BTN = 3;
+export const ADD_TO_EXPENSE_BTN = 2;
+export const REMOVE_FROM_SAVED_BTN = 3;
+export const REMOVE_FROM_TAX_BTN = 4;
+
+export const TO_VAT_LIST = 0;
+export const TO_MEDICAL_LIST = 1;
+export const TO_EXPENSES_LIST = 2;
+
 
 type Item = {
     quantity: number;
@@ -39,7 +46,7 @@ export type Reward = {
 }
 
 export type ViewerScreen = 
-    typeof ADD_TO_SAVED_AND_TAX | 
+    typeof ADD_TO_SAVED_TAX_EXPENSE | 
     typeof REMOVE_FROM_SAVED | 
     typeof REMOVE_FROM_TAX |
     typeof NAV_ERROR; 
@@ -49,7 +56,7 @@ export type RootStackParamsList = {
     Saved: undefined;
     Rewards: undefined;
     Profile: undefined;
-    ADD_TO_SAVED_AND_TAX: {
+    ADD_TO_SAVED_TAX_EXPENSE: {
         receiptId: number;
         vendorId: string;
         receiptDate: Date;
@@ -96,7 +103,11 @@ export type RootStackParamsList = {
         itemsTotal: number;
         priceTotal: number;
         viewerType: string | undefined;
-    }
+    },
+    RECEIPT_LIST_VIEWER : {
+        receiptList: ReceiptProps[];
+        viewerType: string;
+    },
 }
 
 export type UIReceiptProps = {

@@ -2,6 +2,7 @@ import { Dimensions } from "react-native";
 
 export const RECEIPT_CARD_WIDTH = Dimensions.get('window').width*0.4;
 export const RECEIPT_CARD_HEIGHT = Dimensions.get('window').width*0.65;
+export const FULL_RECEIPT_CARD = Dimensions.get('window').height*0.7;
 export const COMPACT_RECEIPT_WIDTH = Dimensions.get('window').width*0.35;
 export const COMPACT_RECEIPT_HEIGHT = Dimensions.get('window').width*0.45;
 export const FULL_RECEIPT_WIDTH = Dimensions.get('window').width*0.75;
