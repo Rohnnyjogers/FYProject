@@ -1,6 +1,6 @@
-import { PurchaseProps, ReceiptProps, Reward } from "../types/types";
+import { PurchaseProps, ReceiptProps, Reward } from "../../types/types";
 import { DatabaseReference, child, get, ref, set, update } from "firebase/database";
-import { database } from "../../firebaseconfig";
+import { database } from "../../../firebaseconfig";
 
 export const setRewardActive = (
     userId: string | undefined,

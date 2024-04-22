@@ -130,32 +130,7 @@ const Saved = () => {
             <TaxAndExpenseCard
               taxes={taxReceipts}
               expenses={expenseReceipts}
-              />
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.flatListStyle}
-              contentContainerStyle={styles.receiptList}
-              data={taxReceipts}
-              keyExtractor={(item) => item.receiptId.toString()}
-              renderItem={({item}) => {
-                return(
-                  <ReceiptCard
-                    receiptId={item.receiptId}
-                    vendorId={item.vendorId}
-                    receiptDate={item.receiptDate}
-                    latitude={item.latitude}
-                    longitude={item.longitude}
-                    vendorName={item.vendorName}
-                    items={item.items}
-                    priceTotal={item.priceTotal}
-                    itemsTotal={item.itemsTotal}
-                    viewerType={REMOVE_FROM_TAX}
-                  />
-                )
-              }}
-              ListEmptyComponent={<NavError/>}
-            />
+            />          
           </ScrollView>
         </View> 
       }

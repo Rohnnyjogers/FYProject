@@ -14,7 +14,7 @@ import NavError from '../components/NavError';
 import { ReceiptContext } from '../../App';
 import { auth } from '../../firebaseconfig';
 import { addReceiptToRecent, sendReceiptToVendor, updateCustomerRecordWithVendor } from '../service/service';
-import { checkAndUpdateRewards } from '../service/rewardFunctions';
+import { checkAndUpdateRewards } from '../components/rewards/rewardFunctions';
 import PushNotification from 'react-native-push-notification';
 import ReceiptListViewer from '../screens/ReceiptListViewer';
 
