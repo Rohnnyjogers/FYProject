@@ -4,7 +4,7 @@ import { COLOR, FONTFAMILY, FULL_RECEIPT_WIDTH, REWARDS_CARD_HEIGHT, REWARDS_CAR
 import { Reward } from '../../types/types';
 import RewardStamp from './RewardStamp';
 import { auth } from '../../../firebaseconfig';
-import { setRewardActive, setRewardClaimed } from './rewardFunctions';
+import { setRewardActive, setRewardClaimed } from '../../functions/rewardFunctions';
 
 interface RewardCardProps {
   reward: Reward;

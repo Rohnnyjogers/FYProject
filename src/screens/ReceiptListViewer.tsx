@@ -19,7 +19,7 @@ const ReceiptListViewer = () => {
 
     const dateString = (receiptDate: Date) => {
         const rawDate = new Date(receiptDate);
-        return `${rawDate.getDate()}/${rawDate.getMonth()}/${rawDate.getFullYear()} ${rawDate.getHours()}:${String(rawDate.getMinutes()).padStart(2,'0')}`;
+        return `${rawDate.getDate()}/${rawDate.getMonth()+1}/${rawDate.getFullYear()} ${rawDate.getHours()}:${String(rawDate.getMinutes()).padStart(2,'0')}`;
     }
 
     return (

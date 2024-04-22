@@ -1,17 +1,15 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { RECEIPT_LIST_VIEWER, ReceiptProps, RootStackParamsList, TO_EXPENSES_LIST, TO_MEDICAL_LIST, TO_VAT_LIST } from '../../types/types';
-import { COLOR, FONTFAMILY, SIZE, TAX_EXPENSE_CARD_HEIGHT, TAX_EXPENSE_CARD_WIDTH } from '../../theme/theme';
+import { COLOR, FONTFAMILY, SIZE, FULL_CARD_WIDTH } from '../../theme/theme';
 import  Icon  from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { PDFDocument, rgb, StandardFonts, } from 'pdf-lib';
-import { encodeToBase64 } from 'pdf-lib';
-import { writeFile, DownloadDirectoryPath } from 'react-native-fs';
 import { auth, database } from '../../../firebaseconfig';
 import { CompanyDetailsProps, PersonalDetailsProps } from '../../screens/Profile';
 import { onValue, ref } from 'firebase/database';
-import { generateAndDownloadPDF, receiptsTotal, vatTaxback } from './taxesExpensesFunctions';
+import { generateAndDownloadPDF, receiptsTotal, vatTaxback } from '../../functions/taxesExpensesFunctions';
+
 
 
 interface TaxAndExpenseCardProps {
@@ -43,8 +41,6 @@ const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
             }
         });
     }, []);
-
-    console.log(personalDetails);
 
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
 
@@ -218,7 +214,7 @@ export default TaxAndExpenseCard;
 const styles = StyleSheet.create({
     taxExpenseCard: {
         marginTop: SIZE.size_10,
-        width: TAX_EXPENSE_CARD_WIDTH,
+        width: FULL_CARD_WIDTH,
         gap: SIZE.size_50,
     },
     cardLayout: {

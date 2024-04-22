@@ -1,6 +1,6 @@
 import { PDFDocument, StandardFonts, encodeToBase64, rgb } from "pdf-lib";
-import { CompanyDetailsProps, PersonalDetailsProps } from "../../screens/Profile";
-import { ReceiptProps } from "../../types/types";
+import { CompanyDetailsProps, PersonalDetailsProps } from "../screens/Profile";
+import { ReceiptProps } from "../types/types";
 import { Alert } from "react-native";
 import { DownloadDirectoryPath, writeFile } from "react-native-fs";
 

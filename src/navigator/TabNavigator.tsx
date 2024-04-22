@@ -14,7 +14,7 @@ import NavError from '../components/NavError';
 import { ReceiptContext } from '../../App';
 import { auth } from '../../firebaseconfig';
 import { addReceiptToRecent, sendReceiptToVendor, updateCustomerRecordWithVendor } from '../service/service';
-import { checkAndUpdateRewards } from '../components/rewards/rewardFunctions';
+import { checkAndUpdateRewards } from '../functions/rewardFunctions';
 import PushNotification from 'react-native-push-notification';
 import ReceiptListViewer from '../screens/ReceiptListViewer';
 
@@ -181,6 +181,6 @@ const TabNavigator = () => {
   )
 }
 
-const styles = StyleSheet.create({})
+export default TabNavigator;
 
-export default TabNavigator
+const styles = StyleSheet.create({})

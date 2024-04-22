@@ -7,7 +7,7 @@ import RewardsCard from '../components/rewards/RewardsCard';
 import { auth, database } from '../../firebaseconfig';
 import { DatabaseReference, onValue, ref } from 'firebase/database';
 import { Reward } from '../types/types';
-import { checkAndUpdateRewards } from '../components/rewards/rewardFunctions';
+import { checkAndUpdateRewards } from '../functions/rewardFunctions';
 
 const Rewards = () => {
 

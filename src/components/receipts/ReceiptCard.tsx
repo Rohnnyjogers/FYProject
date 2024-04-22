@@ -52,7 +52,7 @@ const ReceiptCard: React.FC<ReceiptProps> = ({
   };
 
   const rawDate: Date = new Date(receiptDate);
-  const date = `${rawDate.getDate()}/${rawDate.getMonth()}/${rawDate.getFullYear()} ${rawDate.getHours()}:${String(rawDate.getMinutes()).padStart(2,'0')}`;
+  const date = `${rawDate.getDate()}/${rawDate.getMonth()+1}/${rawDate.getFullYear()} ${rawDate.getHours()}:${String(rawDate.getMinutes()).padStart(2,'0')}`;
   const vendor: string = vendorName.replace(/_/g,' ');
 
   return (
