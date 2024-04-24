@@ -23,7 +23,6 @@ const CompactReceipt: React.FC<UIReceiptProps> = ({
             return(
               <View style={styles.itemView} key={items.indexOf(item)}>
                 <Text style={styles.itemLayout}>{item.quantity} x {item.description}</Text>
-                <Text style={styles.itemPrice}>{item.price.toFixed(2)}</Text>
               </View>
             )
           })}

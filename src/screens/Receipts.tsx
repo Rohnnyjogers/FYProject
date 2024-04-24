@@ -26,15 +26,7 @@ const Saved = () => {
 
       onValue(savedDbRef, (snapshot) => {
         if(snapshot.exists()){
-          const vendors = Object.keys(snapshot.val());
-
-          const receipts = vendors.flatMap((vendor) => {
-            const vendorReceipts: ReceiptProps[] = Object.values(snapshot.val()[vendor])
-            
-            return vendorReceipts.map((receipt) => ({
-              ...receipt
-            }));
-          });
+          const receipts: ReceiptProps[] = Object.values(snapshot.val());
           setSavedReceipts(receipts);
         } else {
           setSavedReceipts([]);
@@ -43,16 +35,7 @@ const Saved = () => {
 
       onValue(taxDbRef, (snapshot) => {
         if(snapshot.exists()){
-          const vendors = Object.keys(snapshot.val());
-
-          const receipts = vendors.flatMap((vendor) => {
-            const vendorReceipts: ReceiptProps[] = Object.values(snapshot.val()[vendor])
-            
-            return vendorReceipts.map((receipt) => ({
-              ...receipt
-            }));
-
-          });
+          const receipts: ReceiptProps[] = Object.values(snapshot.val());
           setTaxReceipts(receipts);
         } else {
           setTaxReceipts([]);
@@ -61,16 +44,7 @@ const Saved = () => {
 
       onValue(expenseDbRef, (snapshot) => {
         if(snapshot.exists()){
-          const vendors = Object.keys(snapshot.val());
-
-          const receipts = vendors.flatMap((vendor) => {
-            const vendorReceipts: ReceiptProps[] = Object.values(snapshot.val()[vendor])
-            
-            return vendorReceipts.map((receipt) => ({
-              ...receipt
-            }));
-
-          });
+          const receipts: ReceiptProps[] = Object.values(snapshot.val());
           setExpenseReceipts(receipts);
         } else {
           setExpenseReceipts([]);
@@ -119,6 +93,8 @@ const Saved = () => {
                     items={item.items}
                     priceTotal={item.priceTotal}
                     itemsTotal={item.itemsTotal}
+                    taxType={item.taxType}
+                    vendorType={item.vendorType}
                     viewerType={REMOVE_FROM_SAVED}
                   />
                 )

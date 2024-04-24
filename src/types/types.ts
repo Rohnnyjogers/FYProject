@@ -31,7 +31,9 @@ export type ReceiptProps = {
     items: Item[];
     itemsTotal: number;
     priceTotal: number;
-} & ({viewerType?: never} | {viewerType: string});
+    taxType: string;
+    vendorType: string;
+} & ({ viewerType?: never } | { viewerType: string });
 
 export type Reward = {
     active: boolean;
@@ -45,11 +47,11 @@ export type Reward = {
     complete: boolean;
 }
 
-export type ViewerScreen = 
-    typeof ADD_TO_SAVED_TAX_EXPENSE | 
-    typeof REMOVE_FROM_SAVED | 
+export type ViewerScreen =
+    typeof ADD_TO_SAVED_TAX_EXPENSE |
+    typeof REMOVE_FROM_SAVED |
     typeof REMOVE_FROM_TAX |
-    typeof NAV_ERROR; 
+    typeof NAV_ERROR;
 
 export type RootStackParamsList = {
     Home: undefined;
@@ -66,6 +68,8 @@ export type RootStackParamsList = {
         items: Item[];
         itemsTotal: number;
         priceTotal: number;
+        taxType: string;
+        vendorType: string;
         viewerType: string | undefined;
     },
     REMOVE_FROM_SAVED: {
@@ -78,6 +82,8 @@ export type RootStackParamsList = {
         items: Item[];
         itemsTotal: number;
         priceTotal: number;
+        taxType: string;
+        vendorType: string;
         viewerType: string | undefined;
     },
     REMOVE_FROM_TAX: {
@@ -90,6 +96,8 @@ export type RootStackParamsList = {
         items: Item[];
         itemsTotal: number;
         priceTotal: number;
+        taxType: string;
+        vendorType: string;
         viewerType: string | undefined;
     }
     NAV_ERROR: {
@@ -102,9 +110,11 @@ export type RootStackParamsList = {
         items: Item[];
         itemsTotal: number;
         priceTotal: number;
+        taxType: string;
+        vendorType: string;
         viewerType: string | undefined;
     },
-    RECEIPT_LIST_VIEWER : {
+    RECEIPT_LIST_VIEWER: {
         receiptList: ReceiptProps[];
         viewerType: string;
     },

@@ -13,7 +13,7 @@ import { ADD_TO_SAVED_TAX_EXPENSE, NAV_ERROR, RECEIPT_LIST_VIEWER, REMOVE_FROM_S
 import NavError from '../components/NavError';
 import { ReceiptContext } from '../../App';
 import { auth } from '../../firebaseconfig';
-import { addReceiptToRecent, sendReceiptToVendor, updateCustomerRecordWithVendor } from '../service/service';
+import { addReceiptToReceipts, sendReceiptToVendor, updateCustomerRecordWithVendor } from '../service/service';
 import { checkAndUpdateRewards } from '../functions/rewardFunctions';
 import PushNotification from 'react-native-push-notification';
 import ReceiptListViewer from '../screens/ReceiptListViewer';
@@ -103,7 +103,7 @@ const TabNavigator = () => {
       });
 
       recentReceipts.forEach((receipt) => {
-        addReceiptToRecent(userId, receipt);
+        addReceiptToReceipts(userId, receipt);
         updateCustomerRecordWithVendor(userId, receipt);
         sendReceiptToVendor(userId, receipt);
         checkAndUpdateRewards(userId, receipt);

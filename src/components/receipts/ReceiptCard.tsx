@@ -15,7 +15,9 @@ const ReceiptCard: React.FC<ReceiptProps> = ({
       vendorName, 
       items, 
       priceTotal, 
-      itemsTotal, 
+      itemsTotal,
+      taxType,
+      vendorType, 
       viewerType 
 }) => {
 
@@ -46,7 +48,9 @@ const ReceiptCard: React.FC<ReceiptProps> = ({
       longitude,
       items, 
       itemsTotal, 
-      priceTotal, 
+      priceTotal,
+      taxType,
+      vendorType, 
       viewerType 
     });
   };

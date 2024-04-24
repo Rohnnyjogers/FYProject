@@ -3,36 +3,6 @@ import { PurchaseProps, ReceiptProps, Reward } from "../types/types";
 import { database } from "../../firebaseconfig";
 import { Alert } from "react-native";
 
-// export const getCurrentRewardSize = async(
-//     userId: string|undefined,
-//     receiptData: ReceiptProps,
-//     rewardItem: string
-// ) => {
-//     const dbRef = ref(database, `/users/${userId}/rewards`);
-
-//     try{
-//         const rewardsSnapshot = await get(dbRef);
-
-//         if(rewardsSnapshot.exists()){
-//             const rewards = rewardsSnapshot.val();
-//             const { vendorId } = receiptData;
-
-//             for(const reward of Object.keys(rewards)){
-//                 const rewardData: Reward = rewards[reward];
-
-//                 if(rewardData.vendorId===vendorId && rewardData.item===rewardItem && rewardData.active){
-//                     return rewardData.size;
-//                 }
-//             }
-//         }
-//         return null;
-//     }
-//     catch(error){
-//         console.log('Error retrieving reward size: ', error);
-//     }
-// }
-
-
 
 export const updateCustomerRecordWithVendor = async (
     userId: string | undefined,
@@ -111,12 +81,12 @@ export const sendReceiptToVendor = (
     });
 }
 
-export const addReceiptToRecent = (
+export const addReceiptToReceipts = (
     userId: string | undefined,
     receiptData: ReceiptProps,
 ) => {
     const receiptKey = `${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`
-    const dbRef = ref(database, `/users/${userId}/receipts/recent/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/receipts/${receiptKey}`);
 
     get(dbRef)
     .then((snapshot) => {
@@ -135,7 +105,7 @@ export const addReceiptToExpenses = async (
     navigation: any
 ) => {
     const receiptKey = `E_${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
-    const dbRef = ref(database, `/users/${userId}/receipts/expenses/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/expenses/${receiptKey}`);
 
     try{
         const receiptSnapshot = await get(dbRef);
@@ -166,7 +136,7 @@ export const addReceiptToSaved = (
     navigation: any
 ) => {
     const receiptKey = `${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
-    const dbRef = ref(database, `/users/${userId}/receipts/saved/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/saved/${receiptKey}`);
 
     get(dbRef)
     .then((snapshot) => {
@@ -206,7 +176,7 @@ export const addReceiptToTax = (
     navigation: any
 ) => {
     const receiptKey = `T_${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
-    const dbRef = ref(database, `/users/${userId}/receipts/tax/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/tax/${receiptKey}`);
 
     get(dbRef)
     .then((snapshot) => {
@@ -244,7 +214,7 @@ export const removeReceiptFromExpenses = async (
     navigation: any
 ) => {
     const receiptKey = `E_${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
-    const dbRef = ref(database, `/users/${userId}/receipts/expenses/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/expenses/${receiptKey}`);
     
     try{
         const receiptSnaphot = await get(dbRef);
@@ -273,7 +243,7 @@ export const removeReceiptFromSaved = (
     navigation: any
 ) => {
     const receiptKey = `${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
-    const dbRef = ref(database, `/users/${userId}/receipts/saved/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/saved/${receiptKey}`);
 
     get(dbRef)
     .then((snapshot) => {
@@ -302,7 +272,7 @@ export const removeReceiptFromTax = (
     navigation: any
 ) => {
     const receiptKey = `T_${receiptData.vendorName}_${receiptData.vendorId}_${receiptData.receiptId}`;
-    const dbRef = ref(database, `/users/${userId}/receipts/tax/${receiptData.vendorName}_${receiptData.vendorId}/${receiptKey}`);
+    const dbRef = ref(database, `/users/${userId}/receipts/tax/${receiptKey}`);
 
     get(dbRef)
     .then((snapshot) => {
