@@ -10,6 +10,7 @@ import { BarChart, LineChart } from 'react-native-chart-kit';
 import { auth, database } from '../../firebaseconfig';
 import { get, onValue, ref, set } from 'firebase/database';
 import { SpendingCategories, getPrevMonthsSpendingData, getSpendingByCategoryData, previousMonthSpendingTotal } from '../functions/homeFunctions';
+import PushNotification from 'react-native-push-notification';
 
 const Home = () => {
   const [recentReceipts, setRecentReceipts] = useState<ReceiptProps[]>([]);
@@ -30,14 +31,13 @@ const Home = () => {
         // receipts.slice(0,10);
         setRecentReceipts(receipts.reverse());
         setReceiptsLoading(false);
+        getPrevMonthsSpendingData(userId, setThirtyDayData, setLineChartLoading);
+        getSpendingByCategoryData(userId, setSpendingByCategory, setBarChartLoading);
       }
       else {
         setRecentReceipts([]);
       }
     });
-
-    getPrevMonthsSpendingData(userId, setThirtyDayData, setLineChartLoading);
-    getSpendingByCategoryData(userId, setSpendingByCategory, setBarChartLoading);
   }, []);
 
 
@@ -45,7 +45,7 @@ const Home = () => {
     let labels = [];
     let data = [];
 
-    for(let i = 0; i < spendingByCategory.length; i++){
+    for (let i = 0; i < spendingByCategory.length; i++) {
       labels.push(spendingByCategory[i].category);
       data.push(spendingByCategory[i].total);
     }
@@ -57,11 +57,11 @@ const Home = () => {
   }
 
   const lineChartData = {
-    labels: ['a', 'b', 'c', 'd'],
+    labels: [],
     datasets: [
       {
         data: thirtyDayData,
-        color: (opacity = 1) => `rgba(70, 130, 180, ${opacity})`, 
+        color: (opacity = 1) => `rgba(70, 130, 180, ${opacity})`,
         strokeWidth: 2
       }
     ],
@@ -72,7 +72,7 @@ const Home = () => {
     datasets: [
       {
         data: extractBarChartData().data,
-        color: (opacity = 1) => `rgba(70, 130, 180, ${opacity})`, 
+        color: (opacity = 1) => `rgba(70, 130, 180, ${opacity})`,
         strokeWidth: 2
       }
     ],
@@ -100,9 +100,27 @@ const Home = () => {
     useShadowColorFromDataset: false,
   };
 
+  const test = () => {
+    PushNotification.createChannel(
+      {
+        channelId: '929255533210',
+        channelName: "My_channel",
+        playSound: true,
+      },
+      (created) => console.log(`createChannel returned '${created}'`)
+    );
+
+    PushNotification.localNotification({
+      channelId: '929255533210',
+      title: "Notification",
+      message: 'This is a notification.'
+    });
+  }
+
   return (
     <>
       <Header />
+      {/* <Button title='Press' onPress={test} /> */}
       <Text style={styles.title}>Home</Text>
       <View style={styles.divider} />
       <View style={styles.screenContainer}>
@@ -200,12 +218,12 @@ const Home = () => {
               }
             </View>
             <View style={{ width: '100%', flexDirection: 'row' }}>
-              <Text style={{
+              {/* <Text style={{
                 alignSelf: 'flex-start',
                 fontFamily: FONTFAMILY.jost_medium,
                 fontSize: SIZE.size_16,
                 color: COLOR.primaryGreyHex
-              }}>{`Total spend: €${previousMonthSpendingTotal(thirtyDayData).toFixed(2)}`}</Text>
+              }}>{`Total spend: €${previousMonthSpendingTotal(thirtyDayData).toFixed(2)}`}</Text> */}
             </View>
           </View>
           {/* <Map/> */}

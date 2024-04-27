@@ -58,6 +58,7 @@ export type RootStackParamsList = {
     Saved: undefined;
     Rewards: undefined;
     Profile: undefined;
+    Login: undefined;
     ADD_TO_SAVED_TAX_EXPENSE: {
         receiptId: number;
         vendorId: string;

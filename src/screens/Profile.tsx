@@ -201,6 +201,12 @@ const Profile: React.FC = () => {
                 <Text style={{ fontFamily: FONTFAMILY.jost_regular, color: COLOR.primaryGreyHex, fontSize: SIZE.size_14 }}>
                   {`${personalDetails.taxNumber}`}</Text>
               </View>
+              <Pressable
+                // onPress={addCompanyToDatabase}
+                style={styles.submitButton}
+                android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Edit</Text>
+              </Pressable>
             </View>
             :
             <View style={styles.detailsView}>
@@ -297,6 +303,12 @@ const Profile: React.FC = () => {
                   {`${companyDetails.companyEmail}`}
                 </Text>
               </View>
+              <Pressable
+                // onPress={addCompanyToDatabase}
+                style={styles.submitButton}
+                android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Edit</Text>
+              </Pressable>
             </View>
             :
             <View style={styles.detailsView}>
@@ -427,10 +439,13 @@ const styles = StyleSheet.create({
     elevation: SIZE.size_2
   },
   submitButton: {
+    marginTop: 20,
+    marginStart: 100,
+    marginEnd: 100,
     paddingTop: SIZE.size_5,
     paddingBottom: SIZE.size_5,
-    paddingStart: SIZE.size_10,
-    paddingEnd: SIZE.size_10,
+    paddingStart: SIZE.size_40,
+    paddingEnd: SIZE.size_40,
     backgroundColor: COLOR.primaryBlueHex,
     alignItems: 'center',
     borderRadius: SIZE.size_4,

@@ -22,66 +22,66 @@ const HomeStack = createNativeStackNavigator();
 const ReceiptsStack = createNativeStackNavigator();
 
 const HomeStackScreen = () => {
-  return(
-    <HomeStack.Navigator 
-      screenOptions={{headerShown: false}}>
-      <HomeStack.Screen 
-        name='Home' 
-        component={Home}/>
-      <HomeStack.Screen 
-        name={ADD_TO_SAVED_TAX_EXPENSE} 
+  return (
+    <HomeStack.Navigator
+      screenOptions={{ headerShown: false }}>
+      <HomeStack.Screen
+        name='Home'
+        component={Home} />
+      <HomeStack.Screen
+        name={ADD_TO_SAVED_TAX_EXPENSE}
         component={ReceiptViewer}
         options={{
           headerShown: true,
           headerTitle: "",
           headerTintColor: COLOR.primaryBlueHex
-        }}/>
-        <ReceiptsStack.Screen
+        }} />
+      <ReceiptsStack.Screen
         name='Nav Error'
-        component={NavError}/>
+        component={NavError} />
     </HomeStack.Navigator>
   )
 }
 
 const ReceiptsStackScreen = () => {
-  return(
+  return (
     <ReceiptsStack.Navigator
-      screenOptions={{headerShown: false}}>
-        <ReceiptsStack.Screen
-          name='Receipts'
-          component={Receipts}
-        />
-        <ReceiptsStack.Screen
-          name={REMOVE_FROM_SAVED}
-          component={ReceiptViewer}
-          options={{
-            headerShown: true,
-            headerTitle: '',
-            headerTintColor: COLOR.primaryBlueHex
-          }}
-        />
-        <ReceiptsStack.Screen
-          name={REMOVE_FROM_TAX}
-          component={ReceiptViewer}
-          options={{
-            headerShown: true,
-            headerTitle: '',
-            headerTintColor: COLOR.primaryBlueHex
-          }}
-        />  
-        <ReceiptsStack.Screen
-          name={NAV_ERROR}
-          component={NavError}
-        />
-        <ReceiptsStack.Screen
-          name={RECEIPT_LIST_VIEWER}
-          component={ReceiptListViewer}
-          options={{
-            headerShown: true,
-            headerTitle: '',
-            headerTintColor: COLOR.primaryBlueHex
-          }}
-        />
+      screenOptions={{ headerShown: false }}>
+      <ReceiptsStack.Screen
+        name='Receipts'
+        component={Receipts}
+      />
+      <ReceiptsStack.Screen
+        name={REMOVE_FROM_SAVED}
+        component={ReceiptViewer}
+        options={{
+          headerShown: true,
+          headerTitle: '',
+          headerTintColor: COLOR.primaryBlueHex
+        }}
+      />
+      <ReceiptsStack.Screen
+        name={REMOVE_FROM_TAX}
+        component={ReceiptViewer}
+        options={{
+          headerShown: true,
+          headerTitle: '',
+          headerTintColor: COLOR.primaryBlueHex
+        }}
+      />
+      <ReceiptsStack.Screen
+        name={NAV_ERROR}
+        component={NavError}
+      />
+      <ReceiptsStack.Screen
+        name={RECEIPT_LIST_VIEWER}
+        component={ReceiptListViewer}
+        options={{
+          headerShown: true,
+          headerTitle: '',
+          headerTintColor: COLOR.primaryBlueHex
+        }}
+      />
     </ReceiptsStack.Navigator>
   )
 }
@@ -89,18 +89,12 @@ const ReceiptsStackScreen = () => {
 const BottomTab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const contextValue = useContext(ReceiptContext) || {recentReceipts: [], setRecentReceipts: () => {}};
+  const contextValue = useContext(ReceiptContext) || { recentReceipts: [], setRecentReceipts: () => { } };
   const { recentReceipts, setRecentReceipts } = contextValue;
   const userId = auth.currentUser?.uid;
 
   useEffect(() => {
-    if(recentReceipts.length > 0){
-     
-      PushNotification.localNotification({
-        channelId: '7000',
-        title: "Notification",
-        message: 'This is a notification.'
-      });
+    if (recentReceipts.length > 0) {
 
       recentReceipts.forEach((receipt) => {
         addReceiptToReceipts(userId, receipt);
@@ -110,74 +104,74 @@ const TabNavigator = () => {
       });
       setRecentReceipts([]);
     }
-  },[recentReceipts, setRecentReceipts, userId]);
+  }, [recentReceipts, setRecentReceipts, userId]);
 
   return (
-      <BottomTab.Navigator screenOptions={{
-        headerShown: false,
-        tabBarHideOnKeyboard: true,
-        tabBarShowLabel: false,
-      }}>
-        <BottomTab.Screen 
-          name='HomeStackScreen' 
-          component={HomeStackScreen}
-          options={{
-            tabBarIcon: ({focused, size, color}) => (
-              <Icon 
-                name="home"
-                size={28}
-                color={
-                  focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
-                }
-              />
-            )
-          }}/>
-        <BottomTab.Screen 
-          name='rewards' 
-          component={Rewards}
-          options={{
-            tabBarIcon: ({focused, size, color}) => (
-              <Icon 
-                name="stars"
-                size={28}
-                color={
-                  focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
-                }
-              />
-            )
-          }}
-          />
-        <BottomTab.Screen 
-          name='ReceiptsStackScreen' 
-          component={ReceiptsStackScreen}
-          options={{
-            tabBarIcon: ({focused, size, color}) => (
-              <Icon 
-                name="folder"
-                size={28}
-                color={
-                  focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
-                }
-              />
-            )
-          }}
-          />
-        <BottomTab.Screen 
-          name='profile' 
-          component={Profile}
-          options={{
-            tabBarIcon: ({focused, size, color}) => (
-              <Icon 
-                name="account-box"
-                size={28}
-                color={
-                  focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
-                }
-              />
-            )
-          }}
-          />
-      </BottomTab.Navigator>
+    <BottomTab.Navigator screenOptions={{
+      headerShown: false,
+      tabBarHideOnKeyboard: true,
+      tabBarShowLabel: false,
+    }}>
+      <BottomTab.Screen
+        name='HomeStackScreen'
+        component={HomeStackScreen}
+        options={{
+          tabBarIcon: ({ focused, size, color }) => (
+            <Icon
+              name="home"
+              size={28}
+              color={
+                focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
+              }
+            />
+          )
+        }} />
+      <BottomTab.Screen
+        name='rewards'
+        component={Rewards}
+        options={{
+          tabBarIcon: ({ focused, size, color }) => (
+            <Icon
+              name="stars"
+              size={28}
+              color={
+                focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
+              }
+            />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name='ReceiptsStackScreen'
+        component={ReceiptsStackScreen}
+        options={{
+          tabBarIcon: ({ focused, size, color }) => (
+            <Icon
+              name="folder"
+              size={28}
+              color={
+                focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
+              }
+            />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name='profile'
+        component={Profile}
+        options={{
+          tabBarIcon: ({ focused, size, color }) => (
+            <Icon
+              name="account-box"
+              size={28}
+              color={
+                focused ? COLOR.primaryBlueHex : COLOR.primaryGreyHex
+              }
+            />
+          )
+        }}
+      />
+    </BottomTab.Navigator>
   )
 }
 

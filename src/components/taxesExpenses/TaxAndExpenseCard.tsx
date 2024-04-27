@@ -60,7 +60,7 @@ const TaxAndExpenseCard: React.FC<TaxAndExpenseCardProps> = ({
 
   return (
      <View style={styles.taxExpenseCard}>
-        {taxes && 
+        {taxes.length > 0 && 
             <View style={styles.cardLayout}>
                 <View style={styles.innerCardLayout}>
                     <View style={styles.totalsLayout}>

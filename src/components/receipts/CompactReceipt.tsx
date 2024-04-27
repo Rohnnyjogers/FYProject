@@ -5,22 +5,22 @@ import { UIReceiptProps } from '../../types/types';
 
 
 const CompactReceipt: React.FC<UIReceiptProps> = ({
-    vendorName,
-    items,
-    priceTotal,
-    itemTotal,
+  vendorName,
+  items,
+  priceTotal,
+  itemTotal,
 }) => {
-  const vendor: string = vendorName.replace(/_/g,' ');
+  const vendor: string = vendorName.replace(/_/g, ' ');
 
   return (
     <View style={styles.receiptContainer}>
       <Text style={styles.receiptTitle}>{vendor}</Text>
-      <View style={styles.divider}/>
+      <View style={styles.divider} />
       <View style={styles.items}>
         <ScrollView
           showsVerticalScrollIndicator={true}>
           {items.map((item) => {
-            return(
+            return (
               <View style={styles.itemView} key={items.indexOf(item)}>
                 <Text style={styles.itemLayout}>{item.quantity} x {item.description}</Text>
               </View>
@@ -28,13 +28,15 @@ const CompactReceipt: React.FC<UIReceiptProps> = ({
           })}
         </ScrollView>
       </View>
-      <View style={styles.divider}/>
-      <View style={styles.dblDivider}/>
-      <View style={styles.totalContainer}>
-        <Text style={styles.total}>Total:</Text>
-        <Text style={styles.price}>€{priceTotal.toFixed(2)}</Text>
+      <View style={{marginBottom: 20}}>
+        <View style={styles.divider} />
+        <View style={styles.dblDivider} />
+        <View style={styles.totalContainer}>
+          <Text style={styles.total}>Total:</Text>
+          <Text style={styles.price}>€{priceTotal.toFixed(2)}</Text>
+        </View>
+        <View style={styles.divider} />
       </View>
-      <View style={styles.divider}/>
     </View>
   )
 }
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed'
   },
   items: {
-      height: COMPACT_ITEMS_CONTAINER_HEIGHT
+    height: COMPACT_ITEMS_CONTAINER_HEIGHT
   },
   itemView: {
     padding: SIZE.size_1,
@@ -102,11 +104,11 @@ const styles = StyleSheet.create({
     fontSize: SIZE.size_14,
     color: COLOR.primaryGreyHex,
     fontFamily: FONTFAMILY.IBMPlexMono_Medium
-  
+
   },
   price: {
     fontSize: SIZE.size_14,
     color: COLOR.primaryGreyHex,
-    fontFamily: FONTFAMILY.IBMPlexMono_Medium  
+    fontFamily: FONTFAMILY.IBMPlexMono_Medium
   }
 })
