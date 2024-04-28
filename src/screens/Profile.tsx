@@ -1,10 +1,16 @@
-import { StyleSheet, View, Text, ScrollView, Button, Alert, TextInput, Pressable } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, ScrollView, Alert, TextInput, Pressable, Modal } from 'react-native';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import { COLOR, FONTFAMILY, SIZE } from '../theme/theme';
 import Header from '../components/Header';
-import { AddressProps, NameProp, OccupationProps, TaxNumberProp } from '../types/types';
 import { auth, database } from '../../firebaseconfig';
-import { get, onValue, ref, set } from 'firebase/database';
+import { onValue, ref, set } from 'firebase/database';
+import {
+  formatAddressFields,
+  savePersonalChanges,
+  validCompanyDetails,
+  validPersonalFields,
+  validTaxNumber,
+} from '../functions/profileFunctions';
 
 export interface PersonalDetailsProps {
   firstName: string,
@@ -23,21 +29,41 @@ export interface CompanyDetailsProps {
 }
 
 const Profile: React.FC = () => {
-  const [personalDetails, setPersonalDetails] = useState<PersonalDetailsProps>();
-  const [companyDetails, setCompanyDetails] = useState<CompanyDetailsProps>();
+  const [hasPersonalDetails, setHasPersonalDetails] = useState<PersonalDetailsProps>();
+  const [hasCompanyDetails, setHasCompanyDetails] = useState<CompanyDetailsProps>();
 
-  const [firstName, setFirstName] = useState('');
-  const [secondName, setSecondName] = useState('');
+  const [personalDetails, setPersonalDetails] = useState<PersonalDetailsProps>({
+    firstName: '',
+    secondName: '',
+    addressLine1: '',
+    addressLine2: '',
+    city: '',
+    country: '',
+    taxNumber: ''
+  });
+  const [companyDetails, setCompanyDetails] = useState<CompanyDetailsProps>({
+    role: '',
+    company: '',
+    companyEmail: ''
+  });
+  const [editedDetails, setEditedDetails] = useState<PersonalDetailsProps>({
+    firstName: '',
+    secondName: '',
+    addressLine1: '',
+    addressLine2: '',
+    city: '',
+    country: '',
+    taxNumber: ''
+  });
+  const [editedCompanyDetails, setEditedCompanyDetails] = useState<CompanyDetailsProps>({
+    role: '',
+    company: '',
+    companyEmail: ''
+  })
 
-  const [addressLine1, setAddressLine1] = useState('');
-  const [addressLine2, setAddressLine2] = useState('');
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('');
-  const [taxNumber, setTaxNumber] = useState('');
 
-  const [role, setRole] = useState('');
-  const [company, setCompany] = useState('');
-  const [companyEmail, setCompanyEmail] = useState('');
+  const [personalModalVisible, setPersonalModalVisible] = useState(false);
+  const [companyModalVisible, setCompanyModalVisible] = useState(false);
 
   const userId = auth.currentUser?.uid;
 
@@ -46,99 +72,68 @@ const Profile: React.FC = () => {
     const companyRef = ref(database, `/users/${userId}/profile/companyDetails`);
 
     onValue(personalRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setPersonalDetails(snapshot.val());
+      const val = snapshot.val();
+      if (val) {
+        setHasPersonalDetails(snapshot.val());
       }
     })
 
     onValue(companyRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setCompanyDetails(snapshot.val());
+      const val = snapshot.val();
+      if (val) {
+        setHasCompanyDetails(snapshot.val());
       }
     })
 
   }, []);
 
-  const validPersonalFields = (
-    firstName: string,
-    secondName: string,
-    addressLine1: string,
-    addressLine2: string,
-    city: string,
-    country: string,
-    taxNumber: string
+  const addPersonalToDatabase = async (
+    type: string
   ) => {
-    return !firstName || !secondName || !addressLine1 || !addressLine2 || !city || !country || !taxNumber;
-  }
-
-  const validTaxNumber = (
-    taxNumber: string
-  ) => {
-    return taxNumber.length !== 8 || !isNaN(Number(taxNumber.slice(-1)));
-  }
-
-  const formatAddressFields = (
-    addressLine1: string,
-    addressLine2: string,
-    city: string,
-    country: string,
-  ) => {
-    return `${addressLine1}\n${addressLine2}\n${city}\n${country}`
-  }
-
-  const validCompanyDetails = (
-    role: string,
-    company: string,
-    companyEmail: string
-  ) => {
-    return !role || !company || !companyEmail;
-  }
-
-  const clearPersonalFields = () => {
-    setFirstName('');
-    setSecondName('');
-    setAddressLine1('');
-    setAddressLine2('');
-    setCity('');
-    setCountry('');
-    setTaxNumber('');
-  }
-
-  const clearCompanyFields = () => {
-    setCompany('');
-    setRole('');
-    setCompanyEmail('')
-  }
-
-  const addProfileToDatabse = async () => {
     let invalid = true;
+    let details: PersonalDetailsProps = {
+      firstName: '',
+      secondName: '',
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      country: '',
+      taxNumber: ''
+    };
+    
+    if(type === 'CREATE'){
+      details = personalDetails;
+    }
+    else if(type === 'EDIT'){
+      details = editedDetails;
+    }
 
-    if (invalid = validPersonalFields(firstName, secondName, addressLine1, addressLine2, city, country, taxNumber)) {
-      Alert.alert('Please fill out all fields in Personal Details.');
+    if (invalid = validPersonalFields(details)) {
+      Alert.alert(
+        'Details Missing',
+        'Please fill out all fields in Personal Details.');
       return;
     }
 
-    if (invalid = validTaxNumber(taxNumber)) {
-      Alert.alert('Tax Number must contain 8 values and end with a letter.');
+    if (invalid = validTaxNumber(details.taxNumber)) {
+      Alert.alert(
+        'Tax Number Invalid',
+        'Tax Number must contain 8 values and end with a letter.');
       return;
     }
 
     if (!invalid) {
 
-      const profileData: PersonalDetailsProps = {
-        firstName: firstName,
-        secondName: secondName,
-        addressLine1: addressLine1,
-        addressLine2: addressLine2,
-        city: city,
-        country: country,
-        taxNumber: taxNumber
-      }
-
       const profileRef = ref(database, `/users/${userId}/profile/personalDetails`)
       try {
-        await set(profileRef, profileData);
+        await set(profileRef, details);
         Alert.alert('Personal Details saved successfully.');
+        if(personalModalVisible){
+          closePersonalModal();
+        }
+        if(editedDetails){
+          clearFields('EDIT')
+        }
       }
       catch (error) {
         console.log('Error setting Personal Details: ', error);
@@ -146,28 +141,264 @@ const Profile: React.FC = () => {
     }
   }
 
-  const addCompanyToDatabase = async () => {
+  const addCompanyToDatabase = async (
+    type: string
+  ) => {
     let invalid = true;
+    let details: CompanyDetailsProps = {
+      role: '',
+      company: '',
+      companyEmail: ''
+    }
 
-    if (invalid = validCompanyDetails(role, company, companyEmail)) {
+    if(type === 'CREATE'){
+      details = companyDetails
+    }
+    else if(type === 'EDIT'){
+      details = editedCompanyDetails
+    }
+
+    if (invalid = validCompanyDetails(details)) {
       Alert.alert('Please fill out all fields in Company Details.');
       return;
     }
 
-    const companyData: CompanyDetailsProps = {
-      role: role,
-      company: company,
-      companyEmail: companyEmail
-    }
-
-    const profileRef = ref(database, `/users/${userId}/profile/companyDetails`);
-    try {
-      await set(profileRef, companyData);
-      Alert.alert('Company Details saved succesfully.');
-    } catch (error) {
-      console.log('Error setting Company Details: ', error);
+    if (!invalid) {
+      const profileRef = ref(database, `/users/${userId}/profile/companyDetails`);
+      try {
+        await set(profileRef, details);
+        Alert.alert('Company Details saved succesfully.');
+        if(companyModalVisible){
+          closeCompanyModal();
+        }
+        if(editedCompanyDetails){
+          clearFields('EDIT_COMPANY');
+        }
+      } catch (error) {
+        console.log('Error setting Company Details: ', error);
+      }
     }
   }
+
+  const openPersonalModal = () => {
+    setPersonalModalVisible(true);
+  }
+
+  const closePersonalModal = () => {
+    setPersonalModalVisible(false);
+  }
+
+  const openCompanyModal = () => {
+    setCompanyModalVisible(true);
+  }
+
+  const closeCompanyModal = () => {
+    setCompanyModalVisible(false);
+  }
+
+  const clearFields = (
+    type: string
+  ) => {
+    if (type === 'CREATE') {
+      setPersonalDetails({
+        firstName: '',
+        secondName: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        country: '',
+        taxNumber: ''
+      })
+    }
+    else if (type === 'EDIT') {
+      setEditedDetails({
+        firstName: '',
+        secondName: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        country: '',
+        taxNumber: ''
+      })
+    }
+    else if (type === 'CREATE_COMPANY') {
+      setCompanyDetails({
+        role: '',
+        company: '',
+        companyEmail: ''
+      })
+    }
+    else if(type === 'EDIT_COMPANY'){
+      setEditedCompanyDetails({
+        role: '',
+        company: '',
+        companyEmail: ''
+      })
+    }
+  }
+
+  const renderPersonalModal = () => {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={personalModalVisible}
+        onRequestClose={closePersonalModal}>
+        <View style={styles.modalCard}>
+          <View style={styles.modalContent}>
+            <Text style={{ fontFamily: FONTFAMILY.jost_semibold, color: COLOR.primaryGreyHex, fontSize: SIZE.size_20 }}>Edit Personal Details</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder='First Name'
+              value={editedDetails.firstName}
+              onChangeText={(text) => setEditedDetails(prev => ({
+                ...prev,
+                firstName: text
+              }))}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder='Second Name'
+              value={editedDetails.secondName}
+              onChangeText={(text) => setEditedDetails(prev => ({
+                ...prev,
+                secondName: text
+              }))}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder='Address Line 1'
+              value={editedDetails.addressLine1}
+              onChangeText={(text) => setEditedDetails(prev => ({
+                ...prev,
+                addressLine1: text
+              }))}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder='Address Line 2'
+              value={editedDetails.addressLine2}
+              onChangeText={(text) => setEditedDetails(prev => ({
+                ...prev,
+                addressLine2: text
+              }))}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder='City'
+              value={editedDetails.city}
+              onChangeText={(text) => setEditedDetails(prev => ({
+                ...prev,
+                city: text
+              }))}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder='Country'
+              value={editedDetails.country}
+              onChangeText={(text) => setEditedDetails(prev => ({
+                ...prev,
+                country: text
+              }))}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder='Tax Number'
+              value={editedDetails.taxNumber}
+              onChangeText={(text) => setEditedDetails(prev => ({
+                ...prev,
+                taxNumber: text
+              }))}
+            />
+            <View style={styles.buttonContainer}>
+              <Pressable
+                onPress={() => addPersonalToDatabase('EDIT')}
+                style={styles.modalButton}
+                android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Save</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => clearFields('EDIT')}
+                style={styles.modalButton}
+                android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Clear</Text>
+              </Pressable>
+              <Pressable
+                onPress={closePersonalModal}
+                style={styles.modalButton}
+                android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Cancel</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    )
+  }
+
+  const renderCompanyModal = () => {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={companyModalVisible}
+        onRequestClose={closeCompanyModal}>
+        <View style={styles.modalCard}>
+          <View style={styles.modalContent}>
+            <Text style={{ fontFamily: FONTFAMILY.jost_semibold, color: COLOR.primaryGreyHex, fontSize: SIZE.size_20 }}>Edit Company Details</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder='Company'
+              value={editedCompanyDetails.company}
+              onChangeText={(text) => setEditedCompanyDetails(prev => ({
+                ...prev,
+                company: text
+              }))}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder='Role'
+              value={editedCompanyDetails.role}
+              onChangeText={(text) => setEditedCompanyDetails(prev => ({
+                ...prev,
+                role: text
+              }))}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder='Accounts Email'
+              value={editedCompanyDetails.companyEmail}
+              onChangeText={(text) => setEditedCompanyDetails(prev => ({
+                ...prev,
+                companyEmail: text
+              }))}
+            />
+            <View style={styles.buttonContainer}>
+              <Pressable
+                onPress={() => addCompanyToDatabase('EDIT')}
+                style={styles.modalButton}
+                android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Save</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => clearFields('EDIT_COMPANY')}
+                style={styles.modalButton}
+                android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Clear</Text>
+              </Pressable>
+              <Pressable
+                onPress={closeCompanyModal}
+                style={styles.modalButton}
+                android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
+                <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Cancel</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    )
+  }
+
 
   return (
     <>
@@ -178,31 +409,27 @@ const Profile: React.FC = () => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollViewFlex}>
-          {personalDetails ?
+          {hasPersonalDetails ?
             <View style={styles.detailsView}>
               <Text style={{ fontFamily: FONTFAMILY.jost_semibold, color: COLOR.primaryGreyHex, fontSize: SIZE.size_20 }}>Personal Details</Text>
               <View style={{ borderWidth: 1, borderColor: COLOR.borderDarkGrey }} />
               <View style={styles.singleDetail}>
                 <Text style={{ fontFamily: FONTFAMILY.jost_semibold, color: COLOR.primaryGreyHex, fontSize: SIZE.size_16 }}>Name: </Text>
                 <Text style={{ fontFamily: FONTFAMILY.jost_regular, color: COLOR.primaryGreyHex, fontSize: SIZE.size_14 }}>
-                  {`${personalDetails.firstName} ${personalDetails.secondName}`}</Text>
+                  {`${hasPersonalDetails.firstName} ${hasPersonalDetails.secondName}`}</Text>
               </View>
               <View style={styles.singleDetail}>
                 <Text style={{ fontFamily: FONTFAMILY.jost_semibold, color: COLOR.primaryGreyHex, fontSize: SIZE.size_16 }}>Address: </Text>
                 <Text style={{ fontFamily: FONTFAMILY.jost_regular, color: COLOR.primaryGreyHex, fontSize: SIZE.size_14 }}>
-                  {formatAddressFields(
-                    personalDetails.addressLine1,
-                    personalDetails.addressLine2,
-                    personalDetails.city,
-                    personalDetails.country)}</Text>
+                  {formatAddressFields(hasPersonalDetails)}</Text>
               </View>
               <View style={styles.singleDetail}>
                 <Text style={{ fontFamily: FONTFAMILY.jost_semibold, color: COLOR.primaryGreyHex, fontSize: SIZE.size_16 }}>Tax Number: </Text>
                 <Text style={{ fontFamily: FONTFAMILY.jost_regular, color: COLOR.primaryGreyHex, fontSize: SIZE.size_14 }}>
-                  {`${personalDetails.taxNumber}`}</Text>
+                  {`${hasPersonalDetails.taxNumber}`}</Text>
               </View>
               <Pressable
-                // onPress={addCompanyToDatabase}
+                onPress={openPersonalModal}
                 style={styles.submitButton}
                 android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                 <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Edit</Text>
@@ -219,62 +446,83 @@ const Profile: React.FC = () => {
               </View>
               <TextInput
                 style={styles.textInput}
-                value={firstName}
+                value={personalDetails.firstName}
                 placeholder='First Name'
                 placeholderTextColor={COLOR.primaryGreyHex}
-                onChangeText={(text) => setFirstName(text)}
+                onChangeText={(text) => setPersonalDetails(prev => ({
+                  ...prev,
+                  firstName: text
+                }))}
               />
               <TextInput
                 style={styles.textInput}
-                value={secondName}
+                value={personalDetails.secondName}
                 placeholder='Second Name'
                 placeholderTextColor={COLOR.primaryGreyHex}
-                onChangeText={(text) => setSecondName(text)}
+                onChangeText={(text) => setPersonalDetails(prev => ({
+                  ...prev,
+                  secondName: text
+                }))}
               />
               <TextInput
                 style={styles.textInput}
-                value={addressLine1}
+                value={personalDetails.addressLine1}
                 placeholder='Address Line 1'
                 placeholderTextColor={COLOR.primaryGreyHex}
-                onChangeText={(text) => setAddressLine1(text)}
+                onChangeText={(text) => setPersonalDetails(prev => ({
+                  ...prev,
+                  addressLine1: text
+                }))}
               />
               <TextInput
                 style={styles.textInput}
-                value={addressLine2}
+                value={personalDetails.addressLine2}
                 placeholder='Address Line 2'
                 placeholderTextColor={COLOR.primaryGreyHex}
-                onChangeText={(text) => setAddressLine2(text)}
+                onChangeText={(text) => setPersonalDetails(prev => ({
+                  ...prev,
+                  addressLine2: text
+                }))}
               />
               <TextInput
                 style={styles.textInput}
-                value={city}
+                value={personalDetails.city}
                 placeholder='City'
                 placeholderTextColor={COLOR.primaryGreyHex}
-                onChangeText={(text) => setCity(text)}
+                onChangeText={(text) => setPersonalDetails(prev => ({
+                  ...prev,
+                  city: text
+                }))}
               />
               <TextInput
                 style={styles.textInput}
-                value={country}
+                value={personalDetails.country}
                 placeholder='Country'
                 placeholderTextColor={COLOR.primaryGreyHex}
-                onChangeText={(text) => setCountry(text)}
+                onChangeText={(text) => setPersonalDetails(prev => ({
+                  ...prev,
+                  country: text
+                }))}
               />
               <TextInput
                 style={styles.textInput}
-                value={taxNumber}
+                value={personalDetails.taxNumber}
                 placeholder='Tax Number'
                 placeholderTextColor={COLOR.primaryGreyHex}
-                onChangeText={(text) => setTaxNumber(text)}
+                onChangeText={(text) => setPersonalDetails(prev => ({
+                  ...prev,
+                  taxNumber: text
+                }))}
               />
               <View style={styles.buttonContainer}>
                 <Pressable
-                  onPress={clearPersonalFields}
+                  onPress={() => clearFields('CREATE')}
                   style={styles.clearButton}
                   android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                   <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Clear</Text>
                 </Pressable>
                 <Pressable
-                  onPress={addProfileToDatabse}
+                  onPress={() => addPersonalToDatabase('CREATE')}
                   style={styles.submitButton}
                   android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                   <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Submit</Text>
@@ -282,29 +530,29 @@ const Profile: React.FC = () => {
               </View>
             </View>
           }
-          {companyDetails ?
+          {hasCompanyDetails ?
             <View style={styles.detailsView}>
               <Text style={{ fontFamily: FONTFAMILY.jost_semibold, color: COLOR.primaryGreyHex, fontSize: SIZE.size_20 }}>Company Details</Text>
               <View style={{ borderWidth: 1, borderColor: COLOR.borderDarkGrey }} />
               <View style={styles.singleDetail}>
                 <Text style={{ fontFamily: FONTFAMILY.jost_semibold, color: COLOR.primaryGreyHex, fontSize: SIZE.size_16 }}>Company: </Text>
                 <Text style={{ fontFamily: FONTFAMILY.jost_regular, color: COLOR.primaryGreyHex, fontSize: SIZE.size_14 }}>
-                  {`${companyDetails.company}`}</Text>
+                  {`${hasCompanyDetails.company}`}</Text>
               </View>
               <View style={styles.singleDetail}>
                 <Text style={{ fontFamily: FONTFAMILY.jost_semibold, color: COLOR.primaryGreyHex, fontSize: SIZE.size_16 }}>Role: </Text>
                 <Text style={{ fontFamily: FONTFAMILY.jost_regular, color: COLOR.primaryGreyHex, fontSize: SIZE.size_14 }}>
-                  {`${companyDetails.role}`}
+                  {`${hasCompanyDetails.role}`}
                 </Text>
               </View>
               <View style={styles.singleDetail}>
                 <Text style={{ fontFamily: FONTFAMILY.jost_semibold, color: COLOR.primaryGreyHex, fontSize: SIZE.size_16 }}>Accounts Email: </Text>
                 <Text style={{ fontFamily: FONTFAMILY.jost_regular, color: COLOR.primaryGreyHex, fontSize: SIZE.size_14 }}>
-                  {`${companyDetails.companyEmail}`}
+                  {`${hasCompanyDetails.companyEmail}`}
                 </Text>
               </View>
               <Pressable
-                // onPress={addCompanyToDatabase}
+                onPress={openCompanyModal}
                 style={styles.submitButton}
                 android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                 <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Edit</Text>
@@ -321,35 +569,44 @@ const Profile: React.FC = () => {
               </View>
               <TextInput
                 style={styles.textInput}
-                value={company}
+                value={companyDetails.company}
                 placeholder='Company Name'
                 placeholderTextColor={COLOR.primaryGreyHex}
-                onChangeText={(text) => setCompany(text)}
+                onChangeText={(text) => setCompanyDetails(prev => ({
+                  ...prev,
+                  company: text
+                }))}
               />
               <TextInput
                 style={styles.textInput}
-                value={role}
+                value={companyDetails.role}
                 placeholder='Role'
                 placeholderTextColor={COLOR.primaryGreyHex}
-                onChangeText={(text) => setRole(text)}
+                onChangeText={(text) => setCompanyDetails(prev => ({
+                  ...prev,
+                  role: text
+                }))}
               />
               <TextInput
                 style={styles.textInput}
-                value={companyEmail}
+                value={companyDetails.companyEmail}
                 placeholder='Accounts Email'
                 keyboardType='email-address'
                 placeholderTextColor={COLOR.primaryGreyHex}
-                onChangeText={(text) => setCompanyEmail(text)}
+                onChangeText={(text) => setCompanyDetails(prev => ({
+                  ...prev,
+                  companyEmail: text
+                }))}
               />
               <View style={styles.buttonContainer}>
                 <Pressable
-                  onPress={clearCompanyFields}
+                  onPress={() => clearFields('CREATE_COMPANY')}
                   style={styles.clearButton}
                   android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                   <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Clear</Text>
                 </Pressable>
                 <Pressable
-                  onPress={addCompanyToDatabase}
+                  onPress={() => addCompanyToDatabase('CREATE')}
                   style={styles.submitButton}
                   android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                   <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Submit</Text>
@@ -358,6 +615,8 @@ const Profile: React.FC = () => {
             </View>
           }
         </ScrollView>
+        {personalModalVisible && renderPersonalModal()}
+        {companyModalVisible && renderCompanyModal()}
       </View>
     </>
   )
@@ -439,17 +698,42 @@ const styles = StyleSheet.create({
     elevation: SIZE.size_2
   },
   submitButton: {
-    marginTop: 20,
-    marginStart: 100,
-    marginEnd: 100,
     paddingTop: SIZE.size_5,
     paddingBottom: SIZE.size_5,
-    paddingStart: SIZE.size_40,
-    paddingEnd: SIZE.size_40,
+    paddingStart: SIZE.size_10,
+    paddingEnd: SIZE.size_10,
     backgroundColor: COLOR.primaryBlueHex,
     alignItems: 'center',
     borderRadius: SIZE.size_4,
     elevation: SIZE.size_2
+  },
+  modalButton: {
+    paddingTop: SIZE.size_5,
+    paddingBottom: SIZE.size_5,
+    paddingStart: SIZE.size_10,
+    paddingEnd: SIZE.size_10,
+    backgroundColor: COLOR.primaryBlueHex,
+    borderRadius: SIZE.size_4,
+    elevation: SIZE.size_2
+  },
+  modalCard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    margin: 1,
+    backgroundColor: COLOR.secondaryLightGrey,
+    paddingStart: SIZE.size_10,
+    paddingEnd: SIZE.size_10,
+    paddingTop: SIZE.size_30,
+    paddingBottom: SIZE.size_30,
+    width: '90%',
+    gap: SIZE.size_10,
+    borderRadius: SIZE.size_5,
+    borderWidth: SIZE.size_1,
+    borderColor: COLOR.borderDarkGrey,
   }
 })
 

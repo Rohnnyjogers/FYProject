@@ -5,7 +5,7 @@ import { ADD_TO_SAVED_TAX_EXPENSE, ReceiptProps, RootStackParamsList } from '../
 import { COLOR, FONTFAMILY, FULL_RECEIPT_CARD, SIZE } from '../theme/theme';
 import FullReceipt from '../components/receipts/FullReceipt';
 import ReceiptCard from '../components/receipts/ReceiptCard';
-import { removeReceiptFromExpenses } from '../service/service';
+import { removeReceiptFromExpenses, removeReceiptFromTax } from '../service/service';
 import { auth } from '../../firebaseconfig';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -45,9 +45,13 @@ const ReceiptListViewer = () => {
                                 <Text style={{fontFamily: FONTFAMILY.jost_medium, fontSize: SIZE.size_18}}>{String(item.vendorName.replace(/_/g,' '))}</Text>
                                 <Text style={{fontFamily: FONTFAMILY.jost_regular, fontSize: SIZE.size_16}}>{dateString(item.receiptDate)}</Text>
                             </View>
-                            {viewerType === 'taxes' && (
+                            {viewerType === 'tax' && (
                                 <Pressable
-                                    onPress={() => {}}
+                                    onPress={() => removeReceiptFromTax(
+                                        userId,
+                                        item,
+                                        navigation
+                                    )}
                                     style={styles.pressable}
                                     android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                                     <Text style={{fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex}}>Remove Receipt</Text>

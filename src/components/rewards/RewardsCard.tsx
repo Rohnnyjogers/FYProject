@@ -95,10 +95,11 @@ const RewardsCard: React.FC<RewardCardProps> = ({
                     android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                     <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Claim</Text>
                   </Pressable>
+                  <Button title='Press' onPress={() => setModalVisible(true)} />
                 </View>
                 :
                 <View style={styles.activate}>
-                  {/* <Button title='Press' onPress={() => setModalVisible(true)} /> */}
+                 
                   <Pressable
                     onPress={() => setRewardActive(
                       userId,

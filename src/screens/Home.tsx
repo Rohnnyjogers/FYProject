@@ -9,7 +9,7 @@ import Map from '../components/Map';
 import { BarChart, LineChart } from 'react-native-chart-kit';
 import { auth, database } from '../../firebaseconfig';
 import { get, onValue, ref, set } from 'firebase/database';
-import { SpendingCategories, getPrevMonthsSpendingData, getSpendingByCategoryData, previousMonthSpendingTotal } from '../functions/homeFunctions';
+import { SpendingCategories, getPrevMonthsSpendingData, getRecentReceipts, getSpendingByCategoryData, previousMonthSpendingTotal } from '../functions/homeFunctions';
 import PushNotification from 'react-native-push-notification';
 
 const Home = () => {
@@ -21,6 +21,7 @@ const Home = () => {
   const [receiptsLoading, setReceiptsLoading] = useState(true);
   const userId = auth.currentUser?.uid;
 
+
   const bottomTabHeight = useBottomTabBarHeight();
 
   useEffect(() => {
@@ -29,10 +30,9 @@ const Home = () => {
       if (snapshot.exists()) {
         const receipts: ReceiptProps[] = Object.values(snapshot.val());
         // receipts.slice(0,10);
-        setRecentReceipts(receipts.reverse());
-        setReceiptsLoading(false);
-        getPrevMonthsSpendingData(userId, setThirtyDayData, setLineChartLoading);
-        getSpendingByCategoryData(userId, setSpendingByCategory, setBarChartLoading);
+        // setRecentReceipts(receipts);
+        // setReceiptsLoading(false);
+
       }
       else {
         setRecentReceipts([]);
@@ -40,6 +40,11 @@ const Home = () => {
     });
   }, []);
 
+  useEffect(() => {
+    getRecentReceipts(setReceiptsLoading, setRecentReceipts);
+    getPrevMonthsSpendingData(userId, setThirtyDayData, setLineChartLoading);
+    getSpendingByCategoryData(userId, setSpendingByCategory, setBarChartLoading);
+  }, []);
 
   const extractBarChartData = () => {
     let labels = [];

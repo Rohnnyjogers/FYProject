@@ -59,7 +59,7 @@ const Header: React.FC<HeaderBarProps> = ({ headerTitle }) => {
                             onPress={openMenu}
                         />
                     }>
-                    <Menu.Item onPress={signOut} title='Sign out' />
+                    <Menu.Item onPress={signOut} title='Sign out'/>
                 </Menu>
         </View>
     )

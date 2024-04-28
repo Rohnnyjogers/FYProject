@@ -9,13 +9,15 @@ export const getRecentReceipts = async (
 ) => {
     const userId = auth.currentUser?.uid;
     const dbRef = ref(database, `/users/${userId}/receipts/receipts`);
-
     try {
         const receiptsSnapshot = await get(dbRef);
 
         if (receiptsSnapshot.exists()) {
             const receiptsArray: ReceiptProps[] = Object.values(receiptsSnapshot.val());
-            receiptsArray.sort((a: ReceiptProps, b: ReceiptProps) => b.receiptDate.getTime() - a.receiptDate.getTime());
+           
+            receiptsArray.sort((a: ReceiptProps, b: ReceiptProps) => {
+              return new Date(b.receiptDate).getTime() - new Date(a.receiptDate).getTime();
+            })
             const recentReceipts = receiptsArray.slice(0, 10);
 
             setRecentReceipts(recentReceipts);
@@ -54,11 +56,15 @@ export const getPrevMonthsSpendingData = async (
           return receiptDate >= lastMonth && receiptDate <= currentDate;
         });
 
+        prevMonthReceipts.sort((a: ReceiptProps, b: ReceiptProps) => {
+          return new Date(b.receiptDate).getTime() - new Date(a.receiptDate).getTime();
+        })
+
         const priceTotals = prevMonthReceipts.map((item) => {
           return item.priceTotal;
         })
 
-        setThirtyDayData(priceTotals);
+        setThirtyDayData(priceTotals.reverse());
         setLineCartLoading(false);
 
       }
