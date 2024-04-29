@@ -9,6 +9,7 @@ import Login from './src/screens/Login';
 import NfcManager, { Ndef, NfcEvents, NfcTech, TagEvent } from 'react-native-nfc-manager';
 import { ReceiptProps } from './src/types/types';
 import { PaperProvider } from 'react-native-paper';
+import PushNotification from 'react-native-push-notification';
 
 
 const Stack = createNativeStackNavigator();
@@ -73,13 +74,18 @@ const App: React.FC = () => {
       NfcManager.cancelTechnologyRequest();
     }
 
-  }, [recentReceipts]);
+  }, []);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setUser(user);
     })
+    requestNotificationPermission();
   }, []);
+
+  const requestNotificationPermission = () => {
+    PushNotification.requestPermissions();
+  };
 
   return (
     <PaperProvider>

@@ -85,7 +85,62 @@ export const generateAndDownloadPDF = async(
         font: courierFont
     })
 
-    let y = titleY - 40;
+    let y = titleY - 20;
+
+    if(reportType === 'Medical' || reportType === 'VAT'){
+        const name = `${personalState?.firstName} ${personalState?.secondName}`;
+        page.drawText(name, {
+            x: 50,
+            y,
+            size: 12,
+            color: rgb(0,0,0)
+
+        })
+
+        y -=20;
+
+        const address = `${personalState?.addressLine1}, ${personalState?.addressLine2}, ${personalState?.city}, ${personalState?.country}`;
+        page.drawText(address, {
+            x: 50,
+            y,
+            size: 12,
+            color: rgb(0,0,0)
+        })
+
+        y -=20;
+
+        const taxNumber = `${personalState?.taxNumber}`;
+        page.drawText(taxNumber, {
+            x: 50,
+            y,
+            size: 12,
+            color: rgb(0,0,0)
+        })
+
+        y -= 40
+    }
+    else if(reportType === 'Expense'){
+        const name = `${personalState?.firstName} ${personalState?.secondName}`;
+        page.drawText(name, {
+            x: 50,
+            y,
+            size: 12,
+            color: rgb(0,0,0)
+
+        })
+
+        y -=20;
+
+        const jobInfo = `${companyState?.role} - ${companyState?.company}`;
+        page.drawText(jobInfo, {
+            x: 50,
+            y,
+            size: 12,
+            color: rgb(0,0,0)
+        })
+
+        y -= 40
+    }
 
     receipts.forEach((receipt, index) => {
         const rawDate = new Date(receipt.receiptDate);

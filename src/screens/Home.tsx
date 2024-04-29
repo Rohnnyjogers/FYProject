@@ -29,9 +29,9 @@ const Home = () => {
     onValue(dbRef, (snapshot) => {
       if (snapshot.exists()) {
         const receipts: ReceiptProps[] = Object.values(snapshot.val());
-        // receipts.slice(0,10);
-        // setRecentReceipts(receipts);
-        // setReceiptsLoading(false);
+        getRecentReceipts(setReceiptsLoading, setRecentReceipts);
+        getPrevMonthsSpendingData(userId, setThirtyDayData, setLineChartLoading);
+        getSpendingByCategoryData(userId, setSpendingByCategory, setBarChartLoading);
 
       }
       else {
@@ -41,9 +41,6 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    getRecentReceipts(setReceiptsLoading, setRecentReceipts);
-    getPrevMonthsSpendingData(userId, setThirtyDayData, setLineChartLoading);
-    getSpendingByCategoryData(userId, setSpendingByCategory, setBarChartLoading);
   }, []);
 
   const extractBarChartData = () => {

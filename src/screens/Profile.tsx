@@ -6,7 +6,6 @@ import { auth, database } from '../../firebaseconfig';
 import { onValue, ref, set } from 'firebase/database';
 import {
   formatAddressFields,
-  savePersonalChanges,
   validCompanyDetails,
   validPersonalFields,
   validTaxNumber,

@@ -45,17 +45,35 @@ export const updateCustomerRecordWithVendor = async (
                 }
             } 
             else{
-                const purchaseData: PurchaseProps = {
-                    quantity: quantity,
-                    rewardable: true,
-                    activeReward: false,
-                    rewardCount: null,
-                    nextRewardCount: 0,
-                    nextRewardPhase: false,
-                    totalCompleteRewards: 0
+                const rewardableItems = ['Tea', 'Americano', 'Latte', 'Wrap'];
+
+                if(rewardableItems.includes(item.description)){
+                    const purchaseData: PurchaseProps = {
+                        quantity: quantity,
+                        rewardable: true,
+                        activeReward: false,
+                        rewardCount: null,
+                        nextRewardCount: 0,
+                        nextRewardPhase: false,
+                        totalCompleteRewards: 0
+                    }
+    
+                    await set(itemRef, purchaseData);
+                }
+                else{
+                    const purchaseData: PurchaseProps = {
+                        quantity: quantity,
+                        rewardable: false,
+                        activeReward: false,
+                        rewardCount: null,
+                        nextRewardCount: 0,
+                        nextRewardPhase: false,
+                        totalCompleteRewards: 0
+                    }
+    
+                    await set(itemRef, purchaseData);
                 }
 
-                await set(itemRef, purchaseData);
             }
         }
     }catch(error){
