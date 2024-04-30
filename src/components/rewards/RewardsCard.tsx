@@ -14,7 +14,7 @@ interface RewardCardProps {
 const RewardsCard: React.FC<RewardCardProps> = ({
   reward
 }) => {
-  const { active, complete, claimed, vendor, item, size, progress } = reward;
+  const { active, complete, claimed, vendor, item, size, progress, vendorId, rewardId } = reward;
   const userId = auth.currentUser?.uid;
   const vendorName: string = vendor.replace(/_/g, ' ');
   const [modalVisible, setModalVisible] = useState(false);
@@ -33,7 +33,8 @@ const RewardsCard: React.FC<RewardCardProps> = ({
   }
 
   const displayRewardQRModal = () => {
-    const rewardQRData = `${item}_${userId}`;
+    const rewardKey = `${vendor}_${vendorId}_${rewardId}_${item}`
+    const rewardQRData = `${userId}:${rewardKey}`;
 
     return (
       <Modal
@@ -91,11 +92,11 @@ const RewardsCard: React.FC<RewardCardProps> = ({
               {complete ?
                 <View style={styles.activate}>
                   <Pressable
+                    onPress={() => setModalVisible(true)}
                     style={styles.pressable}
                     android_ripple={{ color: 'rgba(0, 0, 0, 0.2)' }}>
                     <Text style={{ fontFamily: FONTFAMILY.jost_bold, fontSize: SIZE.size_16, color: COLOR.primaryWhiteHex }}>Claim</Text>
                   </Pressable>
-                  <Button title='Press' onPress={() => setModalVisible(true)} />
                 </View>
                 :
                 <View style={styles.activate}>

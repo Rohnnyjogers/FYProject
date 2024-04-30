@@ -122,7 +122,6 @@ const Home = () => {
   return (
     <>
       <Header />
-      {/* <Button title='Press' onPress={test} /> */}
       <Text style={styles.title}>Home</Text>
       <View style={styles.divider} />
       <View style={styles.screenContainer}>
